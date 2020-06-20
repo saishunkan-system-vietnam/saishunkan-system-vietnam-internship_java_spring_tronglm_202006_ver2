@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperMember">
+
+	<insert id="insert" parameterType="Member">
+		INSERT INTO member (name_member, nickname, id_team, cap_flg, del_flg) 
+		VALUES (#{name_member}, #{nickname}, #{id_team}, #{cap_flg}, #{del_flg});
+	</insert>
+	
+	<select id="getAll" parameterType="Member"
+		resultType="Member">
+		SELECT * FROM member WHERE del_flg = 0
+		<if test="name_member != null">
+			and name_account LIKE '%${name_account}%' or nickname LIKE '%${name_account}%'
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset} 	
+	</select>
+	
+	<select id="getTotalMember" parameterType="Member" resultType="BigInteger">
+		SELECT Count(*) FROM member WHERE del_flg = 0
+		<if test="name_member != null">
+			and name_member LIKE '%${name_member}%'
+		</if>
+	</select>
+	
+	<select id="getByTeam" parameterType="Member">
+		SELECT * FROM member WHERE id_team = #{id_team} and del_flg = 0
+		<if test="name_member != null">
+			and name_member LIKE '%${name_member}%' or nickname LIKE '%${name_account}%' 
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset}
+	</select>
+	
+	<select id="getTotalByTeam" parameterType="Member" resultType="BigInteger">
+		SELECT Count(*) FROM member WHERE id_team = #{id_team} and del_flg = 0
+		<if test="name_member != null">
+			and name_member LIKE '%${name_member}%' or nickname LIKE '%${name_account}%'
+		</if>
+	</select>
+	
+	<select id="getById" parameterType="int"
+		resultType="Member">
+		SELECT * FROM member WHERE id = #{id};
+	</select>
+	
+	
+	
+	
+
+</mapper>
