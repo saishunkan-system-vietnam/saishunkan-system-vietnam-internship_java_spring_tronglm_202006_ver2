@@ -4,31 +4,31 @@
 <mapper namespace="com.saishunken.maneger_game.mapper.MapperMember">
 
 	<insert id="insert" parameterType="Member">
-		INSERT INTO member (name_member, nickname, id_team, cap_flg, del_flg) 
-		VALUES (#{name_member}, #{nickname}, #{id_team}, #{cap_flg}, #{del_flg});
+		INSERT INTO member (name_member, nickname, id_team, cap_flg, del_flg, create_date, edit_date, scored) 
+		VALUES (#{name_member}, #{nickname}, #{id_team}, #{cap_flg}, #{del_flg}, #{create_date}, #{edit_date}, #{scored});
 	</insert>
 	
 	<select id="getAll" parameterType="Member"
 		resultType="Member">
 		SELECT * FROM member WHERE del_flg = 0
 		<if test="name_member != null">
-			and name_account LIKE '%${name_account}%' or nickname LIKE '%${name_account}%'
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
 		</if>
 		LIMIT  #{maxPageItem} 
-		OFFSET #{offset} 	
+		OFFSET #{offset};
 	</select>
 	
 	<select id="getTotalMember" parameterType="Member" resultType="BigInteger">
 		SELECT Count(*) FROM member WHERE del_flg = 0
 		<if test="name_member != null">
-			and name_member LIKE '%${name_member}%'
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
 		</if>
 	</select>
 	
-	<select id="getByTeam" parameterType="Member">
-		SELECT * FROM member WHERE id_team = #{id_team} and del_flg = 0
+	<select id="getByTeam" parameterType="Member" resultType="Member">
+		SELECT * FROM member WHERE id_team = #{id_team} AND del_flg = 0
 		<if test="name_member != null">
-			and name_member LIKE '%${name_member}%' or nickname LIKE '%${name_account}%' 
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
 		</if>
 		LIMIT  #{maxPageItem} 
 		OFFSET #{offset}
@@ -37,17 +37,77 @@
 	<select id="getTotalByTeam" parameterType="Member" resultType="BigInteger">
 		SELECT Count(*) FROM member WHERE id_team = #{id_team} and del_flg = 0
 		<if test="name_member != null">
-			and name_member LIKE '%${name_member}%' or nickname LIKE '%${name_account}%'
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
 		</if>
 	</select>
+	
+	<select id="getByIdTeam" parameterType="Member" resultType="Member">
+		SELECT * FROM member WHERE id_team > 0 AND del_flg = 0
+		<if test="name_member != null">
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset}
+	</select>
+	
+	<select id="getTotalByIdTeam" parameterType="Member" resultType="BigInteger">
+		SELECT Count(*) FROM member WHERE id_team > 0 and del_flg = 0
+		<if test="name_member != null">
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
+		</if>
+	</select>
+	
+	<select id="getByNotIdTeam" parameterType="Member" resultType="Member">
+		SELECT * FROM member WHERE id_team = 0 AND del_flg = 0
+		<if test="name_member != null">
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%' )
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset}
+	</select>
+	
+	<select id="getTotalByNotIdTeam" parameterType="Member" resultType="BigInteger">
+		SELECT Count(*) FROM member WHERE id_team = 0 and del_flg = 0
+		<if test="name_member != null">
+			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
+		</if>
+	</select>
+	
 	
 	<select id="getById" parameterType="int"
 		resultType="Member">
 		SELECT * FROM member WHERE id = #{id};
 	</select>
 	
+	<select id="getTotalByNickName"	resultType="int">
+		SELECT Count(*) FROM member WHERE nickname = #{nickname} AND nickname != ""
+		<if test ="id != null">
+			AND id != #{id}
+		</if>
+	</select>
 	
-	
-	
-
+	<update id="update" parameterType="Member">
+		UPDATE member SET	
+		<if test="name_member != null">
+			name_member = #{name_member},
+		</if>	
+		<if test="nickname != null">
+			nickname = #{nickname},
+		</if>
+		<if  test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		<if test="id_team != null">
+			id_team = #{id_team},
+		</if>
+		<if test="cap_flg != null">
+			cap_flg = #{cap_flg},
+		</if>
+		<if test="scored">
+			scored = #{scored},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id};
+	</update>
+		
 </mapper>

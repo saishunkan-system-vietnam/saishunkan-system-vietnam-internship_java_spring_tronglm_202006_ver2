@@ -86,7 +86,7 @@ public class AccountController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 	
-	@GetMapping("/isphone")
+	@GetMapping("isphone")
 	public ResponseEntity<Response> isTotalPhone(@RequestParam String phone,  @RequestParam Optional<Integer> id) {	
 		Integer userID;
 		if(id.isPresent()) {
@@ -100,7 +100,7 @@ public class AccountController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 	
-	@GetMapping("/ismail")
+	@GetMapping("ismail")
 	public ResponseEntity<Response> isTotalMail(@RequestParam String mail,  @RequestParam Optional<Integer> id) {
 		Integer userID;
 		if(id.isPresent()) {
@@ -114,7 +114,7 @@ public class AccountController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 
-	@PostMapping("/register")
+	@PostMapping("register")
 	public ResponseEntity<Response> createUser(@RequestBody Account account) {
 		Integer id = null;
 		account.setPassword(encoder.encode(account.getPassword()));
@@ -127,7 +127,7 @@ public class AccountController {
 		}
 	}
 	
-	@PostMapping("/updateAccount")
+	@PostMapping("updateAccount")
 	public ResponseEntity<Response> update(@RequestBody Account account) {
 		if (account.getPassword() != null) {
 			account.setPassword(encoder.encode(account.getPassword()));

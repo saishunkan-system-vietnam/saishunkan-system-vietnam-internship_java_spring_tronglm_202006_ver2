@@ -1,5 +1,7 @@
 package com.saishunken.maneger_game.model;
 
+import java.time.LocalDate;
+
 public class Team extends AbstractModel{
 	
 	private static final long serialVersionUID = 1L;
@@ -8,7 +10,23 @@ public class Team extends AbstractModel{
 	private Integer id_tournament;
 	private Integer points;
 	private String link_logo;
+	private LocalDate founding_date;
+	private String info;
 	
+	
+	
+	public LocalDate getFounding_date() {
+		return founding_date;
+	}
+	public void setFounding_date(LocalDate founding_date) {
+		this.founding_date = founding_date;
+	}
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
+	}
 	public String getName_team() {
 		return name_team;
 	}
@@ -33,8 +51,5 @@ public class Team extends AbstractModel{
 	public void setLink_logo(String link_logo) {
 		this.link_logo = link_logo;
 	}
-	
-	
-	
 
 }

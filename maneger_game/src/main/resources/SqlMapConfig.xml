@@ -6,11 +6,13 @@
     <typeAliases>
         <typeAlias alias="Account" type="com.saishunken.maneger_game.model.Account" />
         <typeAlias alias="Member" type="com.saishunken.maneger_game.model.Member" />
+        <typeAlias alias="Team" type="com.saishunken.maneger_game.model.Team" />
     </typeAliases>
  
     <mappers>
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Account.xml" />
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Member.xml" />
+        <mapper resource="com/saishunken/maneger_game/mapper/sql/Team.xml" />
     </mappers>
  
 </configuration>
