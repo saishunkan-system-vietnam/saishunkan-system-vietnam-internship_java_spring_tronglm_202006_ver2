@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperTeam">
+	<insert id="insert" parameterType="Team">
+		INSERT INTO team (name_team, id_tournament, del_flg, points, link_logo, founding_date, create_date, edit_date, info) 
+		VALUES (#{name_team}, #{id_tournament}, #{del_flg}, #{points}, #{link_logo}, #{founding_date}, #{create_date}, #{edit_date}, #{info});
+	</insert>
+
+	<update id="update" parameterType="Team">
+		UPDATE team SET	
+		<if test="name_team != null">
+			name_team = #{name_team},
+		</if>
+		
+		<if test="id_tournament != null">
+			id_tournament = #{id_tournament},
+		</if>
+		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		
+		<if test="points != null">
+			points = #{points},
+		</if>
+		
+		<if test="link_logo != null">
+			link_logo = #{link_logo},
+		</if>
+		
+		<if test="founding_date != null">
+			founding_date = #{founding_date},
+		</if>
+		
+		<if test="info != null">
+			info = #{info},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id};
+	</update>
+
+	<select id="getById" parameterType="int"
+		resultType="Team">
+		SELECT * FROM team WHERE id = #{id};
+	</select>
+
+	
+	<select id="getTotalByNameTeam" resultType="int">
+		SELECT Count(*) FROM team WHERE name_team = #{name_team}
+		<if test ="id != null">
+			and id != #{id};
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="Team"
+		resultType="Team">
+		SELECT * FROM team WHERE del_flg = 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset} 	
+	</select>
+
+	<select id="getTotalTeam" parameterType="Team" resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+	</select>
+	
+	<select id="getAllByTournament" parameterType="Team"
+		resultType="Team">
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset} 	
+	</select>
+
+	<select id="getTotalByTournament" parameterType="Team" resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+	</select>
+	
+	<select id="getAllByIdTournament" parameterType="Team"
+		resultType="Team">
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament > 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset} 	
+	</select>
+
+	<select id="getTotalByIdTournament" parameterType="Team" resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament > 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+	</select>
+	
+	<select id="getAllByNotIdTournament" parameterType="Team"
+		resultType="Team">
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset} 	
+	</select>
+
+	<select id="getTotalByNotIdTournament" parameterType="Team" resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+		</if>
+	</select>
+	
+	
+</mapper>
