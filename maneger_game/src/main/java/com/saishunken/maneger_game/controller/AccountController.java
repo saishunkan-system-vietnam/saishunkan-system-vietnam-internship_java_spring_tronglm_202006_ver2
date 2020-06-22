@@ -33,7 +33,7 @@ public class AccountController {
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
 	
-	@GetMapping("admin/getall")
+	@GetMapping("admin/account/getall")
 	public ResponseEntity<Response> getAllUser(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameAccount) {
 		Response response = new Response();
@@ -127,7 +127,7 @@ public class AccountController {
 		}
 	}
 	
-	@PostMapping("updateAccount")
+	@PostMapping("/account/update")
 	public ResponseEntity<Response> update(@RequestBody Account account) {
 		if (account.getPassword() != null) {
 			account.setPassword(encoder.encode(account.getPassword()));

@@ -29,7 +29,7 @@ public class TeamCotroller {
 	
 	//check name team
 	@GetMapping("/isteamname")
-	public ResponseEntity<Response> isTeamName(@RequestParam String name_team,  @RequestParam Optional<Integer> id) {	
+	public ResponseEntity<Response> isTeamName(@RequestParam String name_team,  @RequestParam Optional<Integer> id) {
 		Integer teamId;
 		if(id.isPresent()) {
 			teamId  = id.get();
@@ -43,7 +43,7 @@ public class TeamCotroller {
 	}
 	
 	//create team
-	@PostMapping("/createTeam")
+	@PostMapping("team/create")
 	public ResponseEntity<Response> createTeam(@RequestBody Team team) {
 		Integer id = null;
 		if(mapperTeam.getTotalByNameTeam(team.getName_team(), id) > 0) {
@@ -56,8 +56,8 @@ public class TeamCotroller {
 	}
 	
 	//update
-	@PostMapping("/updateTeam")
-	public ResponseEntity<Response> updateUser(@RequestBody Team team) {
+	@PostMapping("team/update")
+	public ResponseEntity<Response> updateTeam(@RequestBody Team team) {
 		Integer id = team.getId();
 		if(mapperTeam.getTotalByNameTeam(team.getName_team(), id) > 0) {
 			return ResponseEntity.ok().body(new Response("0007", "Update Team failed", 0, null));
@@ -71,7 +71,7 @@ public class TeamCotroller {
 	
 	//get by id
 	@GetMapping("/team/getbyid")
-	public ResponseEntity<Response> getUserById(@RequestParam int id) {
+	public ResponseEntity<Response> getTeamById(@RequestParam int id) {
 		Response response = new Response();
 		Team team = mapperTeam.getById(id);
 		if (team != null) {

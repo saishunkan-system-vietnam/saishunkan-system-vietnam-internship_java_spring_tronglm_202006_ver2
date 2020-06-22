@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -42,6 +43,7 @@ public class ConfigMyBatis {
 		Resource resource = new ClassPathResource("SqlMapConfig.xml");
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 		sqlSessionFactory.setDataSource(dataSource());
+		sqlSessionFactory.setTransactionFactory(new ManagedTransactionFactory());
 		sqlSessionFactory.setConfigLocation(resource);
 		return sqlSessionFactory;
 	}

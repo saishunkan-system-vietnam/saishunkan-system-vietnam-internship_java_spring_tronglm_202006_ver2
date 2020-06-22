@@ -28,7 +28,7 @@ public class MemberController {
 	private MemberService memberService;
 	
 	//all
-	@GetMapping("/getall/member")
+	@GetMapping("/member/getall")
 	public ResponseEntity<Response> getAllMember(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -48,7 +48,7 @@ public class MemberController {
 	}
 	
 	//get team
-	@GetMapping("/getbyteam/member")
+	@GetMapping("/member/getbyteam")
 	public ResponseEntity<Response> getMemberByTeam(@RequestParam Integer id_team, @RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -74,7 +74,7 @@ public class MemberController {
 	}
 	
 	//get by id team
-	@GetMapping("/getbyidteam/member")
+	@GetMapping("/member/getbyidteam")
 	public ResponseEntity<Response> getMemberByIdTeam(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -94,7 +94,7 @@ public class MemberController {
 	}
 	
 	//get by not id team
-	@GetMapping("/getbynotidteam/member")
+	@GetMapping("/member/getbynotidteam")
 	public ResponseEntity<Response> getMemberByNotIdTeam(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -128,7 +128,7 @@ public class MemberController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 	// create member
-	@PostMapping("/createMember")
+	@PostMapping("/member/create")
 	public ResponseEntity<Response> createUser(@RequestBody Member member) {
 		Integer id = null;
 		if(mapperMember.getTotalByNickName(member.getNickname(), id) > 0) {
@@ -141,7 +141,7 @@ public class MemberController {
 	}
 	
 	// update member
-	@PostMapping("/updateMember")
+	@PostMapping("/member/update")
 	public ResponseEntity<Response> updateUser(@RequestBody Member member) {
 		Integer id = member.getId();
 		if(mapperMember.getTotalByNickName(member.getNickname(), id) > 0) {

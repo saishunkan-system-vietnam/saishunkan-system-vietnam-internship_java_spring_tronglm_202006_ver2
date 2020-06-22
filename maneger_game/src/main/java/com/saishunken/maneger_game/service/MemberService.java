@@ -30,6 +30,10 @@ public class MemberService {
 		if(member.getNickname() == null) {
 			member.setNickname("");
 		}
+		if(member.getScored() == null) {
+			member.setScored(0);
+		}
+		
 		mapperMember.insert(member);
 	}
 	

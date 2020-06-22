@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperMatch">
+
+	<insert id="insert" parameterType="Match">
+		INSERT INTO match (start_time, del_flg, status_flg, edit_date, create_date, place_match, end_time)
+		VALUES (#{start_time}, #{del_flg}, #{status_flg}, #{edit_date}, #{create_date}, #{place_match}, #{end_time});
+	</insert>
+
+	<update id="update" parameterType="Match">
+		UPDATE match SET	
+		<if test="start_time != null">
+			start_time = #{start_time},
+		</if>
+		
+		<if test="end_time != null">
+			end_time = #{end_time},
+		</if>
+		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>
+		
+		<if test="place_match != null">
+			place_match = #{place_match},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id};
+	</update>
+
+	<select id="getById" parameterType="int"
+		resultType="Match">
+		SELECT * FROM match WHERE id = #{id};
+	</select>
+	
+	<select id="getById" parameterType="int"
+		resultType="Match">
+		SELECT * FROM match WHERE id = #{id};
+	</select>
+		
+</mapper>

@@ -18,9 +18,8 @@ public class TeamService {
 	
 	// create team
 	public void createTeam (Team team) {
-		if(team.getDel_flg() == null) {
-			team.setDel_flg(0);
-		}
+		team.setDel_flg(0);
+
 		if(team.getId_tournament() == null) {
 			team.setId_tournament(0);
 		}
