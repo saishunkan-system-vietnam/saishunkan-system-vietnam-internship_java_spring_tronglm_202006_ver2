@@ -11,6 +11,7 @@ public class Tournament  extends AbstractModel{
 	private Integer status_flg;	
 	private LocalDate start_date;
 	private LocalDate end_date;
+	
 	public String getName_tnm() {
 		return name_tnm;
 	}

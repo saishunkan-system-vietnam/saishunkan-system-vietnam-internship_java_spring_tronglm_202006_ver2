@@ -7,7 +7,7 @@ import com.saishunken.maneger_game.model.Detail_match;
 @Repository
 public interface MapperDetail_match {
 
-	public void insert(Detail_match detail_match);
+	public int insert(Detail_match detail_match);
 	
 	public void update(Detail_match detail_match);
 	

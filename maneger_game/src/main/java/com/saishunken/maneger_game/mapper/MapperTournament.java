@@ -30,3 +30,4 @@ public interface MapperTournament {
 	public int getTotalByNameTournament(@Param("name_tnm") String name_tnm, @Param("id") Integer id );
 }
 
+

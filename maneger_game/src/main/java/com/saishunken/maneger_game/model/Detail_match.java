@@ -32,8 +32,6 @@ public class Detail_match  extends AbstractModel{
 	}
 	public void setWin_flg(Integer win_flg) {
 		this.win_flg = win_flg;
-	}
-	
-	
+	}	
 
 }

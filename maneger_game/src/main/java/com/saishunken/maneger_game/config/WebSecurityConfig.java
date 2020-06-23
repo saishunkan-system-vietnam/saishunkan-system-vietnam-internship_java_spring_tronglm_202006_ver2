@@ -29,8 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	AuthenticationFailureHandler authenticationFailureHandler;
 	
-	 @Autowired
-     LogoutSuccessHandler logoutSuccessHandler;
+	@Autowired
+    LogoutSuccessHandler logoutSuccessHandler;
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable();
 
-		http.authorizeRequests().antMatchers("/login", "/register").permitAll()
+		http.authorizeRequests().antMatchers("/login", "/register", "/check/**").permitAll()
 			.antMatchers("/admin/**").hasAuthority("admin")
 			.anyRequest().authenticated();
 

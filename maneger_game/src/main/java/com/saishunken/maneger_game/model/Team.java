@@ -14,6 +14,7 @@ public class Team extends AbstractModel{
 	private String info;
 	
 	
+	
 	public LocalDate getFounding_date() {
 		return founding_date;
 	}

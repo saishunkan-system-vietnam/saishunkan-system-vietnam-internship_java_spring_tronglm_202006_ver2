@@ -1,5 +1,8 @@
 package com.saishunken.maneger_game.model;
 
+import org.springframework.stereotype.Component;
+
+
 public class Response {
 	private static final long serialVersionUID = 1L;
 	
