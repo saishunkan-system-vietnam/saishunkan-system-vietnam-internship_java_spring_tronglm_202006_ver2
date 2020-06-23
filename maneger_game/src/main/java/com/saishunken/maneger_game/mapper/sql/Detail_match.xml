@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperDetail_match">
+	<insert id="insert" parameterType="Detail_match" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO detail_match (id_team, id_match, result, create_date, edit_date, win_flg, del_flg)
+		VALUES (#{id_team}, #{id_match}, #{result}, #{create_date}, #{edit_date}, #{win_flg}, #{del_flg});
+	</insert>
+
+	<update id="update" parameterType="Detail_match">
+		UPDATE detail_match SET	
+		<if test="id_team != null">
+			id_team = #{id_team},
+		</if>
+		
+		<if test="id_match != null">
+			id_match = #{id_match},
+		</if>
+		
+		<if test="result != null">
+			result = #{result},
+		</if>
+		
+		<if test="win_flg != null">
+			win_flg = #{win_flg},
+		</if>
+		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id};
+	</update>
+
+	<select id="getById" parameterType="int"
+		resultType="Detail_match">
+		SELECT * FROM detail_match WHERE id = #{id};
+	</select>
+		
+</mapper>

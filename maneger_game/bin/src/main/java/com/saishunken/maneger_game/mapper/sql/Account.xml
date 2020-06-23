@@ -44,7 +44,7 @@
 	
 	<select id="getByName" parameterType="String"
 		resultType="Account">
-		SELECT * FROM manage_device.account WHERE name_account = #{name_account};
+		SELECT * FROM account WHERE name_account = #{name_account};
 	</select>
 	
 	<select id="getTotalByName" resultType="int">
