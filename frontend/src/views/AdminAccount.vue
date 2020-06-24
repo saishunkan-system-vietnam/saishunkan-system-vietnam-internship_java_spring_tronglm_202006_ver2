@@ -1,42 +1,12 @@
 
 <template>
   <div class="ui container" style="margin-top: 25px;">
-    <div class="ui attached stackable menu">
-      <div class="ui container">
-        <a class="item">
-          <i class="home icon"></i> Home
-        </a>
-        <a class="item">
-          <i class="id badge outline icon"></i> Account
-        </a>
-        <a class="item" @click="manegerCate">
-          <i class="redhat icon"></i> Category
-        </a>
-        <div class="ui simple dropdown item">
-          More
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <a class="item">
-              <i class="edit icon"></i> Edit Profile
-            </a>
-            <a class="item">
-              <i class="globe icon"></i> Choose Language
-            </a>
-            <a class="item">
-              <i class="settings icon"></i> Account Settings
-            </a>
-          </div>
-        </div>
-        <div class="right item">
-          <div class="ui action input">
-            <input v-model="nameAccount" type="text" placeholder="Search..." />
-            <button @click="serchNameAccount()" class="ui button">Search</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <div style="margin-top: 75px;" class="ui buttons">
-      <button @click="addAccount" class="ui button">Add Account User</button>
+      <button @click="addAccount" class="ui button">Thêm tài khoản</button>
+    </div>
+    <div style="float:right;margin-top: 75px;" class="ui action input">
+      <input v-model="nameAccount" type="text" placeholder="Search ..." />
+      <button @click="serchNameAccount()" class="ui button">Search</button>
     </div>
     <table class="ui celled padded table">
       <thead>
@@ -51,11 +21,11 @@
       <tbody>
         <tr v-for=" account in accounts" :key="account.id">
           <td>{{account.id}}</td>
-          <td class="single line">{{account.nameAccount}}</td>
+          <td class="single line">{{account.name_account}}</td>
           <td>
             <div class="ui yellow rating" data-rating="3" data-max-rating="3">{{account.mail}}</div>
           </td>
-          <td class="right aligned">{{account.phoneNumber}}</td>
+          <td class="right aligned">{{account.phone_number}}</td>
           <td>
             <div class="compact ui basic icon buttons">
               <button
@@ -110,15 +80,15 @@
       <div v-else class="ui header red">Add Account</div>
       <div class="content">
         <form class="ui form">
-          <div class="field" :class="[$v.userAccount.nameAccount.$error ? 'field error' : '']">
+          <div class="field" :class="[$v.userAccount.name_account.$error ? 'field error' : '']">
             <label>Name Account</label>
-            <input type="text" v-model.trim="userAccount.nameAccount" placeholder="Name Account" />
-            <template v-if="$v.userAccount.nameAccount.$error">
+            <input type="text" v-model.trim="userAccount.name_account" placeholder="Name Account" />
+            <template v-if="$v.userAccount.name_account.$error">
               <p
                 class="uk-text-danger"
-                v-if="!$v.userAccount.nameAccount.required"
+                v-if="!$v.userAccount.name_account.required"
               >Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.nameAccount.maxLength">Long??</p>
+              <p class="uk-text-danger" v-if="!$v.userAccount.name_account.maxLength">Long??</p>
             </template>
           </div>
           <div class="field" :class="[$v.userAccount.mail.$error ? 'field error' : '']">
@@ -130,24 +100,16 @@
               <p class="uk-text-danger" v-if="!$v.userAccount.mail.email">Must be a mail</p>
             </template>
           </div>
-          <div class="field" :class="[$v.userAccount.phoneNumber.$error ? 'field error' : '']">
+          <div class="field" :class="[$v.userAccount.phone_number.$error ? 'field error' : '']">
             <label>Phone Number</label>
-            <input type="text" v-model.trim="userAccount.phoneNumber" placeholder="Phone Number" />
-            <template v-if="$v.userAccount.phoneNumber.$error">
+            <input type="text" v-model.trim="userAccount.phone_number" placeholder="Phone Number" />
+            <template v-if="$v.userAccount.phone_number.$error">
               <p
                 class="uk-text-danger"
-                v-if="!$v.userAccount.phoneNumber.required"
+                v-if="!$v.userAccount.phone_number.required"
               >Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.phoneNumber.maxLength">Long??</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.phoneNumber.numeric">Must be a number</p>
-            </template>
-          </div>
-          <div class="field" :class="[$v.userAccount.address.$error ? 'field error' : '']">
-            <label>Address</label>
-            <input type="text" v-model.trim="userAccount.address" placeholder="Address" />
-            <template v-if="$v.userAccount.address.$error">
-              <p class="uk-text-danger" v-if="!$v.userAccount.address.required">Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.address.maxLength">Long??</p>
+              <p class="uk-text-danger" v-if="!$v.userAccount.phone_number.maxLength">Long??</p>
+              <p class="uk-text-danger" v-if="!$v.userAccount.phone_number.numeric">Must be a number</p>
             </template>
           </div>
           <div class="field">
@@ -175,15 +137,13 @@ export default {
       accounts: [],
       userAccount: {
         id: "",
-        nameAccount: "",
+        name_account: "",
+        password: "",
         mail: "",
-        passWord: "",
-        address: "",
-        phoneNumber: "",
-        roleName: "",
-        delFlg: 0
+        role_name: "",
+        phone_number: "",
+        del_flg: "",
       },
-      categoris: [],
       idAccountWatch: "",
       selecteRole: null,
       totalItem: 0,
@@ -222,11 +182,11 @@ export default {
         });
     },
     async listAccount() {
-      let response = await callApi("GET", "account/admin/getall");
-      if (response.status == 200) {
-        this.accounts = response.data.results;
+      let response = await callApi("GET", "admin/getall");
+      if (response.data.code == "0000") {
+        this.accounts = response.data.payload;
         this.totalItem = response.data.totalItem;
-        this.maxPageOnItem = response.data.maxPageItem;
+        this.maxPageOnItem = 5;
         this.pages = response.data.page;
       }
     },
@@ -238,18 +198,28 @@ export default {
         null,
         (id = { id })
       );
-      if (response.status == 200) {
-        this.userAccount = {
-          id: response.data.id,
-          nameAccount: response.data.nameAccount,
-          mail: response.data.mail,
-          address: response.data.address,
-          phoneNumber: response.data.phoneNumber,
-          delFlg: 1
-        };
+      if (response.data.code == "0000") {
+        this.userAccount.id = response.data.payload.id;
+        this.userAccount.del_flg = response.data.payload.del_flg;
         $("#modal-account-account-delete").modal("show");
       } else {
         this.listAccount();
+      }
+    },
+
+    async deleteAccountHandle() {
+      let response = await callApi(
+        "POST",
+        "/updateAccount",
+        {
+          id: this.userAccount.id,
+          del_flg: 1
+        }
+      );
+      if (response.data.code == "0000") {
+        this.listAccount();
+        this.success();
+        $("#modal-account-account-delete").modal("toggle");
       }
     },
 
@@ -259,33 +229,19 @@ export default {
       $("#modal-account-account-edit").modal("show");
     },
 
-    async deleteAccountHandle() {
-      let response = await callApi(
-        "POST",
-        "account/updateUser",
-        this.userAccount
-      );
-      if (response.status == 200) {
-        this.listAccount();
-        this.success();
-        $("#modal-account-account-delete").modal("hide");
-      }
-    },
-
     async editAccount(id) {
       this.idAccountWatch = 1;
       let response = await callApi("GET", "/account/getbyid", null, { id });
-      if (response.status == 200) {
+      if (response.data.code == "0000") {
         this.userAccount = {
-          id: response.data.id,
-          nameAccount: response.data.nameAccount,
-          mail: response.data.mail,
-          address: response.data.address,
-          phoneNumber: response.data.phoneNumber
+          id: response.data.payload.id,
+          name_account: response.data.payload.name_account,
+          mail: response.data.payload.mail,
+          phone_number: response.data.payload.phone_number
         };
         $("#selected-account-role-dropdown").dropdown(
           "set selected",
-          response.data.roleName
+          response.data.payload.role_name
         );
         $("#modal-account-account-edit").modal("show");
       } else {
@@ -301,24 +257,29 @@ export default {
         return;
       }
       if (self.idAccountWatch) {
-        self.userAccount.roleName = self.selecteRole;
+       self.userAccount = {
+          id: self.userAccount.id,
+          name_account: self.userAccount.name_account,
+          mail: self.userAccount.mail,
+          phone_number: self.userAccount.phone_number,
+          role_name: self.selecteRole
+        };       
         response = await callApi(
           "POST",
-          "account/updateUser",
+          "/updateAccount",
           self.userAccount
         );
       } else {
         self.userAccount = {
-          nameAccount: self.userAccount.nameAccount,
+          name_account: self.userAccount.name_account,
           mail: self.userAccount.mail,
-          passWord: "123456",
-          address: self.userAccount.address,
-          phoneNumber: self.userAccount.phoneNumber,
-          roleName: self.selecteRole
+          password: "123456",
+          phone_number: self.userAccount.phone_number,
+          role_name: self.selecteRole
         };
-        response = await callApi("POST", "account/register", self.userAccount);
+        response = await callApi("POST", "/register", self.userAccount);
       }
-      if (response.status == 200) {
+      if (response.data.code == "0000") {
         self.listAccount();
         self.success();
         $("#modal-account-account-edit").modal("toggle");
@@ -330,14 +291,14 @@ export default {
     },
     async changePage(page) {
       if (page != this.pages) {
-        let response = await callApi("GET", "account/admin/getall", null, {
+        let response = await callApi("GET", "admin/getall", null, {
           page,
           nameAccount: this.nameAccount
         });
-        if (response.status == 200) {
-          this.accounts = response.data.results;
+        if (response.data.code == "0000") {
+          this.accounts = response.data.payload;
           this.totalItem = response.data.totalItem;
-          this.maxPageOnItem = response.data.maxPageItem;
+          this.maxPageOnItem = 5;
           this.pages = response.data.page;
         }
       }
@@ -345,10 +306,9 @@ export default {
     refestData() {
       this.$v.$reset();
       this.userAccount = {
-        nameAccount: "",
+        name_account: "",
         mail: "",
-        phoneNumber: "",
-        address: "",
+        phone_number: "",
         roleName: null,
         delFlg: 0
       };
@@ -366,17 +326,17 @@ export default {
       if (page != self.pages) {
         let response = await callApi(
           "GET",
-          "account/admin/getall",
+          "admin/getall",
           null,
           {
           page,
           nameAccount: this.nameAccount
         }
         );
-        if (response.status == 200) {
-          this.accounts = response.data.results;
+        if (response.data.code == "0000") {
+          this.accounts = response.data.payload;
           this.totalItem = response.data.totalItem;
-          this.maxPageOnItem = response.data.maxPageItem;
+          this.maxPageOnItem = 5;
           this.pages = response.data.page;
         }
       }
@@ -384,14 +344,14 @@ export default {
     async serchNameAccount() {
       let response = await callApi(
         "GET",
-        "account/admin/getall",
+        "admin/getall",
         null,
        {nameAccount: this.nameAccount}
       );
-      if (response.status == 200) {
-        this.accounts = response.data.results;
+      if (response.data.code == "0000") {
+        this.accounts = response.data.payload;
         this.totalItem = response.data.totalItem;
-        this.maxPageOnItem = response.data.maxPageItem;
+        this.maxPageOnItem = 5
         this.pages = response.data.page;
       }
     },
@@ -404,22 +364,19 @@ export default {
   validations() {
     return {
       userAccount: {
-        nameAccount: {
+        name_account: {
           required,
           maxLength: maxLength(20)
         },
         mail: {
           email,
           required,
-          maxLength: maxLength(30)
+          maxLength: maxLength(50)
         },
-        phoneNumber: {
+        phone_number: {
           required,
           numeric,
-          maxLength: maxLength(12)
-        },
-        address: {
-          maxLength: maxLength(50)
+          maxLength: maxLength(20)
         }
       }
     };

@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Login from "../views/Login.vue"
 import Regist from "../views/Regist.vue"
-import AdminHome from "../views/AdminHome.vue"
+import Team from "../views/Team.vue"
+import Member from "../views/Member.vue"
 import AdminAccount from "../views/AdminAccount.vue"
 import AccountUser from "../views/AccountUser.vue"
+import LayoutAdmin from "../components/masters/LayoutAdmin"
+import LayoutUsers from "../components/masters/LayoutUsers"
 import store from "../store/index"
 import { callApi } from "../Api/callApi"
 
@@ -14,52 +16,51 @@ Vue.use(Vuelidate)
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
+  {
+    path: '/admin',
+    component: LayoutAdmin,
+    children: [
+      {
+        path: "",
+        name: "AdminAccount",
+        component: AdminAccount
+      },
+      {
+        path: 'team',
+        component: Team,
+        name: "Team",
+      },
+      {
+        path: 'member/:id_team',
+        component: Member,
+        name: "Member",
+        props: true
+      }
+    ]
+  },
+
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    component: LayoutUsers,
+    children: [
+      {
+        path: '',
+        component: AccountUser,
+        name: "AccountUser",
+        props: true,
+      }
+    ]
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
-    beforeEnter: (to, from, next) => {
-      console.log("Enter")
-      next()
-    //   if(store.state.userlogined != null) next({name: "AdminHome"})
-    //  // console.log(store.state.userlogined, "beforeEnter")
-    //  else next()
-    }
-  },
-  {
-    path: "/home/admin",
-    name: "AdminHome",
-    component: AdminHome
-  },
-  {
-    path: "/home/accountUser/:id",
-    name: "AccountUser",
-    props: true,
-    component: AccountUser,
-  },
-  {
-    path: "/home/admin/account",
-    name: "AdminAccount",
-    component: AdminAccount
   },
   {
     path: "/regist",
     name: "Regist",
     component: Regist
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 
@@ -69,33 +70,39 @@ const router = new VueRouter({
   routes
 })
 
- router.beforeEach(async (to, from, next) =>  {
+router.beforeEach(async (to, from, next) => {
   let response;
-   if(store.state.userlogined == null ){
+  if (store.state.userlogined == null) {
     response = await callApi("GET", "/account/getsession")
-    if(response.status){
-      if(to.name == 'Login'){
-      next({ name: 'AdminHome' });
-      } else{
-        next();
-      }
+    if (!response.data || response.data.code != "0000") {
+      if (to.path == '/login' || to.path == '/regist')
+        return next()
+      return next({ path: '/login' })
     }
-    else {
-      if(to.name == 'Login'){
-        console.log(22)
-        next()
-      } else{
-        next({name: 'Login' })
-      }
+    if (response.data.payload.role_name == 'admin') {
+      if (to.path == '/login' || to.path == '/regist')
+        return next({ path: '/admin' });
+      return next();
+    }
+    if (response.data.payload.role_name == 'user') {
+      if (to.path == '/login' || to.path.includes('/admin') || to.path == '/regist')
+        return next({ path: '/' });
+      return next();
     }
   }
   else {
-    if(to.name == 'Login'){
-      next({ name: 'AdminHome' })
-    } else{
-      next();
+    if (store.state.userlogined.role_name == 'admin') {  
+      if(to.path == '/login' || to.path == '/regist') {
+        return next({ path: '/admin' });
+      }
+      return next();
+    }
+    if (store.state.userlogined.role_name == 'user') {  
+      if(to.path == '/login' || to.path.includes('/admin') || to.path == '/regist') {
+        return next({ path: '/' });
+      }
+      return next();
     }
   }
 })
-
 export default router

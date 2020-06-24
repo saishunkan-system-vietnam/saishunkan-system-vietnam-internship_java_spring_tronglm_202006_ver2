@@ -72,10 +72,10 @@
 		resultType="Account">
 		SELECT * FROM account WHERE del_flg = 0
 		<if test="name_account != null">
-			and name_account LIKE '%${name_account}%'
+			AND name_account LIKE '%${name_account}%'
 		</if>
 		<if test="role_name != null">
-			and role_name = #{role_name}
+			AND role_name = #{role_name}
 		</if>
 		LIMIT  #{maxPageItem} 
 		OFFSET #{offset} 	
@@ -84,7 +84,7 @@
 	<select id="getTotalUser" parameterType="Account" resultType="BigInteger">
 		SELECT Count(*) FROM account WHERE del_flg = 0
 		<if test="name_account != null">
-			and name_account LIKE '%${name_account}%'
+			and name_account LIKE '%${name_account}%' 
 		</if>
 		<if test="role_name != null">
 			and role_name = #{role_name}

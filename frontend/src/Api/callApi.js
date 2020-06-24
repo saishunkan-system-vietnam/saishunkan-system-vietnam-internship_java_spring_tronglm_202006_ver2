@@ -3,7 +3,7 @@ export async function callApi(method, endpoint, data = null, params = null) {
     return await axios({
         url: endpoint,
         method: method,
-        baseURL: "http://192.168.10.112:8081",
+        baseURL: "http://localhost:8081",
         data: data,
         params:params,
         withCredentials: true

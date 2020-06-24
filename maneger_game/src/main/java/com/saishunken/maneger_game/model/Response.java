@@ -1,8 +1,5 @@
 package com.saishunken.maneger_game.model;
 
-import org.springframework.stereotype.Component;
-
-
 public class Response {
 	private static final long serialVersionUID = 1L;
 	
@@ -16,11 +13,30 @@ public class Response {
 	private String message;
 	private int totalItem;
 	private Object payload;
+	private int page;
 	
 	
+	
+	
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
 	public Response() {
 		super();
 	}
+	public Response(String code, String message, int totalItem, Object payload, int page ) {
+		super();
+		this.code = code;
+		this.message = message;
+		this.totalItem = totalItem;
+		this.page = page;	
+		this.payload = payload;
+	}
+	
+	
 	public Response(String code, String message, int totalItem, Object payload) {
 		super();
 		this.code = code;

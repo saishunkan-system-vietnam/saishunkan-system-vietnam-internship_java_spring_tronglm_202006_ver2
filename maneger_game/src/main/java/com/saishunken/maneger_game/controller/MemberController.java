@@ -66,11 +66,17 @@ public class MemberController {
 		member.setId_team(id_team);
 		//member.setName_member(nameMember.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
 		member.setOffset((member.getPage() - 1) * member.getMaxPageItem());
-		response.setTotalItem(memberService.getTotalByTeam(member));
-		response.setCode("0000");
-		response.setMessage("Get data successfully");
-		response.setPayload(memberService.getByTeam(member));
-		return ResponseEntity.ok().body(response);
+		Member memberTest = mapperMember.getById(id_team);
+		if(memberTest != null) {
+			response.setTotalItem(memberService.getTotalByTeam(member));
+			response.setCode("0000");
+			response.setMessage("Get data successfully");
+			response.setPayload(memberService.getByTeam(member));
+			return ResponseEntity.ok().body(response);
+		} 
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, memberTest));
+		
+		
 	}
 	
 	//get by id team
@@ -85,7 +91,7 @@ public class MemberController {
 			member.setPage(1);
 		}
 		member.setName_member(nameMember.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
-		member.setOffset((member.getPage() - 1) * member.getMaxPageItem());
+		member.setOffset((member.getPage() - 1) * member.getMaxPageItem());		
 		response.setTotalItem(memberService.getTotalByIdTeam(member));
 		response.setCode("0000");
 		response.setMessage("Get data successfully");

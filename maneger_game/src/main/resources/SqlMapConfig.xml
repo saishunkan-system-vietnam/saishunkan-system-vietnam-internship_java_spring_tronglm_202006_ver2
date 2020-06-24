@@ -18,7 +18,7 @@
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Team.xml" />
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Tournament.xml" />
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Match.xml" />
-         <mapper resource="com/saishunken/maneger_game/mapper/sql/Detail_match.xml" />
+        <mapper resource="com/saishunken/maneger_game/mapper/sql/Detail_match.xml" />
     </mappers>
  
 </configuration>

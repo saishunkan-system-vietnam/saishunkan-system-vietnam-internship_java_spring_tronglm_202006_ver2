@@ -1,7 +1,9 @@
 
 <template>
 
- <div> {{id}} aaaaaaaaaaa </div>
+ <div> 
+   <button @click="logout()">Logout</button>
+  </div>
  
 </template>
 
@@ -14,6 +16,14 @@ export default {
   name: "AccountUser",
   props:{
     id: {}
-  }
+  },
+  methods: {
+    async logout(){
+      let response = await callApi(
+          "GET",
+          "logout"
+        );
+    }
+  },
 }
 </script> 

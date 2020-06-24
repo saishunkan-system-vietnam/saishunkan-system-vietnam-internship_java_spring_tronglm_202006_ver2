@@ -19,7 +19,7 @@ import com.saishunken.maneger_game.model.Tournament;
 import com.saishunken.maneger_game.service.TournamentService;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class TournamentController {
 	
 	@Autowired

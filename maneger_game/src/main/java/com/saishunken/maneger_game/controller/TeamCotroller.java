@@ -163,9 +163,5 @@ public class TeamCotroller {
 			response.setPayload(teamService.getAllByNotIdTournament(team));
 			return ResponseEntity.ok().body(response);
 		}
-		
-		
-		
-	
 
 }

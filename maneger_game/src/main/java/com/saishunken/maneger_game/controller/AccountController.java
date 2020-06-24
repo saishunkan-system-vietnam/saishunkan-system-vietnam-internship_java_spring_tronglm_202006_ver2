@@ -39,8 +39,10 @@ public class AccountController {
 		account.setRole_name("user");
 		if (page.isPresent()) {
 			account.setPage(page.get());
+			response.setPage(page.get());
 		} else {
 			account.setPage(1);
+			response.setPage(1);
 		}
 		account.setName_account(nameAccount.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
 		account.setOffset((account.getPage() - 1) * account.getMaxPageItem());

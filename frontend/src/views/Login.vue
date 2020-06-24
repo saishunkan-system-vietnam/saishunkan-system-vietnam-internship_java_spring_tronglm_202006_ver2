@@ -5,36 +5,36 @@
       <div class="ui middle aligned center aligned grid">
         <div class="column">
           <h2 class="ui teal image header">
-            <div class="content">Log-in to your account</div>
+            <div class="content">Đăng nhập</div>
           </h2>
           <form class="ui large form">
             <div class="ui stacked segment">
-              <div class="field" :class="[$v.login.nameAccount.$error ? 'field error' : '']">
+              <div class="field" :class="[$v.login.name_account.$error ? 'field error' : '']">
                 <div class="ui left icon input">
                   <i class="user icon"></i>
                   <input
                     type="text"
                     name="nameAccount"
-                    v-model="login.nameAccount"
-                    placeholder="Name Account"
+                    v-model="login.name_account"
+                    placeholder="Tên tài khoản"
                   />
                 </div>
-                <template v-if="$v.login.nameAccount.$error">
-                  <span class="ui red text" v-if="!$v.login.nameAccount.required">Not must required</span>
+                <template v-if="$v.login.name_account.$error">
+                  <span class="ui red text" v-if="!$v.login.name_account.required">Không được bỏ trống!</span>
                 </template>
               </div>
-              <div class="field" :class="[$v.login.passWord.$error ? 'field error' : '']">
+              <div class="field" :class="[$v.login.password.$error ? 'field error' : '']">
                 <div class="ui left icon input">
                   <i class="lock icon"></i>
                   <input
                     type="password"
-                    v-model="login.passWord"
+                    v-model="login.password"
                     name="password"
-                    placeholder="Password"
+                    placeholder="Mật khẩu"
                   />
                 </div>
-                <template v-if="$v.login.passWord.$error">
-                  <span class="ui red text" v-if="!$v.login.passWord.required">Not must required</span>
+                <template v-if="$v.login.password.$error">
+                  <span class="ui red text" v-if="!$v.login.password.required">Không được bỏ trống</span>
                 </template>
               </div>
               <div @click="loginAccount" class="ui fluid large teal submit button">Login</div>
@@ -43,8 +43,8 @@
           </form>
 
           <div class="ui message">
-            New to us?
-            <a href="#" @click="changeRouterRegist">Sign Up</a>
+            Bạn có tài khoản chưa?
+            <a href="#" @click="changeRouterRegist">Đăng ký</a>
           </div>
         </div>
       </div>
@@ -59,16 +59,10 @@ export default {
   data() {
     return {
       login: {
-        nameAccount: "",
-        passWord: ""
+        name_account: "",
+        password: ""
       },
-      checkLogin: false,
-      infoLogin:{
-        id: "",
-        nameAccount: "",
-        phoneNumber: "",
-        roleName: ""
-      }
+      infoLogin:{}
     }
   },
   methods: {
@@ -79,57 +73,41 @@ export default {
         return;
       }
       let frmData = new FormData();
-      frmData.append("nameAccount", this.login.nameAccount);
-      frmData.append("passWord", this.login.passWord);
-
+      frmData.append("name_account", this.login.name_account);
+      frmData.append("password", this.login.password);
       let response = await callApi("POST", "/login", frmData);
-      if (response.status == 200) {
-        self.infoLogin = {
-          id: response.data.id,
-          nameAccount: response.data.nameAccount,
-          phoneNumber: response.data.phoneNumber,
-          roleName: response.data.roleName
-       } 
-      self.$store.commit('increment', self.infoLogin);
-
+      if (response.data.code == "0000") {
+        self.infoLogin = response.data.payload;
+        self.$store.commit('increment', self.infoLogin);
       $("body").toast({
           class: "success",
-          message: `Login Success! Hello Admin `});
-        self.$router.push({ name: "AdminHome" });
-        self.checkLogin = true;
-    } 
-
-
-      // if(response.status == 200){
-      //   $("body").toast({
-      //     class: "success",
-      //     message: `Login Success! Hello You!`
-      //   });
-      //   let a=123;
-      //   this.$router.push({ name: "AccountUser", params: { nameUser: a} });
-      //   this.checkLogin = true;
-      // }
-
-      if(!this.checkLogin) {
-        $('body')
-         .toast({
-          class: 'error',
-          message: `Invalid account name or password incorrect! Please try again`});
+          message: response.data.message
+      });
+        if(response.data.payload.role_name == "admin"){
+           self.$router.push({ path: "/admin" });
+        } else{
+          self.$router.push({ name: "AccountUser" });
+        }
       }
-    },
-
+      if(response.data.code != "0000"){
+        $("body").toast({
+          class: "error",
+          message: response.data.message
+      });
+      }
+    } ,
     changeRouterRegist(){
       this.$router.push({ name: "Regist" });
     }
-  },
+   },
 
   validations() {
     return {
       login: {
-        nameAccount: {
+        name_account: {
           required
         },
-        passWord: {
+        password: {
           required
         }
       }
