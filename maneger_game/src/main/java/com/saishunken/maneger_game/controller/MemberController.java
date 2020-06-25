@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.saishunken.maneger_game.mapper.MapperMember;
+import com.saishunken.maneger_game.mapper.MapperTeam;
 import com.saishunken.maneger_game.model.Member;
 import com.saishunken.maneger_game.model.Response;
+import com.saishunken.maneger_game.model.Team;
 import com.saishunken.maneger_game.service.MemberService;
 
 @RestController
@@ -26,6 +28,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MapperTeam mapperTeam;
 	
 	//all
 	@GetMapping("/getall/member")
@@ -66,15 +71,15 @@ public class MemberController {
 		member.setId_team(id_team);
 		//member.setName_member(nameMember.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
 		member.setOffset((member.getPage() - 1) * member.getMaxPageItem());
-		Member memberTest = mapperMember.getById(id_team);
-		if(memberTest != null) {
+		Team team = mapperTeam.getById(id_team);
+		if(team != null) {
 			response.setTotalItem(memberService.getTotalByTeam(member));
 			response.setCode("0000");
 			response.setMessage("Get data successfully");
 			response.setPayload(memberService.getByTeam(member));
 			return ResponseEntity.ok().body(response);
 		} 
-		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, memberTest));
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 		
 		
 	}

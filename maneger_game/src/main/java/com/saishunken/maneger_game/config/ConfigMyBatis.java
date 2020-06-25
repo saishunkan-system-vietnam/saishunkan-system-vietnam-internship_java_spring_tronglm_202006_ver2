@@ -65,7 +65,7 @@ public class ConfigMyBatis {
 		mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
 		return mapperScannerConfigurer;
 	}
-	
+
 	@Bean
 	public FilterRegistrationBean<CharacterEncodingFilter> encodingFilter() {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();

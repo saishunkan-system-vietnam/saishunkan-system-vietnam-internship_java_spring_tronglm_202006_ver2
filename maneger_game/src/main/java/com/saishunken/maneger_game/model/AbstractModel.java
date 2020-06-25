@@ -3,12 +3,18 @@ package com.saishunken.maneger_game.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AbstractModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private int id;
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime create_date = LocalDateTime.now();
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime edit_date = LocalDateTime.now();
 	private Integer page = 1;
 	private int maxPageItem = 5;

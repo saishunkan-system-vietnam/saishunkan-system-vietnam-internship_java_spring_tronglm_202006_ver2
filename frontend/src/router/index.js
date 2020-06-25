@@ -37,6 +37,7 @@ const routes = [
         name: "Member",
         props: true
       }
+      
     ]
   },
 

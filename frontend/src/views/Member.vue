@@ -130,7 +130,6 @@ export default {
       if(response.data.code == "0000"){
         this.team = response.data.payload;
       }
-      console.log(response.data.payload, "name")
     },
   },
 

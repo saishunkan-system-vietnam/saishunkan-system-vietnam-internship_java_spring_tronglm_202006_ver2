@@ -65,6 +65,7 @@ export default {
       infoLogin:{}
     }
   },
+
   methods: {
     async loginAccount() {
       let self = this;
@@ -95,7 +96,7 @@ export default {
           message: response.data.message
       });
       }
-    } ,
+    },
     changeRouterRegist(){
       this.$router.push({ name: "Regist" });
     }

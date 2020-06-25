@@ -1,6 +1,9 @@
 
 <template>
   <div class="ui container" style="margin-top: 25px;">
+    <div class="text-title">
+      Quản lý tài khoản
+    </div>
     <div style="margin-top: 75px;" class="ui buttons">
       <button @click="addAccount" class="ui button">Thêm tài khoản</button>
     </div>
@@ -223,7 +226,7 @@ export default {
       }
     },
 
-    async addAccount() {
+    addAccount() {
       this.idAccountWatch = null;
       this.refestData();
       $("#modal-account-account-edit").modal("show");
