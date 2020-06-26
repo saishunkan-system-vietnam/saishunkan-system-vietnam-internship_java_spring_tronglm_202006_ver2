@@ -19,7 +19,7 @@ import com.saishunken.maneger_game.model.Tournament;
 import com.saishunken.maneger_game.service.TournamentService;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class TournamentController {
 	
 	@Autowired
@@ -45,7 +45,7 @@ public class TournamentController {
 	}
 	
 	//add tournament
-	@PostMapping("/tournament/create")
+	@PostMapping("/admintournament/create")
 	public ResponseEntity<Response> createTeam(@RequestBody Tournament tournament) {
 		Integer id = null;
 		if(mapperTournament.getTotalByNameTournament(tournament.getName_tnm(), id)> 0){
@@ -58,7 +58,7 @@ public class TournamentController {
 	}
 	
 	//update
-	@PostMapping("/tournament/update")
+	@PostMapping("admin/tournament/update")
 	public ResponseEntity<Response> updateUser(@RequestBody Tournament tournament) {
 		Integer id = tournament.getId();
 		if((mapperTournament.getTotalByNameTournament(tournament.getName_tnm(), id)) > 0) {
@@ -72,7 +72,7 @@ public class TournamentController {
 	}
 	
 	//get by id
-	@GetMapping("/tournament/getbyid")
+	@GetMapping("tournament/getbyid")
 	public ResponseEntity<Response> getUserById(@RequestParam int id) {
 		Response response = new Response();
 		Tournament tournament = mapperTournament.getById(id);
@@ -86,7 +86,7 @@ public class TournamentController {
 	}
 	
 	//get all
-	@GetMapping("/tournament/getall")
+	@GetMapping("tournament/getall")
 	public ResponseEntity<Response> getAllTournament(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> name_tnm) {
 		Response response = new Response();

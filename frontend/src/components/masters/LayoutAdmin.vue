@@ -7,14 +7,21 @@
           :class="isActiveLink('AdminAccount') ? 'active' : ''"
           :to="{ name: 'AdminAccount'}"
         >
-          <i class="home icon"></i> Home
+          <i class="home icon"></i> Trang chủ
         </router-link>
         <router-link
           class="item"
-          :class="isActiveLink('Team') ? 'active' : ''"
+          :class="isActiveLink('Team') ? 'active' : (isActiveLink('Member') ? 'active': '')"
           :to="{ name: 'Team'}"
         >
-          <i class="users icon"></i> Team
+          <i class="users icon"></i> Đội
+        </router-link>
+        <router-link
+          class="item"
+          :class="isActiveLink('Tournament') ? 'active' : ''"
+          :to="{ name: 'Tournament'}"
+        >
+          <i class="steam icon"></i> Giải đấu
         </router-link>
       </div>
     </div>

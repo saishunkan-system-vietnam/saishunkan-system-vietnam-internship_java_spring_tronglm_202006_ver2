@@ -3,8 +3,8 @@
 
 <mapper namespace="com.saishunken.maneger_game.mapper.MapperTournament">
 	<insert id="insert" parameterType="Tournament">
-		INSERT INTO tournament (name_tnm, info_tnm, del_flg, start_date, end_date, status_flg, create_date, edit_date) 
-		VALUES (#{name_tnm}, #{info_tnm}, #{del_flg}, #{start_date}, #{end_date}, #{status_flg}, #{create_date}, #{edit_date});
+		INSERT INTO tournament (name_tnm, info_tnm, del_flg, start_date, end_date, status_flg, create_date, edit_date, win_point, lose_point, equal_point) 
+		VALUES (#{name_tnm}, #{info_tnm}, #{del_flg}, #{start_date}, #{end_date}, #{status_flg}, #{create_date}, #{edit_date}, #{win_point}, #{lose_point}, #{equal_point});
 	</insert>
 
 	<update id="update" parameterType="Tournament">
@@ -27,6 +27,18 @@
 		
 		<if test="end_date != null">
 			end_date = #{end_date},
+		</if>
+		
+		<if test="win_point != null">
+			win_point = #{win_point},
+		</if>
+		
+		<if test="equal_point != null">
+			equal_point = #{equal_point},
+		</if>
+		
+		<if test="lose_point != null">
+			lose_point = #{lose_point},
 		</if>
 		
 		<if test="status_flg != null">
@@ -55,8 +67,6 @@
 		<if test="name_tnm != null">
 			AND (name_tnm LIKE '%${name_tnm}%' OR info_tnm LIKE '%${name_tnm}%' OR start_date LIKE '%${name_tnm}%' OR end_date LIKE '%${name_tnm}%')
 		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset}
 	</select>
 
 	<select id="getTotalTournament" parameterType="Tournament" resultType="BigInteger">

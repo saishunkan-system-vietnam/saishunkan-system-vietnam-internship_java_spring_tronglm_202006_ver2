@@ -23,6 +23,15 @@ public class TournamentService {
 		if(tournament.getStatus_flg() == null) {
 			tournament.setStatus_flg(0);
 		}
+		if(tournament.getWin_point() == null) {
+			tournament.setWin_point(0);;
+		}
+		if(tournament.getLose_point() == null) {
+			tournament.setLose_point(0);
+		}
+		if(tournament.getEqual_point() == null) {
+			tournament.setEqual_point(0);
+		}
 		mapperTournament.insert(tournament);
 	}
 	

@@ -4,7 +4,7 @@
     <button  @click="turnTeam">
         <i class="arrow left icon"></i>
     </button>
-    <div class="text-title">Quản lý thành viên của đội</div>
+    <div class="text-title">Quản lý đội trong giải đấu</div>
     <table class="team-detail">
       <tr>
         <td>
@@ -128,7 +128,7 @@ import { callApi } from "../Api/callApi";
 import { required, maxLength, numeric, email } from "vuelidate/lib/validators";
 
 export default {
-  name: "Member",
+  name: "TeamDuel",
   props: ["id_team"],
   data() {
     return {
@@ -164,9 +164,9 @@ export default {
       let response = await callApi("GET", "admin/getbyteam/member", null, {
         id_team: this.id_team
       });
-      if (response.data.code != "0000") {
-        return this.$router.push({ name: "Team" });
-      }
+    //   if (response.data.code != "0000") {
+    //     return this.$router.push({ name: "Team" });
+    //   }
       this.members = response.data.payload;
       this.totalItem = response.data.totalItem;
       this.maxPageOnItem = 5;

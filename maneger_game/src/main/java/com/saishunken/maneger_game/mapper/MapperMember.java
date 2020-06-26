@@ -38,6 +38,8 @@ public interface MapperMember {
 	
 	public void update(Member member);
 	
+	public void updateCap(Member member);
+	
 	//total nickname
 	public int getTotalByNickName(@Param("nickname") String nickname, @Param("id") Integer id );
 

@@ -21,9 +21,15 @@ public class MemberService {
 		if(member.getDel_flg() == null) {
 			member.setDel_flg(0);
 		}
+		
 		if(member.getCap_flg() == null) {
 			member.setCap_flg(0);
 		}
+		
+		if(member.getCap_flg() == 1) {
+			mapperMember.updateCap(member);
+		}
+			
 		if(member.getId_team() == null) {
 			member.setId_team(0);
 		}
@@ -31,6 +37,18 @@ public class MemberService {
 			member.setNickname("");
 		}
 		mapperMember.insert(member);
+	}
+	
+	//update
+	public void update(Member member) {
+		if(member.getCap_flg() == null) {
+			member.setCap_flg(0);
+		}
+		
+		if(member.getCap_flg() == 1) {
+			mapperMember.updateCap(member);
+		}
+		mapperMember.update(member);
 	}
 	
 	//all

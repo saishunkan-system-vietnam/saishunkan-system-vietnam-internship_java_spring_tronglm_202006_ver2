@@ -14,8 +14,6 @@
 		<if test="name_member != null">
 			AND (name_member LIKE '%${name_member}%' OR nickname LIKE '%${name_member}%')
 		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset};
 	</select>
 	
 	<select id="getTotalMember" parameterType="Member" resultType="BigInteger">
@@ -73,7 +71,6 @@
 		</if>
 	</select>
 	
-	
 	<select id="getById" parameterType="int"
 		resultType="Member">
 		SELECT * FROM member WHERE id = #{id};
@@ -107,7 +104,12 @@
 			scored = #{scored},
 		</if>
 		edit_date = #{edit_date}
-		WHERE id = #{id};
+		WHERE id = #{id} 
 	</update>
-		
+
+	<update id="updateCap" parameterType="Member">
+		UPDATE member SET cap_flg = 0			
+		WHERE id_team = #{id_team} AND cap_flg = 1
+	</update>
+
 </mapper>

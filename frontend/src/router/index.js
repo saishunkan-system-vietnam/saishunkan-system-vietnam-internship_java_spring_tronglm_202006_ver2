@@ -4,9 +4,11 @@ import VueRouter from 'vue-router'
 import Login from "../views/Login.vue"
 import Regist from "../views/Regist.vue"
 import Team from "../views/Team.vue"
+import Tournament from "../views/Tournament.vue"
 import Member from "../views/Member.vue"
 import AdminAccount from "../views/AdminAccount.vue"
 import AccountUser from "../views/AccountUser.vue"
+import TeamDuel from "../views/TeamDuel.vue"
 import LayoutAdmin from "../components/masters/LayoutAdmin"
 import LayoutUsers from "../components/masters/LayoutUsers"
 import store from "../store/index"
@@ -32,12 +34,22 @@ const routes = [
         name: "Team",
       },
       {
+        path: 'team-duel/:id_team',
+        component: TeamDuel,
+        name: "TeamDuel",
+        props: true
+      },
+      {
+        path: 'tournament',
+        component: Tournament,
+        name: "Tournament",
+      },
+      {
         path: 'member/:id_team',
         component: Member,
         name: "Member",
         props: true
-      }
-      
+      }  
     ]
   },
 
@@ -80,6 +92,7 @@ router.beforeEach(async (to, from, next) => {
         return next()
       return next({ path: '/login' })
     }
+    store.commit('increment', response.data.payload);
     if (response.data.payload.role_name == 'admin') {
       if (to.path == '/login' || to.path == '/regist')
         return next({ path: '/admin' });

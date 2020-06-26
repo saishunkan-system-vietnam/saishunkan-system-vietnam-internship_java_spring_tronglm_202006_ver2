@@ -164,14 +164,14 @@ export default {
        let response = await callApi("POST", "admin/updateTeam", frm);
        if(response.data.code == "0000"){
          this.getListTeam();
-         $("#modal-team-delete").modal("toggle");
+         $("#modal-team-delete").modal("hide");
        } else {
          this.getListTeam();
        }
     },
 
     cancelDelete(){
-      $("#modal-team-delete").modal("toggle");
+      $("#modal-team-delete").modal("hide");
     },
 
     async editTeam(id){
@@ -182,12 +182,20 @@ export default {
         this.team.name_team = response.data.payload.name_team;
         this.team.founding_date = response.data.payload.founding_date;
         this.team.info = response.data.payload.info;
-        this.imgPreview = "http://localhost:8081"+response.data.payload.link_logo;
+        if(response.data.payload.link_logo){
+          this.imgPreview = "http://localhost:8081"+response.data.payload.link_logo;
+        } else{
+          this.imgPreview = null;
+        }
         $("#modal-team-edit").modal("show");
       }
     },
 
     async saveTeam() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
       let frm = new FormData();
       if(!this.idTeamWatch){
         frm.append("name_team", this.team.name_team);
@@ -199,7 +207,7 @@ export default {
       let response = await callApi("POST", "admin/createTeam", frm);
       if(response.data.code == "0000"){
         this.getListTeam();
-        $("#modal-team-edit").modal("toggle");
+        $("#modal-team-edit").modal("hide");
       }
     } else{
       if(this.$refs.file.files[0]){
@@ -212,13 +220,13 @@ export default {
       let response = await callApi("POST", "admin/updateTeam", frm);
       if(response.data.code == "0000"){
         this.getListTeam();
-        $("#modal-team-edit").modal("toggle");
-      }
-    }     
+        $("#modal-team-edit").modal("hide");
+        }
+      }     
     },
 
     cancelSave() {
-      $("#modal-team-edit").modal("toggle");
+      $("#modal-team-edit").modal("hide");
     },
 
     manegerMemberRedirect(id) {

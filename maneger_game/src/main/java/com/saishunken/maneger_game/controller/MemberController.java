@@ -160,7 +160,7 @@ public class MemberController {
 			
 		}else {
 			member.setEdit_date(LocalDateTime.now());
-			mapperMember.update(member);
+			memberService.update(member);
 			return ResponseEntity.ok().body(new Response("0000", "Update Member successfully", 0, null));
 		}
 	}

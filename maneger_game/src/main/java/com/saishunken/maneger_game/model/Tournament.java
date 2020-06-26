@@ -11,7 +11,29 @@ public class Tournament  extends AbstractModel{
 	private Integer status_flg;	
 	private LocalDate start_date;
 	private LocalDate end_date;
+	private Integer win_point;
+	private Integer equal_point;
+	private Integer lose_point;
 	
+	
+	public Integer getWin_point() {
+		return win_point;
+	}
+	public void setWin_point(Integer win_point) {
+		this.win_point = win_point;
+	}
+	public Integer getEqual_point() {
+		return equal_point;
+	}
+	public void setEqual_point(Integer equal_point) {
+		this.equal_point = equal_point;
+	}
+	public Integer getLose_point() {
+		return lose_point;
+	}
+	public void setLose_point(Integer lose_point) {
+		this.lose_point = lose_point;
+	}
 	public String getName_tnm() {
 		return name_tnm;
 	}

@@ -1,11 +1,11 @@
-.text-title{
-text-align: center;
-font-weight: bold;
-padding: 30px;
-font-size: 2rem;
+.text-title {
+    text-align: center;
+    font-weight: bold;
+    padding: 30px;
+    font-size: 2rem;
 }
 
-.team-detail{
+.team-detail {
     padding: 10px 10px;
     border: 1px solid silver;
     width: 100%;
@@ -14,19 +14,35 @@ font-size: 2rem;
     box-shadow: 1px 1px 5px silver;
 }
 
-.team-detail table{
+.team-detail table {
     width: 100%;
 }
-.team-detail table td{
+
+.team-detail table td {
     padding-top: 15px;
     border-bottom: 1px solid silver;
 }
 
-.team-detail table td:last-child{
+.team-detail table td:last-child {
     width: 70%;
     padding-left: 15px;
 }
-.img-logo-all{
-    max-height: 200px;
 
+.img-logo-all {
+    max-height: 200px;
 }
+
+#image-member-logo {
+    max-height: 150px;
+    float: right;
+}
+
+.ql-editor {
+    max-height: 400px;
+    min-height: 400px;
+}
+
+/* *, ::after, ::before {
+    -webkit-box-sizing: unset !important;
+    box-sizing: unset !important;
+} */
