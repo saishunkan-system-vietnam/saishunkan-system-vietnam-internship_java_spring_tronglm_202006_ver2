@@ -14,7 +14,16 @@ public class Match extends AbstractModel{
 	
 	private List<Detail_match> listDetailMatch;
 	
+	private Team teams;
 	
+	
+
+	public Team getTeams() {
+		return teams;
+	}
+	public void setTeams(Team teams) {
+		this.teams = teams;
+	}
 	public List<Detail_match> getListDetailMatch() {
 		return listDetailMatch;
 	}

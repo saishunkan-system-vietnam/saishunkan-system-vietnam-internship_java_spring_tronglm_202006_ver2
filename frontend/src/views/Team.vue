@@ -12,7 +12,7 @@
     <table class="ui celled padded table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>id</th>
           <th>Tên Team</th>
           <th>Ngày thành lập</th>
           <th>Thông tin thêm</th>

@@ -3,7 +3,7 @@
     <button @click="turnTournament">
       <i class="arrow left icon"></i>
     </button>
-    <div class="text-title">Quản lý đội trong giải đấu</div>
+    <div class="text-title">Quản lý trận đấu</div>
     <table class="team-detail">
       <tr>
         <td>
@@ -43,34 +43,30 @@
     <div class="ui buttons">
       <button @click="addTeamInTnm()" class="ui button">Thêm đội</button>
     </div>
-   <table class="ui celled padded table">
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>Tên Team</th>
-          <th>Ngày thành lập</th>
-          <th>Thông tin thêm</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in teams" :key="item.id">
-          <td>{{item.id}}</td>
-          <td class="single line">{{item.name_team}}</td>
-          <td>
-            <div class="ui yellow rating" data-rating="3" data-max-rating="3">{{item.founding_date}}</div>
-          </td>
-          <td class="right aligned">{{item.info}}</td>
-          <td>
-            <div class="compact ui basic icon buttons">     
-              <button @click="deleteTeamInTnm(item.id)" class="compact ui button" data-position="top right" data-variation="mini">
-                <i class="trash alternate outline icon"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+   <table class="ui red table">
+  <thead>
+    <tr><th>Food</th>
+    <th>Calories</th>
+    <th>Protein</th>
+    <th>Protein</th>
+    <th>Protein</th>
+  </tr></thead><tbody>
+    <tr>
+      <td>Apples</td>
+      <td>200</td>
+      <td>0g</td>
+      <td>0g</td>
+      <td>0g</td>
+    </tr>
+    <tr>
+      <td>Orange</td>
+      <td>310</td>
+      <td>0g</td>
+      <td>0g</td>
+      <td>0g</td>
+    </tr>
+  </tbody>
+</table>
     <div class="ui modal large" id="modal-team-tournnament-add">
       <div class="ui header red">
         Danh sách các đội
@@ -126,12 +122,12 @@ import { callApi } from "../Api/callApi";
 import { required, maxLength, numeric, email } from "vuelidate/lib/validators";
 
 export default {
-  name: "TeamDuel",
-  props: ["id_tnm"],
+  name: "MatchTnm",
+  props: ["tnm_id"],
   data() {
     return {
       requestDataSaveTeam: {
-        id: this.id_tnm,
+        id: this.tnm_id,
         listTeam: []
       },
       teams: [],
@@ -160,7 +156,7 @@ export default {
       this.id_team_update = id;
       let response = await callApi("GET", "team/getbyidtournament", null, {
         id: id,
-        id_tournament: this.id_tnm
+        id_tournament: this.tnm_id
         });
       if(!response.data.code){
         return ;
@@ -187,7 +183,7 @@ export default {
     },
 
     async getListTeamInTnm() {
-      let response = await callApi("GET", "team/gettournament", null, {id_tournament: this.id_tnm});
+      let response = await callApi("GET", "team/gettournament", null, {id_tournament: this.tnm_id});
       if(!response.data.code){
         return ;
       }
@@ -225,7 +221,7 @@ export default {
     },
 
     async getListTeam() {
-      let response = await callApi("GET", "team/getbynotidtournament", null, {id_tournament: this.id_tnm});
+      let response = await callApi("GET", "team/getbynotidtournament", null, {id_tournament: this.tnm_id});
       if (!response.data.code) {
         return;
       }
@@ -242,7 +238,7 @@ export default {
 
     async getInfoTournament() {
       let response = await callApi("GET", "/tournament/getbyid", null, {
-        id: this.id_tnm
+        id: this.tnm_id
       });
       if (response.data.code == "0000") {
         this.tournament = response.data.payload;

@@ -18,7 +18,7 @@
         </router-link>
         <router-link
           class="item"
-          :class="isActiveLink('Tournament') ? 'active' : ''"
+          :class="isActiveLink('Tournament') ? 'active' : (isActiveLink('TeamDuel') ? 'active': (isActiveLink('MatchTnm') ? 'active': ''))"
           :to="{ name: 'Tournament'}"
         >
           <i class="steam icon"></i> Giải đấu

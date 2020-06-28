@@ -9,6 +9,7 @@ import Member from "../views/Member.vue"
 import AdminAccount from "../views/AdminAccount.vue"
 import AccountUser from "../views/AccountUser.vue"
 import TeamDuel from "../views/TeamDuel.vue"
+import MatchTnm from "../views/MatchTnm.vue"
 import LayoutAdmin from "../components/masters/LayoutAdmin"
 import LayoutUsers from "../components/masters/LayoutUsers"
 import store from "../store/index"
@@ -34,14 +35,20 @@ const routes = [
         name: "Team",
       },
       {
-        path: 'team-duel/:id_team',
+        path: 'team-duel/:id_tnm',
         component: TeamDuel,
         name: "TeamDuel",
         props: true
       },
       {
+        path: 'match-tnm/:tnm_id',
+        component: MatchTnm,
+        name: "MatchTnm",
+        props: true
+      },
+      {
         path: 'tournament',
-        component: Tournament,
+        component: Tournament,  
         name: "Tournament",
       },
       {

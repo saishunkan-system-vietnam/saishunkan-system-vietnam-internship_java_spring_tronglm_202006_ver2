@@ -33,6 +33,7 @@ public class TeamService {
 		mapperTeam.insert(team);
 	}
 	
+	
 	//get all
 	public List<Team> getAll(Team team){
 		return mapperTeam.getAll(team);
@@ -52,9 +53,9 @@ public class TeamService {
 	}
 	
 	//by id tournament
-	public List<Team> getAllByIdTournament(Team team){
-		return mapperTeam.getAllByIdTournament(team);
-	}
+//	public List<Team> getAllByIdTournament(Team team){
+//		return mapperTeam.getAllByIdTournament(team);
+//	}
 	
 	public int getTotalByIdTournament(Team team) { 	
 		return mapperTeam.getTotalByIdTournament(team).intValue();

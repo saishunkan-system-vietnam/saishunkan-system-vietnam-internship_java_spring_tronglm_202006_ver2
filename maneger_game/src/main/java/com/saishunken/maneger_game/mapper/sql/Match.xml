@@ -5,13 +5,13 @@
 
 	<insert id="insert" parameterType="Match"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 
-		INSERT INTO manage_device.match (start_time, del_flg, status_flg, edit_date, create_date, place_match, end_time)
+		INSERT INTO match1 (start_time, del_flg, status_flg, edit_date, create_date, place_match, end_time)
 		VALUES (#{start_time}, #{del_flg}, #{status_flg}, #{edit_date}, #{create_date}, #{place_match}, #{end_time});
 		
 	</insert>
 
 	<update id="update" parameterType="Match">
-		UPDATE match SET	
+		UPDATE match1 SET	
 		<if test="start_time != null">
 			start_time = #{start_time},
 		</if>
@@ -28,7 +28,7 @@
 			status_flg = #{status_flg},
 		</if>
 		
-		<if test="place_match != null">
+		<if test="place_match1 != null">
 			place_match = #{place_match},
 		</if>
 		edit_date = #{edit_date}
@@ -37,7 +37,45 @@
 
 	<select id="getById" parameterType="int"
 		resultType="Match">
-		SELECT * FROM manage_device.match WHERE id = #{id};
+		SELECT * FROM match1 WHERE id = #{id};
 	</select>
+	
+	<select id="getAllMatch" resultMap="matchResultMap">
+	  select 
+	      m1.id as "m1_id",
+	      m1.start_time as "m1_start_time",
+	      m1.end_time as "m1_end_time",
+	      
+	      d1.id as "d1_end_id",
+	      d1.id_team as "d1_id_team",
+	      d1.id_match as "d1_id_match",
+	      d1.result as "d1_result",
+	      d1.win_flg as "d1_win_flg",
+	      
+	      t1.id as "t1_id",
+	      t1.name_team as "t1_name_team",
+	      t1.id_tournament as "t1_id_tournament",
+	      t1.points as "t1_points"
+	      
+	  from match1 m1
+	  join detail_match d1 on m1.id = d1.id_match
+	  join team t1 on d1.id_team = t1.id
+	</select>
+	<resultMap id="teamResultMap" type="Team">
+		 <id property="id" column="t1_id" />  
+		 <result property="name_team" column="t1_name_team" />
+		 <result property="id_tournament" column="t1_id_tournament" />
+		 <result property="points" column="t1_points" />
+	</resultMap>
+		
+	<resultMap id="matchResultMap" type="Match">
+		 <id property="id" column="m1_id" />  
+		 <result property="start_time" column="m1_start_time" />
+		 <result property="end_time" column="m1_start_time" />
+		 <association property="id" column="t1_id" javaType="Team" resultMap="teamResultMap"/> 
+		 <association property="name_team" column="name_team" javaType="Team" resultMap="teamResultMap"/> 
+		 <association property="id_tournament" column="id_tournament" javaType="Team" resultMap="teamResultMap"/> 
+		 <association property="points" column="points" javaType="Team" resultMap="teamResultMap"/> 
+	</resultMap>
 	
 </mapper>

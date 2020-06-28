@@ -359,9 +359,9 @@ export default {
       }
     },
 
-    manegerCate() {
-      this.$router.push({ name: "AdminHome" });
-    }
+    // manegerCate() {
+    //   this.$router.push({ name: "AdminHome" });
+    // }
   },
 
   validations() {

@@ -44,9 +44,17 @@ public class TournamentController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 	
+	//add team in tournament
+	@PostMapping("admin/tournament/addTeam")
+	public ResponseEntity<Response> addTeam(@RequestBody Tournament tournament) {
+		tournamentService.addTeamInTnm(tournament);
+		return ResponseEntity.ok().body(new Response("0000", "Add team in tournament successfully", 0, null));
+
+	}
+	
 	//add tournament
-	@PostMapping("/admintournament/create")
-	public ResponseEntity<Response> createTeam(@RequestBody Tournament tournament) {
+	@PostMapping("admin/tournament/create")
+	public ResponseEntity<Response> createTournament(@RequestBody Tournament tournament) {
 		Integer id = null;
 		if(mapperTournament.getTotalByNameTournament(tournament.getName_tnm(), id)> 0){
 			return ResponseEntity.ok().body(new Response("0007", "Create Tournament failed", 0, null));

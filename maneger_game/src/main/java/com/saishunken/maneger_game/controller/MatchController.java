@@ -1,5 +1,7 @@
 package com.saishunken.maneger_game.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,18 @@ public class MatchController {
 			match.getId();
 		}
 		return ResponseEntity.ok().body(new Response("0000", "Create Team successfully", match.getId(), match));
+	}
+	
+	@GetMapping("match/getall")
+	public ResponseEntity<Response> getMatchAll() {
+		Response response = new Response();
+		if (mapperMatch.getAllMatch() != null) {
+			response.setCode("0000");
+			response.setMessage("Get data successfully");
+			response.setPayload(mapperMatch.getAllMatch());
+			return ResponseEntity.ok().body(response);
+		}	
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}
 //	@PostMapping("admin/detailmatch/create")
 //	public ResponseEntity<Response> createDetailMatch(@RequestBody Detail_match detail_match){

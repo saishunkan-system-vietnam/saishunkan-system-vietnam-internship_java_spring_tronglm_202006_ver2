@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.saishunken.maneger_game.mapper.MapperTeam;
 import com.saishunken.maneger_game.mapper.MapperTournament;
 import com.saishunken.maneger_game.model.Tournament;
 
@@ -16,6 +17,19 @@ public class TournamentService {
 	
 	@Autowired
 	private MapperTournament mapperTournament;
+	
+	@Autowired
+	private MapperTeam mapperTeam;
+	
+	
+	//add team in tournament
+	
+	public void addTeamInTnm(Tournament tournament) {
+		tournament.getListTeam().forEach(team -> {
+			team.setId_tournament(tournament.getId());
+			mapperTeam.update(team);
+		});
+	}
 	
 	//create tournament
 	public void createTournament (Tournament tournament) {

@@ -40,20 +40,28 @@
                 <i class="edit outline icon"></i>
               </button>
               <button
-                @click="deleteTeam(item.id)"
-                class="compact ui button"
-                data-position="top right"
-                data-variation="mini"
-              >
-                <i class="trash alternate outline icon"></i>
-              </button>
-              <button
                 class="compact ui button"
                 data-position="top right"
                 data-variation="mini"
                 @click="manegerTeamTnm(item.id)"
               >
                 <i class="users cog icon"></i>
+              </button>
+              <button
+                class="compact ui button"
+                data-position="top right"
+                data-variation="mini"
+                @click="manegerMatchTnm(item.id)"
+              >
+                <i class="chess board icon"></i>
+              </button>
+              <button
+                @click="deleteTeam(item.id)"
+                class="compact ui button"
+                data-position="top right"
+                data-variation="mini"
+              >
+                <i class="trash alternate outline icon"></i>
               </button>
             </div>
           </td>
@@ -67,7 +75,7 @@
         <form class="ui form">
           <div class="field" :class="[$v.tournament.name_tnm.$error ? 'field error' : '']">
             <label>Tên giải đấu</label>
-            <input type="text" v-model.trim="tournament.name_tnm" placeholder="Tên đội" />
+            <input type="text" v-model.trim="tournament.name_tnm" placeholder="Tên giải đấu" />
             <template v-if="$v.tournament.name_tnm.$error">
               <p class="uk-text-danger" v-if="!$v.tournament.name_tnm.required">Không được bỏ trống!</p>
               <p
@@ -334,8 +342,13 @@ export default {
     },
 
     manegerTeamTnm(id){
-        this.$router.push({ name: "TeamDuel", params: { id_team: id } });
+      this.$router.push({ name: "TeamDuel", params: { id_tnm: id } });
+    },
+
+    manegerMatchTnm(id){
+      this.$router.push({ name: "MatchTnm", params: { tnm_id: id } });
     }
+
   },
 
   validations() {

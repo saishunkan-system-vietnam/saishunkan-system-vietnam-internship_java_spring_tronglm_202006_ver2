@@ -1,6 +1,7 @@
 package com.saishunken.maneger_game.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Tournament  extends AbstractModel{
 	
@@ -15,7 +16,14 @@ public class Tournament  extends AbstractModel{
 	private Integer equal_point;
 	private Integer lose_point;
 	
+	private List<Team> listTeam;
 	
+	public List<Team> getListTeam() {
+		return listTeam;
+	}
+	public void setListTeam(List<Team> listTeam) {
+		this.listTeam = listTeam;
+	}
 	public Integer getWin_point() {
 		return win_point;
 	}

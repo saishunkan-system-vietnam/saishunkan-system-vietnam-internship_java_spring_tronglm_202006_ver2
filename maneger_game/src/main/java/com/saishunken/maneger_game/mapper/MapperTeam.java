@@ -30,7 +30,7 @@ public interface MapperTeam {
 	public BigInteger getTotalByTournament(Team team);
 	
 	//by id tournament
-	public List<Team> getAllByIdTournament (Team team);
+	public Team getByIdTournament (Team team);
 	
 	public BigInteger getTotalByIdTournament(Team team);
 	
