@@ -1,6 +1,7 @@
 package com.saishunken.maneger_game.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,39 +28,48 @@ public class MatchController {
 	@Autowired
 	private MatchService matchService;
 	
-	@GetMapping("match/getbyid")
-	public ResponseEntity<Response> getMatchById(@RequestParam int id) {
-		Response response = new Response();
-		Match match = mapperMatch.getById(id);
-		if (match != null) {
-			response.setCode("0000");
-			response.setMessage("Get data successfully");
-			response.setPayload(match);
-			return ResponseEntity.ok().body(response);
-		}	
-		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
-	}
+//	@GetMapping("match/getbyid")
+//	public ResponseEntity<Response> getMatchById(@RequestParam int id) {
+//		Response response = new Response();
+//		Match match = mapperMatch.getById(id);
+//		if (match != null) {
+//			response.setCode("0000");
+//			response.setMessage("Get data successfully");
+//			response.setPayload(match);
+//			return ResponseEntity.ok().body(response);
+//		}	
+//		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
+//	}
 	
 	@PostMapping("admin/match/create")
 	public ResponseEntity<Response> createMatch(@RequestBody Match match){
 		int id = matchService.addMatch(match);
-		if(id > 0) {
+		if(id < 0) {
 			match.getId();
+			return ResponseEntity.ok().body(new Response("0007", "Create false", 0, null));
 		}
 		return ResponseEntity.ok().body(new Response("0000", "Create Team successfully", match.getId(), match));
 	}
 	
-	@GetMapping("match/getall")
+	@GetMapping("match/get-all")
 	public ResponseEntity<Response> getMatchAll() {
+		List<Match> list = mapperMatch.getAllMatch();	
+		return ResponseEntity.ok().body(new Response("0000", "get list oke", 0, list));
+	}
+	
+	@GetMapping("match/get-match")
+	public ResponseEntity<Response> getMatchById(@RequestParam int id) {
 		Response response = new Response();
-		if (mapperMatch.getAllMatch() != null) {
+		Match object = mapperMatch.getMatchDetail(id);
+		if (object != null) {
 			response.setCode("0000");
 			response.setMessage("Get data successfully");
-			response.setPayload(mapperMatch.getAllMatch());
+			response.setPayload(object);
 			return ResponseEntity.ok().body(response);
 		}	
 		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}
+
 //	@PostMapping("admin/detailmatch/create")
 //	public ResponseEntity<Response> createDetailMatch(@RequestBody Detail_match detail_match){
 //		int id = matchService.addDeatailMatch(detail_match);

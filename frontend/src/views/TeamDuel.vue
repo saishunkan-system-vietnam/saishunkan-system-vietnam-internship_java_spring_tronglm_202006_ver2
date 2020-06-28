@@ -210,6 +210,7 @@ export default {
     },
 
     async saveTeamInTnm(){
+      
       if(this.requestDataSaveTeam.listTeam.length == 0){
         $("#modal-team-tournnament-add").modal("hide");
         return ;

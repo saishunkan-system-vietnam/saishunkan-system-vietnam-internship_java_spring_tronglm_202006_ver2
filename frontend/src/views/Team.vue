@@ -57,8 +57,8 @@
             <label>Tên đội</label>
             <input type="text" v-model.trim="team.name_team" placeholder="Tên đội" />
             <template v-if="$v.team.name_team.$error">
-              <p class="uk-text-danger" v-if="!$v.team.name_team.required">Không được bỏ trống!</p>
-              <p class="uk-text-danger" v-if="!$v.team.name_team.maxLength">Tên đội quá dài!</p>
+              <span class="ui red text" v-if="!$v.team.name_team.required">Không được bỏ trống!</span>
+              <span class="ui red text" v-if="!$v.team.name_team.maxLength">Tên đội quá dài!</span>
             </template>
           </div>
           <div class="field">
@@ -70,7 +70,7 @@
             <label>Ngày thành lập</label>
             <Calender type="date" v-model="team.founding_date"></Calender>
             <template v-if="$v.team.founding_date.$error">
-              <p class="uk-text-danger" v-if="!$v.team.founding_date.required">Không được bỏ trống!</p>
+              <span class="ui red text" v-if="!$v.team.founding_date.required">Không được bỏ trống!</span>
             </template>
           </div>
           <div class="field">

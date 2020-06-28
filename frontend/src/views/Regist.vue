@@ -12,14 +12,14 @@
               <input type="text" v-model="userAccount.name_account" placeholder="Tên tài khoản" />
             </div>
             <template v-if="$v.userAccount.name_account.$error">
-              <span class="ui red text" v-if="!$v.userAccount.name_account.required">
+              <span class="ui red text"  v-if="!$v.userAccount.name_account.required">
                 Vui lòng nhập tên tài khoản!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.name_account.maxLength">Tên tài khoản quá dài</span>
+              <span class="ui red text"  v-if="!$v.userAccount.name_account.maxLength">Tên tài khoản quá dài</span>
             </template>
             <div v-if="!checkName">
-              <span class="ui red text">Tên tài khoản đã tồn tại!</span>
+              <span class="ui red text" >Tên tài khoản đã tồn tại!</span>
             </div>
           </div>
           <div class="field">
@@ -28,15 +28,15 @@
               <input type="password" v-model="userAccount.password" placeholder="Mật khẩu" />
             </div>
             <template v-if="$v.userAccount.password.$error">
-              <span class="ui red text" v-if="!$v.userAccount.password.required">
+              <span class="ui red text"  v-if="!$v.userAccount.password.required">
                 Vui lòng nhập mật khẩu!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.password.maxLength">
+              <span class="ui red text"  v-if="!$v.userAccount.password.maxLength">
                 Mật khẩu quá dài!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.password.minLength">
+              <span class="ui red text"  v-if="!$v.userAccount.password.minLength">
                 Mậu khẩu phải lớn hơn 6 ký tự!
                 <br />
               </span>
@@ -53,7 +53,7 @@
               />
             </div>
             <template v-if="!checkPass">
-              <span class="ui red text">Không trùng mật khẩu!</span>
+              <span class="ui red text" >Không trùng mật khẩu!</span>
             </template>
           </div>
           <div class="field">
@@ -62,17 +62,17 @@
               <input  type="text" v-model.trim="userAccount.mail" placeholder="Mail" />
             </div>
             <template v-if="$v.userAccount.mail.$error">
-              <span class="ui red text" v-if="!$v.userAccount.mail.required">
+              <span class="ui red text"  v-if="!$v.userAccount.mail.required">
                 Vui lòng nhập mail!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.mail.email">
+              <span class="ui red text"  v-if="!$v.userAccount.mail.email">
                 Mail không đúng định dạng!
                 <br />
               </span>
             </template>
              <div v-if="!checkMail">
-              <span class="ui red text">Mail đã tồn tại!</span>
+              <span class="ui red text" >Mail đã tồn tại!</span>
             </div>
           </div>
           <div class="field">
@@ -81,21 +81,21 @@
               <input type="text" v-model.trim="userAccount.phone_number" placeholder="Số điện thoại" />
             </div>
             <template v-if="$v.userAccount.phone_number.$error">
-              <span class="ui red text" v-if="!$v.userAccount.phone_number.required">
+              <span class="ui red text"  v-if="!$v.userAccount.phone_number.required">
                 Vui lòng nhập số điện thoại!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.phone_number.maxLength">
+              <span class="ui red text"  v-if="!$v.userAccount.phone_number.maxLength">
                 Số quá dài!
                 <br />
               </span>
-              <span class="ui red text" v-if="!$v.userAccount.phone_number.numeric">
+              <span class="ui red text"  v-if="!$v.userAccount.phone_number.numeric">
                 Phải là số!
                 <br />
               </span>
             </template>
              <div v-if="!checkPhone">
-              <span class="ui red text">Số điện thoại đã tồn tại!</span>
+              <span class="ui red text" >Số điện thoại đã tồn tại!</span>
             </div>
           </div>
           <div class="field"></div>

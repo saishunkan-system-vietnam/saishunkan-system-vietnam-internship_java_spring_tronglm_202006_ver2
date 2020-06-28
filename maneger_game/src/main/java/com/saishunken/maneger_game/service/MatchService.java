@@ -1,6 +1,7 @@
 package com.saishunken.maneger_game.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,13 @@ public class MatchService {
 	private MapperDetail_match mapperDetail_match;
 	
 	public int addMatch(Match match) {
+		String str = match.getStr_start_time();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); 
+		match.setStart_time(LocalDateTime.parse(str, formatter));
+
 		match.setDel_flg(0);
 		match.setEnd_time(LocalDateTime.now());
-		match.setStart_time(LocalDateTime.now());
 		
 		if(match.getStatus_flg() == null) {
 			match.setStatus_flg(0);

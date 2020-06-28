@@ -44,9 +44,10 @@
 	  select 
 	      m1.id as "m1_id",
 	      m1.start_time as "m1_start_time",
-	      m1.end_time as "m1_end_time",
+	      m1.status_flg as "m1_status_flg",
+	      m1.place_match as "m1_place_match",
 	      
-	      d1.id as "d1_end_id",
+	      d1.id as "d1_id",
 	      d1.id_team as "d1_id_team",
 	      d1.id_match as "d1_id_match",
 	      d1.result as "d1_result",
@@ -54,28 +55,57 @@
 	      
 	      t1.id as "t1_id",
 	      t1.name_team as "t1_name_team",
-	      t1.id_tournament as "t1_id_tournament",
-	      t1.points as "t1_points"
+	      t1.id_tournament as "t1_id_tournament"
 	      
 	  from match1 m1
-	  join detail_match d1 on m1.id = d1.id_match
-	  join team t1 on d1.id_team = t1.id
+	  left join detail_match d1 on m1.id = d1.id_match
+	  left join team t1 on d1.id_team = t1.id
 	</select>
+	
+	<select id="getMatchDetail" parameterType="int" resultMap="matchResultMap">
+	  select 
+	      m1.id as "m1_id",
+	      m1.start_time as "m1_start_time",
+	      m1.status_flg as "m1_status_flg",
+	      m1.place_match as "m1_place_match",
+	      
+	      d1.id as "d1_id",
+	      d1.id_team as "d1_id_team",
+	      d1.id_match as "d1_id_match",
+	      d1.result as "d1_result",
+	      d1.win_flg as "d1_win_flg",
+	      
+	      t1.id as "t1_id",
+	      t1.name_team as "t1_name_team",
+	      t1.id_tournament as "t1_id_tournament"
+	      
+	  from match1 m1
+	  left join detail_match d1 on m1.id = d1.id_match
+	  left join team t1 on d1.id_team = t1.id
+	  where id = #{id} 
+	</select>
+	
 	<resultMap id="teamResultMap" type="Team">
 		 <id property="id" column="t1_id" />  
 		 <result property="name_team" column="t1_name_team" />
 		 <result property="id_tournament" column="t1_id_tournament" />
-		 <result property="points" column="t1_points" />
 	</resultMap>
-		
+	
+	<resultMap id="detailMatchResultMap" type="Detail_match">
+		 <id property="id" column="d1_id" />  
+		 <result property="id_team" column="d1_id_team" />
+		 <result property="id_match" column="d1_id_match" />
+		 <result property="result" column="d1_result" />
+		 <result property="win_flg" column="d1_win_flg" />
+	</resultMap>
+
 	<resultMap id="matchResultMap" type="Match">
 		 <id property="id" column="m1_id" />  
 		 <result property="start_time" column="m1_start_time" />
-		 <result property="end_time" column="m1_start_time" />
-		 <association property="id" column="t1_id" javaType="Team" resultMap="teamResultMap"/> 
-		 <association property="name_team" column="name_team" javaType="Team" resultMap="teamResultMap"/> 
-		 <association property="id_tournament" column="id_tournament" javaType="Team" resultMap="teamResultMap"/> 
-		 <association property="points" column="points" javaType="Team" resultMap="teamResultMap"/> 
+		 <result property="status_flg" column="m1_status_flg" />
+		 <result property="place_match" column="m1_place_match" />
+		 <collection property="teams" javaType="ArrayList" ofType="Team" resultMap="teamResultMap"></collection>
+		 <collection property="listDetailMatch" javaType="ArrayList" ofType="Detail_match" resultMap="detailMatchResultMap"></collection>
 	</resultMap>
 	
 </mapper>

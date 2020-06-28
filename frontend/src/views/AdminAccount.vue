@@ -87,32 +87,30 @@
             <label>Name Account</label>
             <input type="text" v-model.trim="userAccount.name_account" placeholder="Name Account" />
             <template v-if="$v.userAccount.name_account.$error">
-              <p
-                class="uk-text-danger"
+              <span class="ui red text"
                 v-if="!$v.userAccount.name_account.required"
-              >Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.name_account.maxLength">Long??</p>
+              >Not must required</span>
+              <span class="ui red text" v-if="!$v.userAccount.name_account.maxLength">Long??</span>
             </template>
           </div>
           <div class="field" :class="[$v.userAccount.mail.$error ? 'field error' : '']">
             <label>Mail</label>
             <input type="text" v-model.trim="userAccount.mail" placeholder="Mail" />
             <template v-if="$v.userAccount.mail.$error">
-              <p class="uk-text-danger" v-if="!$v.userAccount.mail.required">Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.mail.maxLength">Long??</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.mail.email">Must be a mail</p>
+              <span class="ui red text" v-if="!$v.userAccount.mail.required">Not must required</span>
+              <span class="ui red text" v-if="!$v.userAccount.mail.maxLength">Long??</span>
+              <span class="ui red text" v-if="!$v.userAccount.mail.email">Must be a mail</span>
             </template>
           </div>
           <div class="field" :class="[$v.userAccount.phone_number.$error ? 'field error' : '']">
             <label>Phone Number</label>
             <input type="text" v-model.trim="userAccount.phone_number" placeholder="Phone Number" />
             <template v-if="$v.userAccount.phone_number.$error">
-              <p
-                class="uk-text-danger"
+              <span class="ui red text"
                 v-if="!$v.userAccount.phone_number.required"
-              >Not must required</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.phone_number.maxLength">Long??</p>
-              <p class="uk-text-danger" v-if="!$v.userAccount.phone_number.numeric">Must be a number</p>
+              >Not must required</span>
+              <span class="ui red text" v-if="!$v.userAccount.phone_number.maxLength">Long??</span>
+              <span class="ui red text" v-if="!$v.userAccount.phone_number.numeric">Must be a number</span>
             </template>
           </div>
           <div class="field">

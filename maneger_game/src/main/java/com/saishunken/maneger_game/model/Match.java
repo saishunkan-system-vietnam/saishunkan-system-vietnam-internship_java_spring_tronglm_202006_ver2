@@ -8,21 +8,30 @@ public class Match extends AbstractModel{
 	private static final long serialVersionUID = 1L;
 	
 	private LocalDateTime start_time;
+	
+	private String str_start_time;
+	
 	private LocalDateTime end_time;
+	
 	private Integer status_flg;
+	
 	private String place_match;
 	
 	private List<Detail_match> listDetailMatch;
 	
-	private Team teams;
+	private List<Team> teams;
 	
-	
-
-	public Team getTeams() {
+	public List<Team> getTeams() {
 		return teams;
 	}
-	public void setTeams(Team teams) {
+	public void setTeams(List<Team> teams) {
 		this.teams = teams;
+	}
+	public String getStr_start_time() {
+		return str_start_time;
+	}
+	public void setStr_start_time(String str_start_time) {
+		this.str_start_time = str_start_time;
 	}
 	public List<Detail_match> getListDetailMatch() {
 		return listDetailMatch;

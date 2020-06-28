@@ -71,19 +71,18 @@
             <label>Tên thành viên</label>
             <input type="text" v-model.trim="member.name_member" placeholder="Tên thành viên" />
             <template v-if="$v.member.name_member.$error">
-              <p class="uk-text-danger" v-if="!$v.member.name_member.required">Không được bỏ trống!</p>
-              <p
-                class="uk-text-danger"
+              <span class="ui red text" v-if="!$v.member.name_member.required">Không được bỏ trống!</span>
+              <span class="ui red text"
                 v-if="!$v.member.name_member.maxLength"
-              >Tên thành viên quá dài!</p>
+              >Tên thành viên quá dài!</span>
             </template>
           </div>
           <div class="field" :class="[$v.member.nickname.$error ? 'field error' : '']">
             <label>Nick name</label>
             <input type="text" v-model.trim="member.nickname" placeholder="Nick name" />
             <template v-if="$v.member.nickname.$error">
-              <p class="uk-text-danger" v-if="!$v.member.nickname.required">Không được bỏ trống!</p>
-              <p class="uk-text-danger" v-if="!$v.member.nickname.maxLength">Nick name quá dài!</p>
+              <span class="ui red text" v-if="!$v.member.nickname.required">Không được bỏ trống!</span>
+              <span class="ui red text" v-if="!$v.member.nickname.maxLength">Nick name quá dài!</span>
             </template>
           </div>
           <div class="field">

@@ -77,11 +77,10 @@
             <label>Tên giải đấu</label>
             <input type="text" v-model.trim="tournament.name_tnm" placeholder="Tên giải đấu" />
             <template v-if="$v.tournament.name_tnm.$error">
-              <p class="uk-text-danger" v-if="!$v.tournament.name_tnm.required">Không được bỏ trống!</p>
-              <p
-                class="uk-text-danger"
+              <span class="ui red text" v-if="!$v.tournament.name_tnm.required">Không được bỏ trống!</span>
+              <span class="ui red text"
                 v-if="!$v.tournament.name_tnm.maxLength"
-              >Tên giải đấu quá dài!</p>
+              >Tên giải đấu quá dài!</span>
             </template>
           </div>
           <div class="ui grid container">
@@ -92,10 +91,9 @@
               <label>Ngày bắt đầu</label>
               <Calender type="date" v-model="tournament.start_date"></Calender>
               <template v-if="$v.tournament.start_date.$error">
-                <p
-                  class="uk-text-danger"
+                <span class="ui red text"
                   v-if="!$v.tournament.start_date.required"
-                >Không được bỏ trống!</p>
+                >Không được bỏ trống!</span>
               </template>
             </div>
             <div
@@ -105,10 +103,9 @@
               <label>Ngày kết thúc</label>
               <Calender type="date" v-model="tournament.end_date"></Calender>
               <template v-if="$v.tournament.end_date.$error">
-                <p
-                  class="uk-text-danger"
+                <span class="ui red text"
                   v-if="!$v.tournament.end_date.required"
-                >Không được bỏ trống!</p>
+                >Không được bỏ trống!</span>
               </template>
             </div>
           </div>

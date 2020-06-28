@@ -15,5 +15,9 @@ public interface MapperMatch {
 	
 	public Match getById(int id);
 	
-	public List<Object> getAllMatch();
+	public List<Match> getAllMatch();
+	
+
+	public Match getMatchDetail(int id);
+	
 }
