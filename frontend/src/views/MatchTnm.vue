@@ -56,72 +56,112 @@
       </thead>
       <tbody>
         <tr v-for="item in listMatch" :key="item.id">
-          <td>{{item.id}}</td>
-          <td>{{getStartTime(item.start_time)}}</td>
-          <td>{{getTeam(item).teamA.name}}</td>
-          <td>{{getTeam(item).teamB.name}}</td>
+          <td>{{ item.id }}</td>
+          <td>{{ getStartTime(item.start_time) }}</td>
+          <td>{{ getTeam(item).teamA.name }}</td>
+          <td>{{ getTeam(item).teamB.name }}</td>
           <td v-html="getStatus(item.status_flg)"></td>
-          <!-- <td>{{getTeam(item).teamA.point}} - {{getTeam(item).teamB.point}}</td>
-          <td>{{getTeam(item).result}}</td> -->
-          <td></td>
+          <td>
+            {{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}
+          </td>
+          <td>{{ getTeam(item).result }}</td>
+          <td>
+            <button
+              class="compact ui button"
+              data-position="top right"
+              data-variation="mini"
+              @click="editMatchInTnm(item.id)"
+            >
+              <i class="edit outline icon"></i>
+            </button>
+          </td>
         </tr>
       </tbody>
+      <tfoot>
+        <div class="ui right floated pagination menu"></div>
+      </tfoot>
     </table>
     <div class="ui modal large" id="modal-match-tournnament-add">
       <div class="ui header red">Xếp lịch thi đấu</div>
       <div class="content">
         <form class="ui form">
+          <div
+            class="field"
+            :class="[$v.dateTimeLocal.$error ? 'field error' : '']"
+          >
+            <label>Thời gian bắt đầu</label>
+            <input v-model="dateTimeLocal" type="datetime-local" />
+            <template v-if="$v.dateTimeLocal.$error">
+              <span class="ui red text" v-if="!$v.dateTimeLocal.required"
+                >Không được bỏ trống!</span
+              >
+            </template>
+          </div>
           <div class="field" :class="[$v.idTeamA.$error ? 'field error' : '']">
             <div class="ui sub header">Đội A</div>
-            <div class="ui fluid selection dropdown" id="select-dropdown-team-a">
+            <div
+              class="ui fluid selection dropdown"
+              id="select-dropdown-team-a"
+            >
               <input type="hidden" name="user" />
               <i class="dropdown icon"></i>
-              <div class="default text">Select Friend</div>
+              <div class="default text">Chọn đội</div>
               <div class="menu">
                 <div
                   v-for="item in teams"
                   :key="item.id"
                   class="item"
                   :data-value="item.id"
-                >{{item.name_team}}</div>
+                >
+                  {{ item.name_team }}
+                </div>
               </div>
             </div>
             <template v-if="$v.idTeamA.$error">
-              <span class="ui red text" v-if="!$v.idTeamA.required">Không được bỏ trống!</span>
+              <span class="ui red text" v-if="!$v.idTeamA.required"
+                >Không được bỏ trống!</span
+              >
             </template>
           </div>
           <div class="field" :class="[$v.idTeamB.$error ? 'field error' : '']">
             <div class="ui sub header">Đội B</div>
-            <div class="ui fluid selection dropdown" id="select-dropdown-team-b">
+            <div
+              class="ui fluid selection dropdown"
+              id="select-dropdown-team-b"
+            >
               <input type="hidden" name="user" />
               <i class="dropdown icon"></i>
-              <div class="default text">Select Friend</div>
+              <div class="default text">Chọn đội</div>
               <div class="menu">
                 <div
                   v-for="item in teams"
                   :key="item.id"
                   class="item"
                   :data-value="item.id"
-                >{{item.name_team}}</div>
+                >
+                  {{ item.name_team }}
+                </div>
               </div>
             </div>
             <template v-if="$v.idTeamB.$error">
-              <span class="ui red text" v-if="!$v.idTeamB.required">Không được bỏ trống!</span>
-              <span class="ui red text" v-if="!$v.idTeamB.isVald">Đội B phải khác đội A</span>
+              <span class="ui red text" v-if="!$v.idTeamB.required"
+                >Không được bỏ trống!</span
+              >
+              <span class="ui red text" v-if="!$v.idTeamB.isVald"
+                >Đội B phải khác đội A</span
+              >
             </template>
           </div>
-          <div class="field" :class="[$v.dateTimeLocal.$error ? 'field error' : '']">
-            <label>Thời gian bắt đầu</label>
-            <input v-model="dateTimeLocal" type="datetime-local" />
-            <template v-if="$v.dateTimeLocal.$error">
-              <span class="ui red text" v-if="!$v.dateTimeLocal.required">Không được bỏ trống!</span>
-            </template>
-          </div>
-          <div class="field" :class="[$v.match.place_match.$error ? 'field error' : '']">
+          <div
+            class="field"
+            :class="[$v.match.place_match.$error ? 'field error' : '']"
+          >
             <label>Địa điểm thi đấu</label>
             <input v-model="match.place_match" type="text" />
             <template v-if="$v.match.place_match.$error">
-              <span class="ui red text" v-if="!$v.match.place_match.required">Không được bỏ trống!</span>
+              <span class="ui red text" v-if="!$v.match.place_match.required"
+                >Không được bỏ trống!</span
+              >
             </template>
           </div>
           <div style="margin-top:20px;" class="actions">
@@ -141,8 +181,12 @@
         <p>Bạn có muốn xóa đội khỏi giải đấu ?</p>
       </div>
       <div class="actions">
-        <div @click="deleteHandleTeamInTnm()" class="ui compact red button">Yes</div>
-        <div @click="cancelDelete()" class="ui compact cancel button">Cancel</div>
+        <div @click="deleteHandleTeamInTnm()" class="ui compact red button">
+          Yes
+        </div>
+        <div @click="cancelDelete()" class="ui compact cancel button">
+          Cancel
+        </div>
       </div>
     </div>
   </div>
@@ -171,11 +215,16 @@ export default {
       idTeamB: "",
       dateTimeLocal: "",
       match: {
+        id: null,
         str_start_time: "",
         place_match: "",
         listDetailMatch: []
       },
-      listMatch: []
+      listMatch: [],
+      detail_match: {},
+      idEditA: "",
+      idEditB: "",
+      idWatch: null    
     };
   },
 
@@ -205,11 +254,10 @@ export default {
 
   methods: {
     getTeam(item) {
-      let teamA = {...item.listDetailMatch[0]};
-      let teamB = {...item.listDetailMatch[1]};
+      let teamA = { ...item.listDetailMatch[0] };
+      let teamB = { ...item.listDetailMatch[1] };
       let infoTeamA = [...this.teams].find(x => x.id == teamA.id_team);
       let infoTeamB = [...this.teams].find(x => x.id == teamB.id_team);
-      
 
       let pointTeamA = item.status_flg ? teamA.result.toString() : "";
       let pointTeamB = item.status_flg ? teamB.result.toString() : "";
@@ -244,53 +292,55 @@ export default {
       return '<i style="height: 17px" class="ui red text pause icon "></i> Đã thi đấu';
     },
 
-    getStartTime(time){
-      if(time){
+    getStartTime(time) {
+      if (time) {
         return moment(time).format("YYYY-MM-DD HH:mm");
       }
-      return; 
+      return;
     },
 
     addMatchInTnm() {
+      this.idWatch = null;
       $("#modal-match-tournnament-add").modal("show");
     },
 
+    async editMatchInTnm(id) {
+      this.idWatch = 1;
+      let response = await callApi("GET", "/match/get-match", null, {
+        id: id,
+        id_tournament: this.tnm_id
+      });
+      if (response.data.code == "0000") {
+        this.detail_match = response.data.payload;
+        $("#select-dropdown-team-a").dropdown(
+          "set selected",
+          this.detail_match.teams[0].id
+        );
+        $("#select-dropdown-team-b").dropdown(
+          "set selected",
+          this.detail_match.teams[1].id
+        );
+        this.match.id = this.detail_match.id;
+        this.dateTimeLocal = this.detail_match.start_time;
+        this.match.place_match = this.detail_match.place_match;
+        this.idEditA = this.detail_match.teams[0].id;
+        this.idEditB = this.detail_match.teams[1].id;
+        $("#modal-match-tournnament-add").modal("show");
+      }
+    },
+
     async getListMatch() {
-      let response = await callApi("GET", "/match/get-all");
+      let response = await callApi("GET", "/match/get-all", null, {
+        id: this.tnm_id
+      });
       if (response.data.code == "0000") {
         this.listMatch = response.data.payload;
       }
     },
 
-    async deleteTeamInTnm(id) {
-      // this.id_team_update = id;
-      // let response = await callApi("GET", "team/getbyidtournament", null, {
-      //   id: id,
-      //   id_tournament: this.tnm_id
-      //   });
-      // if(!response.data.code){
-      //   return ;
-      // }
-      // if(response.data.code == "0000"){
-      //    $("#modal-delete-team-tournament").modal("show");
-      // } else{
-      //   this.getListTeamInTnm();
-      // }
-    },
+    async deleteTeamInTnm(id) {},
 
-    async deleteHandleTeamInTnm() {
-      // let response = await callApi("POST", "admin/updateTeamInTnm", {
-      //   id: this.id_team_update,
-      //   id_tournament: 0
-      // });
-      // if(!response.data.code){
-      //   return ;
-      // }
-      // if(response.data.code == "0000"){
-      //   this.getListTeamInTnm();
-      //    $("#modal-delete-team-tournament").modal("hide");
-      // }
-    },
+    async deleteHandleTeamInTnm() {},
 
     async getListTeamInTnm() {
       let response = await callApi("GET", "team/gettournament", null, {
@@ -304,27 +354,33 @@ export default {
       }
     },
 
-    selectTeam(item) {
-      //   let idIndex = this.requestDataSaveTeam.listTeam.findIndex(x => x.id == item.id);
-      //   if(idIndex == -1){
-      //     return this.requestDataSaveTeam.listTeam.push({id: item.id});
-      //   }
-      //  this.requestDataSaveTeam.listTeam.splice(idIndex, 1);
-    },
-
-    checkExits(id) {
-      // let idIndex = this.requestDataSaveTeam.listTeam.findIndex(x => x.id == id);
-      // return idIndex >= 0 ? true : false;
-    },
+    checkExits(id) {},
 
     async saveMatchInTnm() {
+      let response;
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
+      if(!this.idWatch){
+        this.match.listDetailMatch = [
+        {
+          id: this.idEditA,
+          id_team: this.idTeamA
+        },
+        {
+          id: this.idEditB,
+          id_team: this.idTeamB
+        }
+      ];
+      this.match.str_start_time = moment(this.dateTimeLocal).format(
+        "YYYY-MM-DD HH:mm"
+      );
+      response = await callApi("POST", "admin/match/create", this.match);
+    } else{
       this.match.listDetailMatch = [
         {
-          id_team: this.idTeamA
+          id_team: this.idTeamA,
         },
         {
           id_team: this.idTeamB
@@ -333,10 +389,15 @@ export default {
       this.match.str_start_time = moment(this.dateTimeLocal).format(
         "YYYY-MM-DD HH:mm"
       );
-
-      let response = await callApi("POST", "admin/match/create", this.match);
+      response = await callApi("POST", "admin/match/create", this.match);
+    }
+      
       if (!response.data.code) {
         return;
+      }
+      if (response.data.code == "0000") {
+        this.getListMatch();
+        $("#modal-match-tournnament-add").modal("hide");
       }
       // if(response.data.code == "0000"){
       //   this.getListTeamInTnm();

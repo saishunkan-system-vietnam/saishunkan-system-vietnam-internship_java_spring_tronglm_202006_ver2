@@ -75,9 +75,7 @@
 		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
 		<if test="name_team != null">
 			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset} 	
+		</if>	
 	</select>
 
 	<select id="getTotalByTournament" parameterType="Team" resultType="BigInteger">
@@ -87,35 +85,28 @@
 		</if>
 	</select>
 	
-	<select id="getAllByIdTournament" parameterType="Team"
+	<select id="getByIdTournament" parameterType="Team"
 		resultType="Team">
-		SELECT * FROM team WHERE del_flg = 0 AND id_tournament > 0
-		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset} 	
+		SELECT * FROM team WHERE del_flg = 0 AND id = #{id} AND id_tournament = #{id_tournament}	
 	</select>
 
 	<select id="getTotalByIdTournament" parameterType="Team" resultType="BigInteger">
-		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament > 0
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id = #{id} AND id_tournament = #{id_tournament}
 		<if test="name_team != null">
 			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>
+		</if>	
 	</select>
 	
 	<select id="getAllByNotIdTournament" parameterType="Team"
 		resultType="Team">
-		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = 0
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament != #{id_tournament}
 		<if test="name_team != null">
 			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset} 	
+		</if>	
 	</select>
 
 	<select id="getTotalByNotIdTournament" parameterType="Team" resultType="BigInteger">
-		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = 0
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament != #{id_tournament}
 		<if test="name_team != null">
 			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
 		</if>

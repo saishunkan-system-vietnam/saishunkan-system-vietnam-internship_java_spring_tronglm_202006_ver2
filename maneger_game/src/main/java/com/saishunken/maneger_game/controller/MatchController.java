@@ -1,7 +1,6 @@
 package com.saishunken.maneger_game.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,16 +50,22 @@ public class MatchController {
 		return ResponseEntity.ok().body(new Response("0000", "Create Team successfully", match.getId(), match));
 	}
 	
+	@PostMapping("admin/match/update")
+	public ResponseEntity<Response> updateMatch(@RequestBody Match match){
+		matchService.updateMatch(match);
+		return ResponseEntity.ok().body(new Response("0000", "Create Team successfully",0, null));
+	}
+	
 	@GetMapping("match/get-all")
-	public ResponseEntity<Response> getMatchAll() {
-		List<Match> list = mapperMatch.getAllMatch();	
+	public ResponseEntity<Response> getMatchAll(@RequestParam int id) {
+		List<Match> list = mapperMatch.getAllMatch(id);	
 		return ResponseEntity.ok().body(new Response("0000", "get list oke", 0, list));
 	}
 	
 	@GetMapping("match/get-match")
-	public ResponseEntity<Response> getMatchById(@RequestParam int id) {
+	public ResponseEntity<Response> getMatchById(@RequestParam int id, @RequestParam int id_tournament) {
 		Response response = new Response();
-		Match object = mapperMatch.getMatchDetail(id);
+		Match object = mapperMatch.getMatchDetail(id, id_tournament);
 		if (object != null) {
 			response.setCode("0000");
 			response.setMessage("Get data successfully");

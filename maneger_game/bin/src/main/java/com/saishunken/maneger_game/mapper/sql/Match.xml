@@ -28,7 +28,7 @@
 			status_flg = #{status_flg},
 		</if>
 		
-		<if test="place_match != null">
+		<if test="place_match1 != null">
 			place_match = #{place_match},
 		</if>
 		edit_date = #{edit_date}
@@ -40,7 +40,7 @@
 		SELECT * FROM match1 WHERE id = #{id};
 	</select>
 	
-	<select id="getAllMatch" parameterType="int" resultMap="matchResultMap">
+	<select id="getAllMatch" resultMap="matchResultMap">
 	  select 
 	      m1.id as "m1_id",
 	      m1.start_time as "m1_start_time",
@@ -60,10 +60,9 @@
 	  from match1 m1
 	  left join detail_match d1 on m1.id = d1.id_match
 	  left join team t1 on d1.id_team = t1.id
-	  where t1.id_tournament = #{id} and m1.del_flg = 0
 	</select>
 	
-	<select id="getMatchDetail" resultMap="matchResultMap">
+	<select id="getMatchDetail" parameterType="int" resultMap="matchResultMap">
 	  select 
 	      m1.id as "m1_id",
 	      m1.start_time as "m1_start_time",
@@ -83,7 +82,7 @@
 	  from match1 m1
 	  left join detail_match d1 on m1.id = d1.id_match
 	  left join team t1 on d1.id_team = t1.id
-	  where m1.id = #{id} and t1.id_tournament = #{id_tournament} and m1.del_flg = 0
+	  where id = #{id} 
 	</select>
 	
 	<resultMap id="teamResultMap" type="Team">

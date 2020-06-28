@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperTournament">
+	<insert id="insert" parameterType="Tournament">
+		INSERT INTO tournament (name_tnm, info_tnm, del_flg, start_date, end_date, status_flg, create_date, edit_date, win_point, lose_point, equal_point) 
+		VALUES (#{name_tnm}, #{info_tnm}, #{del_flg}, #{start_date}, #{end_date}, #{status_flg}, #{create_date}, #{edit_date}, #{win_point}, #{lose_point}, #{equal_point});
+	</insert>
+
+	<update id="update" parameterType="Tournament">
+		UPDATE tournament SET	
+		<if test="name_tnm != null">
+			name_tnm = #{name_tnm},
+		</if>
+		
+		<if test="info_tnm != null">
+			info_tnm = #{info_tnm},
+		</if>
+		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		
+		<if test="start_date != null">
+			start_date = #{start_date},
+		</if>
+		
+		<if test="end_date != null">
+			end_date = #{end_date},
+		</if>
+		
+		<if test="win_point != null">
+			win_point = #{win_point},
+		</if>
+		
+		<if test="equal_point != null">
+			equal_point = #{equal_point},
+		</if>
+		
+		<if test="lose_point != null">
+			lose_point = #{lose_point},
+		</if>
+		
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id};
+	</update>
+
+	<select id="getById" parameterType="int"
+		resultType="Tournament">
+		SELECT * FROM tournament WHERE id = #{id};
+	</select>
+
+	
+	<select id="getTotalByNameTournament" resultType="int">
+		SELECT Count(*) FROM tournament WHERE name_tnm = #{name_tnm}
+		<if test ="id != null">
+			and id != #{id};
+		</if>
+	</select>
+	
+	<select id="getAll" parameterType="Tournament"
+		resultType="Tournament">
+		SELECT * FROM tournament WHERE del_flg = 0
+		<if test="name_tnm != null">
+			AND (name_tnm LIKE '%${name_tnm}%' OR info_tnm LIKE '%${name_tnm}%' OR start_date LIKE '%${name_tnm}%' OR end_date LIKE '%${name_tnm}%')
+		</if>
+	</select>
+
+	<select id="getTotalTournament" parameterType="Tournament" resultType="BigInteger">
+		SELECT Count(*) FROM tournament WHERE del_flg = 0
+		<if test="name_tnm != null">
+			AND (name_tnm LIKE '%${name_tnm}%' OR info_tnm LIKE '%${name_tnm}%' OR start_date LIKE '%${name_tnm}%' OR end_date LIKE '%${name_tnm}%')
+		</if>
+	</select>
+	
+	<select id="getAllByStatus" parameterType="Tournament"
+		resultType="Tournament">
+		SELECT * FROM tournament WHERE del_flg = 0 AND status_flg = #{status_flg}
+		<if test="name_tnm != null">
+			AND (name_tnm LIKE '%${name_tnm}%' OR info_tnm LIKE '%${name_tnm}%' OR start_date LIKE '%${name_tnm}%' OR end_date LIKE '%${name_tnm}%')
+		</if>
+		LIMIT  #{maxPageItem} 
+		OFFSET #{offset}
+	</select>
+
+	<select id="getTotalByStatus" parameterType="Tournament" resultType="BigInteger">
+		SELECT Count(*) FROM tournament WHERE del_flg = 0 AND status_flg = #{status_flg}
+		<if test="name_tnm != null">
+			AND (name_tnm LIKE '%${name_tnm}%' OR info_tnm LIKE '%${name_tnm}%' OR start_date LIKE '%${name_tnm}%' OR end_date LIKE '%${name_tnm}%')
+		</if>
+	</select>
+	
+</mapper>

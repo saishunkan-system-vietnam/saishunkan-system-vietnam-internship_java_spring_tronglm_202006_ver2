@@ -22,8 +22,7 @@ public class MatchService {
 	private MapperDetail_match mapperDetail_match;
 	
 	public int addMatch(Match match) {
-		String str = match.getStr_start_time();
-		
+		String str = match.getStr_start_time();	
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); 
 		match.setStart_time(LocalDateTime.parse(str, formatter));
 
@@ -51,6 +50,26 @@ public class MatchService {
 			});	
 		}
 		return isCheck;
+	}
+	public void updateMatch(Match match) {
+		String str;
+		if(match.getStr_start_time() != null) {
+			str = match.getStr_start_time();	
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); 
+			match.setStart_time(LocalDateTime.parse(str, formatter));
+		} else {
+			match.setStart_time(null);
+		}
+		mapperMatch.update(match);
+		match.getListDetailMatch().forEach(detailMatch -> {
+			if(detailMatch.getResult() == null) {
+				detailMatch.setResult(0);
+			}
+			if(detailMatch.getWin_flg() == null) {
+				detailMatch.setWin_flg(0);
+			}
+			mapperDetail_match.update(detailMatch);
+		});
 	}
 
 

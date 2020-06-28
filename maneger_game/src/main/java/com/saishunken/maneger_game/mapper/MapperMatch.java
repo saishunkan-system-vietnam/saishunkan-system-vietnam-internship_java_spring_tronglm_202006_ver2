@@ -2,6 +2,7 @@ package com.saishunken.maneger_game.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.saishunken.maneger_game.model.Match;
@@ -15,9 +16,9 @@ public interface MapperMatch {
 	
 	public Match getById(int id);
 	
-	public List<Match> getAllMatch();
+	public List<Match> getAllMatch(int id);
 	
 
-	public Match getMatchDetail(int id);
+	public Match getMatchDetail(@Param("id") int id, @Param("id_tournament") int id_tournament);
 	
 }
