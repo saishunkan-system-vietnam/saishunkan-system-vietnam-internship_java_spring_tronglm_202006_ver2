@@ -7,7 +7,7 @@
     </div>
     <div style="float:right" class="ui action input">
       <input v-model.trim="name_serch" type="text" placeholder="Search ..." />
-      <button  @click="serchTeam()" class="ui button">Search</button>
+      <button @click="serchTeam()" class="ui button">Search</button>
     </div>
     <table class="ui celled padded table">
       <thead>
@@ -26,13 +26,23 @@
           <td>
             <div class="ui yellow rating" data-rating="3" data-max-rating="3">{{item.founding_date}}</div>
           </td>
-          <td class="right aligned">{{item.info}}</td>
+          <td class="aligned">{{item.info}}</td>
           <td>
             <div class="compact ui basic icon buttons">
-              <button class="compact ui button" @click="editTeam(item.id)" data-position="top right" data-variation="mini">
+              <button
+                class="compact ui button"
+                @click="editTeam(item.id)"
+                data-position="top right"
+                data-variation="mini"
+              >
                 <i class="edit outline icon"></i>
               </button>
-              <button @click="deleteTeam(item.id)" class="compact ui button" data-position="top right" data-variation="mini">
+              <button
+                @click="deleteTeam(item.id)"
+                class="compact ui button"
+                data-position="top right"
+                data-variation="mini"
+              >
                 <i class="trash alternate outline icon"></i>
               </button>
               <button
@@ -85,7 +95,8 @@
     <div class="ui modal mini" id="modal-team-delete">
       <div class="ui header red">Delete</div>
       <div class="content">
-        <p>Are you want delete?</p>
+        <p v-if="isCheckTeamInMatch">Đội này đang có trong trận đấu, nếu xóa sẽ mất hết thông tin của trận đấu đó!!</p>
+        <p v-else>Are you want delete?</p>
       </div>
       <div class="actions">
         <div @click="deleteHadleTeam()" class="ui compact cancel red button">Yes</div>
@@ -117,7 +128,8 @@ export default {
         info: ""
       },
       idTeamWatch: "",
-      name_serch: ""
+      name_serch: "",
+      isCheckTeamInMatch: false,
     };
   },
   components: {
@@ -147,47 +159,59 @@ export default {
       this.refestData();
       $("#modal-team-edit").modal("show");
     },
-    async deleteTeam(id){
-      let response = await callApi("GET", "admin/team/getbyid", null, {id: id});
-      if(response.data.code == "0000"){
-        this.team.id = response.data.payload.id
+    async deleteTeam(id) {
+      let response = await callApi("GET", "admin/team/getbyid", null, {
+        id: id
+      });
+      if (response.data.code == "0000") {
+        this.team.id = response.data.payload.id;
+        if (response.data.payload.id_tournament) {
+          this.isCheckTeamInMatch = true;   
+        } else{
+          this.isCheckTeamInMatch = false;
+        }
         $("#modal-team-delete").modal("show");
-      } else{
+      } else {
         this.getListTeam();
       }
     },
 
-    async deleteHadleTeam(){
-       let frm = new FormData();
-       frm.append("id", this.team.id);
-       frm.append("del_flg", 1);
-       let response = await callApi("POST", "admin/updateTeam", frm);
-       if(response.data.code == "0000"){
-         this.getListTeam();
-         $("#modal-team-delete").modal("hide");
-       } else {
-         this.getListTeam();
-       }
+    async deleteHadleTeam() {
+      let frm = new FormData();
+      frm.append("id", this.team.id);
+      frm.append("del_flg", 1);
+      let response = await callApi("POST", "admin/updateTeam", frm);
+      if (response.data.code == "0000") {
+        this.getListTeam();
+        $("#modal-team-delete").modal("hide");
+      } else {
+        this.getListTeam();
+      }
     },
 
-    cancelDelete(){
+    cancelDelete() {
       $("#modal-team-delete").modal("hide");
     },
 
-    async editTeam(id){
+    async editTeam(id) {
       this.idTeamWatch = 1;
-      let response = await callApi("GET", "admin/team/getbyid", null, {id: id});
-      if(response.data.code == "0000"){
+      let response = await callApi("GET", "admin/team/getbyid", null, {
+        id: id
+      });
+      if (response.data.code == "0000") {
         this.team.id = response.data.payload.id;
         this.team.name_team = response.data.payload.name_team;
         this.team.founding_date = response.data.payload.founding_date;
         this.team.info = response.data.payload.info;
-        if(response.data.payload.link_logo){
-          this.imgPreview = "http://localhost:8081"+response.data.payload.link_logo;
-        } else{
+        if (response.data.payload.link_logo) {
+          this.imgPreview =
+            "http://localhost:8081" + response.data.payload.link_logo;
+        } else {
           this.imgPreview = null;
         }
         $("#modal-team-edit").modal("show");
+      } else{
+        this.getListTeam();
       }
     },
 
@@ -197,32 +221,32 @@ export default {
         return;
       }
       let frm = new FormData();
-      if(!this.idTeamWatch){
+      if (!this.idTeamWatch) {
         frm.append("name_team", this.team.name_team);
         frm.append("founding_date", this.team.founding_date);
         frm.append("info", this.team.info);
-        if(this.$refs.file.files[0]){
+        if (this.$refs.file.files[0]) {
           frm.append("multipartFile", this.$refs.file.files[0]);
-         }    
-      let response = await callApi("POST", "admin/createTeam", frm);
-      if(response.data.code == "0000"){
-        this.getListTeam();
-        $("#modal-team-edit").modal("hide");
-      }
-    } else{
-      if(this.$refs.file.files[0]){
-        frm.append("multipartFile", this.$refs.file.files[0]);
-      }
-      frm.append("id", this.team.id);
-      frm.append("name_team", this.team.name_team);
-      frm.append("founding_date", this.team.founding_date);
-      frm.append("info", this.team.info);
-      let response = await callApi("POST", "admin/updateTeam", frm);
-      if(response.data.code == "0000"){
-        this.getListTeam();
-        $("#modal-team-edit").modal("hide");
         }
-      }     
+        let response = await callApi("POST", "admin/createTeam", frm);
+        if (response.data.code == "0000") {
+          this.getListTeam();
+          $("#modal-team-edit").modal("hide");
+        }
+      } else {
+        if (this.$refs.file.files[0]) {
+          frm.append("multipartFile", this.$refs.file.files[0]);
+        }
+        frm.append("id", this.team.id);
+        frm.append("name_team", this.team.name_team);
+        frm.append("founding_date", this.team.founding_date);
+        frm.append("info", this.team.info);
+        let response = await callApi("POST", "admin/updateTeam", frm);
+        if (response.data.code == "0000") {
+          this.getListTeam();
+          $("#modal-team-edit").modal("hide");
+        }
+      }
     },
 
     cancelSave() {
@@ -236,33 +260,35 @@ export default {
     showImage(e) {
       let reader = new FileReader();
       let self = this;
-      if(e.target.files[0]){
+      if (e.target.files[0]) {
         reader.onload = function(e) {
-        self.imgPreview = e.target.result;
-       };
-      }else{
-         self.imgPreview = null;
+          self.imgPreview = e.target.result;
+        };
+      } else {
+        self.imgPreview = null;
       }
-      if(e.target.files[0]){
+      if (e.target.files[0]) {
         reader.readAsDataURL(e.target.files[0]);
       }
     },
-    async serchTeam(){
-      let response = await callApi("GET", "admin/team/getall", null, {name_team: this.name_serch});
+    async serchTeam() {
+      let response = await callApi("GET", "admin/team/getall", null, {
+        name_team: this.name_serch
+      });
       if (response.data.code == "0000") {
         this.teams = response.data.payload;
       }
     },
 
-    refestData(){
-      this.$refs.file.type = "text",
-      this.$refs.file.type = "file",
-      this.$v.$reset();
-      this.team.id = "",
-      this.team.name_team = "",
-      this.team.founding_date = "",
-      this.team.info = "",
-      this.imgPreview = ""
+    refestData() {
+      (this.$refs.file.type = "text"),
+        (this.$refs.file.type = "file"),
+        this.$v.$reset();
+      (this.team.id = ""),
+        (this.team.name_team = ""),
+        (this.team.founding_date = ""),
+        (this.team.info = ""),
+        (this.imgPreview = "");
     }
   },
 

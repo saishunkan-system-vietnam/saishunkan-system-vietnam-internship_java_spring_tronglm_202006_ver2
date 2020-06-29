@@ -27,8 +27,8 @@
           <td>
             <div class="ui yellow rating">{{item.start_date}}</div>
           </td>
-          <td class="right aligned">{{item.end_date}}</td>
-          <td class="right aligned">{{item.info_tnm}}</td>
+          <td class="aligned">{{item.end_date}}</td>
+          <td class="aligned" v-html="unencodeInfo_Tnm(item.info_tnm)"></td>
           <td>
             <div class="compact ui basic icon buttons">
               <button
@@ -125,14 +125,14 @@
           </div>
           <div class="field">
             <label>Thông tin giải</label>
-            <textarea v-model.trim="tournament.info_tnm"></textarea>
+            <ckeditor type="classic" v-model="tournament.info_tnm" ></ckeditor>
           </div>
           <button class="ui button" @click="saveTournament()" type="button">Save</button>
           <button class="ui button" @click="cancelSave()" type="button">Cancel</button>
         </form>
       </div>
     </div>
-    <div class="ui modal mini" id="modal-team-delete">
+    <div class="ui modal mini" id="modal-tournament-delete">
       <div class="ui header red">Delete</div>
       <div class="content">
         <p>Are you want delete?</p>
@@ -214,7 +214,7 @@ export default {
           start_date: response.data.payload.start_date,
           end_date: response.data.payload.end_date,
           del_flg: response.data.payload.del_flg,
-          info_tnm: response.data.payload.info_tnm,
+          info_tnm: this.unencodeInfo_Tnm(response.data.payload.info_tnm),
           win_point: response.data.payload.win_point,
           lose_point: response.data.payload.lose_point,
           equal_point: response.data.payload.equal_point,
@@ -225,7 +225,15 @@ export default {
       }
     },
 
+    encodeInfo_Tnm(info_tnm){
+      return escape(info_tnm);
+    },
+    unencodeInfo_Tnm(info_tnmEncode){
+      return unescape(info_tnmEncode);
+    },
+
     async saveTournament() {
+      console.log(this.tournament.info_tnm, "html")
       let response;
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -237,7 +245,7 @@ export default {
         name_tnm: this.tournament.name_tnm,
         start_date: this.tournament.start_date,
         end_date: this.tournament.end_date,
-        info_tnm: this.tournament.info_tnm,
+        info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
         win_point: this.tournament.win_point,
         lose_point: this.tournament.lose_point,
         equal_point: this.tournament.equal_point
@@ -247,7 +255,7 @@ export default {
         name_tnm: this.tournament.name_tnm,
         start_date: this.tournament.start_date,
         end_date: this.tournament.end_date,
-        info_tnm: this.tournament.info_tnm,
+        info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
         win_point: this.tournament.win_point,
         lose_point: this.tournament.lose_point,
         equal_point: this.tournament.equal_point
@@ -274,7 +282,7 @@ export default {
       }
       if(response.data.code == "0000"){
          this.tournament.id = response.data.payload.id;
-         $("#modal-team-delete").modal("show");
+         $("#modal-tournament-delete").modal("show");
       } else{
           this.getListTournament();
       }
@@ -292,12 +300,12 @@ export default {
       if(response.data.code == "0000"){
           this.getListTournament();
           this.sussefull(response.data.message);
-          $("#modal-team-delete").modal("hide");
+          $("#modal-tournament-delete").modal("hide");
       }
     },
 
     cancelDelete() {
-      $("#modal-team-delete").modal("toggle");
+      $("#modal-tournament-delete").modal("toggle");
     },
 
     async editTeam(id) {},

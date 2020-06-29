@@ -14,6 +14,18 @@ import LayoutAdmin from "../components/masters/LayoutAdmin"
 import LayoutUsers from "../components/masters/LayoutUsers"
 import store from "../store/index"
 import { callApi } from "../Api/callApi"
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import VueCkeditor from 'vue-ckeditor5'
+
+
+const options = {
+  editors: {
+    classic: ClassicEditor,
+  },
+  name: 'ckeditor'
+}
+ 
+Vue.use(VueCkeditor.plugin, options);
 
 Vue.use(Vuelidate)
 
@@ -65,7 +77,7 @@ const routes = [
     component: LayoutUsers,
     children: [
       {
-        path: '',
+        path: 'accont',
         component: AccountUser,
         name: "AccountUser",
         props: true,

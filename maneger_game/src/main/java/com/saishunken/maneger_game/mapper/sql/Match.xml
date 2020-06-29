@@ -58,9 +58,12 @@
 	      t1.id_tournament as "t1_id_tournament"
 	      
 	  from match1 m1
+	  
 	  left join detail_match d1 on m1.id = d1.id_match
-	  left join team t1 on d1.id_team = t1.id
-	  where t1.id_tournament = #{id} and m1.del_flg = 0
+	  
+	  inner join team t1 on d1.id_team = t1.id
+	  
+	  where t1.id_tournament = #{id} and m1.del_flg = 0 and d1.del_flg = 0 and t1.del_flg = 0
 	</select>
 	
 	<select id="getMatchDetail" resultMap="matchResultMap">

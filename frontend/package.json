@@ -7,10 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^20.0.0",
+    "@ckeditor/ckeditor5-vue": "^1.0.1",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "moment": "^2.27.0",
     "vue": "^2.6.11",
+    "vue-ckeditor5": "^0.5.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.2.0",
     "vuelidate": "^0.7.5",

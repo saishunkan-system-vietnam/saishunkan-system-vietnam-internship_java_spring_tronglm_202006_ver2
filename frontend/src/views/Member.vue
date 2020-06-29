@@ -48,7 +48,7 @@
           <td>
             <div class="ui yellow rating" data-rating="3" data-max-rating="3">{{item.nickname}}</div>
           </td>
-          <td class="right aligned">{{labelMember(item.cap_flg)}}</td>
+          <td class="aligned">{{labelMember(item.cap_flg)}}</td>
           <td>
             <div class="compact ui basic icon buttons">
               <button @click="editMember(item.id)" class="compact ui button" data-position="top right" data-variation="mini">

@@ -53,8 +53,15 @@ public class MatchController {
 	@PostMapping("admin/match/update")
 	public ResponseEntity<Response> updateMatch(@RequestBody Match match){
 		matchService.updateMatch(match);
-		return ResponseEntity.ok().body(new Response("0000", "Create Team successfully",0, null));
+		return ResponseEntity.ok().body(new Response("0000", "Update Team successfully",0, null));
 	}
+	
+	@PostMapping("admin/match/delete")
+	public ResponseEntity<Response> deleteMatch(@RequestBody Match match){
+		mapperMatch.update(match);
+		return ResponseEntity.ok().body(new Response("0000", "Delete Team successfully",0, null));
+	}
+	
 	
 	@GetMapping("match/get-all")
 	public ResponseEntity<Response> getMatchAll(@RequestParam int id) {

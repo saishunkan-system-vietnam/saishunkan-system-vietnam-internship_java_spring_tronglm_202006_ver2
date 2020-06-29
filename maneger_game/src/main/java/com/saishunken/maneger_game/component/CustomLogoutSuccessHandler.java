@@ -23,8 +23,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 
-	    if (authentication != null && authentication.getDetails() != null) {
-            try {
+//	    if (authentication != null && authentication.getDetails() != null) {
+//            try {
             	Response response = new Response();
             	response.setMessage("Logout successfully");
         		response.setCode("0000");
@@ -34,10 +34,10 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         		httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         		httpResponse.getWriter().write(json);
         		httpResponse.getWriter().flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 	}
 
 }
