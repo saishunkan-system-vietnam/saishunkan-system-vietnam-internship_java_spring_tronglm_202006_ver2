@@ -1,6 +1,6 @@
 package com.saishunken.maneger_game.model;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +13,18 @@ public class Team extends AbstractModel {
 	private Integer points;
 	private String link_logo;
 	
+	private List<Detail_match> listDetailMatch;
+	
+	
+	
+
+	public List<Detail_match> getListDetailMatch() {
+		return listDetailMatch;
+	}
+
+	public void setListDetailMatch(List<Detail_match> listDetailMatch) {
+		this.listDetailMatch = listDetailMatch;
+	}
 
 	private String founding_date;
 	

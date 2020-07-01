@@ -86,7 +86,7 @@
 	  from match1 m1
 	  left join detail_match d1 on m1.id = d1.id_match
 	  left join team t1 on d1.id_team = t1.id
-	  where m1.id = #{id} and t1.id_tournament = #{id_tournament} and m1.del_flg = 0
+	  where m1.id = #{id} and t1.id_tournament = #{id_tournament} and t1.del_flg = 0 and d1.del_flg = 0 and d1.del_flg = 0
 	</select>
 	
 	<resultMap id="teamResultMap" type="Team">

@@ -57,8 +57,8 @@ public class TeamService {
 //		return mapperTeam.getAllByIdTournament(team);
 //	}
 	
-	public int getTotalByIdTournament(Team team) { 	
-		return mapperTeam.getTotalByIdTournament(team).intValue();
+	public int getTotalByIdTournament(int id) {
+		return mapperTeam.getTotalByIdTournament(id).intValue();
 	}
 	
 	//by not id tournament

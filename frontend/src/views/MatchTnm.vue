@@ -34,9 +34,15 @@
             </tr>
           </table>
         </td>
-        <td>{{ tournament.info_tnm }}</td>
+      </tr>
+      <tr>
+        <div class="ui segment">
+          <td v-html="unencodeInfo_Tnm(tournament.info_tnm)"></td>
+        </div>
       </tr>
     </table>
+
+    <div class="text-title">Danh sách trận đấu</div>
 
     <div class="ui buttons">
       <button @click="addMatchInTnm()" class="ui button">Thêm trận đấu</button>
@@ -57,45 +63,64 @@
       <tbody>
         <template v-for="item in listMatch">
           <tr v-if="item.listDetailMatch.length == 2" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td>{{ getStartTime(item.start_time) }}</td>
-          <td>{{ getTeam(item).teamA.name }}</td>
-          <td>{{ getTeam(item).teamB.name }}</td>
-          <td v-html="getStatus(item.status_flg)"></td>
-          <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
-          <td>{{ getTeam(item).result }}</td>
-          <td>
-            <div class="compact ui basic icon buttons">
-              <button
-                class="compact ui button"
-                data-position="top right"
-                data-variation="mini"
-                @click="editMatchInTnm(item.id)"
-              >
-                <i class="edit outline icon"></i>
-              </button>
+            <td>{{ item.id }}</td>
+            <td>{{ getStartTime(item.start_time) }}</td>
+            <td>{{ getTeam(item).teamA.name }}</td>
+            <td>{{ getTeam(item).teamB.name }}</td>
+            <td v-html="getStatus(item.status_flg)"></td>
+            <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
+            <td>{{ getTeam(item).result }}</td>
+            <td>
+              <div class="compact ui basic icon buttons">
+                <button
+                  class="compact ui button"
+                  data-position="top right"
+                  data-variation="mini"
+                  @click="editMatchInTnm(item.id)"
+                >
+                  <i class="edit outline icon"></i>
+                </button>
 
-              <button
-                class="compact ui button"
-                data-position="top right"
-                data-variation="mini"
-                @click="updateMatchInTnm(item.id)"
-              >
-                <i class="poll icon"></i>
-              </button>
-              <button
-                class="compact ui button"
-                data-position="top right"
-                data-variation="mini"
-                @click="deleteMatch(item.id)"
-              >
-                <i class="trash alternate outline icon"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
+                <button
+                  class="compact ui button"
+                  data-position="top right"
+                  data-variation="mini"
+                  @click="updateMatchInTnm(item.id)"
+                >
+                  <i class="poll icon"></i>
+                </button>
+                <button
+                  class="compact ui button"
+                  data-position="top right"
+                  data-variation="mini"
+                  @click="deleteMatch(item.id)"
+                >
+                  <i class="trash alternate outline icon"></i>
+                </button>
+                <div class="ui button floating icon dropdown match-tournamrnt-status">
+                  <i class="exchange alternate icon"></i>
+                  <div class="menu">
+                    <div
+                      :data-value="`${item.id}-0`"
+                      class="item"
+                      :class="item.status_flg==0 ? 'active' : ''"
+                    >Chưa thi đấu</div>
+                    <div
+                      :data-value="`${item.id}-1`"
+                      class="item"
+                      :class="item.status_flg==1 ? 'active' : ''"
+                    >Đã thi đấu</div>
+                    <div
+                      :data-value="`${item.id}-2`"
+                      class="item"
+                      :class="item.status_flg==2 ? 'active' : ''"
+                    >Đang thi đấu</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
         </template>
-        
       </tbody>
       <tfoot>
         <div class="ui right floated pagination menu"></div>
@@ -285,8 +310,10 @@ export default {
   },
 
   methods: {
+    async changeStatus(n) {},
+
     getTeam(item) {
-      let teamA = { ...item.listDetailMatch[0] };
+      let teamA = item.listDetailMatch[0];
       let teamB = { ...item.listDetailMatch[1] };
       let infoTeamA = [...this.teams].find(x => x.id == teamA.id_team);
       let infoTeamB = [...this.teams].find(x => x.id == teamB.id_team);
@@ -303,7 +330,6 @@ export default {
             ? "N - N"
             : "L - W";
       }
-
       let infoDetail = {
         teamA: {
           name: infoTeamA ? infoTeamA.name_team : "",
@@ -321,6 +347,9 @@ export default {
       if (sta_flg == 0) {
         return '<i style="height: 17px" class="ui green text play icon "></i> Chưa thi đấu';
       }
+      if (sta_flg == 2) {
+        return '<i style="height: 17px" class="ui yellow text video icon "></i> Đang thi đấu';
+      }
       return '<i style="height: 17px" class="ui red text pause icon "></i> Đã thi đấu';
     },
 
@@ -336,6 +365,10 @@ export default {
       this.showButonSave = true;
       this.idWatch = null;
       $("#modal-match-tournnament-add").modal("show");
+    },
+
+    unencodeInfo_Tnm(info_tnmEncode) {
+      return unescape(info_tnmEncode);
     },
 
     refestData() {
@@ -377,35 +410,62 @@ export default {
     },
 
     async getListMatch() {
+      let self = this;
       let response = await callApi("GET", "/match/get-all", null, {
         id: this.tnm_id
       });
       if (response.data.code == "0000") {
         this.listMatch = response.data.payload;
       }
+      this.$nextTick( () => {
+        $(".match-tournamrnt-status").dropdown({
+          async onChange(value, text, $choice) {
+            let index = value.indexOf("-");
+            let idMatch = value.substring(0, index);
+            let statusMatch = value.substring(index+1, value.length);
+            let response = await callApi("POST", "/admin/match_one/update", {
+              id: idMatch,
+              status_flg: statusMatch
+            });
+            if(response.data.code == "0000"){
+              self.getListMatch();
+            }
+          }
+        });
+      });
     },
-    
-    async deleteMatch(id){
+
+    async deleteMatch(id) {
       let response = await callApi("GET", "/match/get-match", null, {
         id: id,
         id_tournament: this.tnm_id
       });
-      if(response.data.code == "0000"){
+      if (response.data.code == "0000") {
         this.match.id = response.data.payload.id;
+        this.idEditA = response.data.payload.listDetailMatch[0].id;
+        this.idEditB = response.data.payload.listDetailMatch[1].id;
         $("#modal-delete-match-tournament").modal("show");
-      }
-      else{
+      } else {
         this.getListMatch();
       }
     },
 
-
     async deleteHandleMatchInTnm() {
-      let response = await callApi("POST", "/admin/match/delete", {
+      let response = await callApi("POST", "admin/match/update", {
         id: this.match.id,
-        del_flg: 1
+        del_flg: 1,
+        listDetailMatch: [
+          {
+            id: this.idEditA,
+            del_flg: 1
+          },
+          {
+            id: this.idEditB,
+            del_flg: 1
+          }
+        ]
       });
-      if(response.data.code == "0000"){
+      if (response.data.code == "0000") {
         this.getListMatch();
         $("#modal-delete-match-tournament").modal("hide");
       }
@@ -443,7 +503,7 @@ export default {
           this.resoultTeamB = "";
         }
         $("#modal-resoult-match").modal("show");
-      } else{
+      } else {
         this.getListMatch();
       }
     },
@@ -453,14 +513,14 @@ export default {
           this.resoultTeamA > this.resoultTeamB
             ? 1
             : this.resoultTeamA == this.resoultTeamB
-            ? 2
-            : 0;
+            ? 3
+            : 2;
         this.win_flgB =
           this.resoultTeamB > this.resoultTeamA
             ? 1
             : this.resoultTeamA == this.resoultTeamB
-            ? 2
-            : 0;
+            ? 3
+            : 2;
       }
       this.$v.resoultTeamA.$touch();
       if (this.$v.resoultTeamA.$invalid) {
@@ -560,7 +620,6 @@ export default {
         this.tournament = response.data.payload;
       }
     },
-
 
     sussefull(mess) {
       $("body").toast({

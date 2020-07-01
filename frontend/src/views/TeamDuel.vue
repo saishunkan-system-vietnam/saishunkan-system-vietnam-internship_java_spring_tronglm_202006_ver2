@@ -34,16 +34,18 @@
             </tr>
           </table>
         </td>
-        <td>
-          {{ tournament.info_tnm }}
-        </td>
+      </tr>
+      <tr>
+        <div class="ui segment">
+          <td v-html="unencodeInfo_Tnm(tournament.info_tnm)"></td>
+        </div>
       </tr>
     </table>
 
     <div class="ui buttons">
       <button @click="addTeamInTnm()" class="ui button">Thêm đội</button>
     </div>
-   <table class="ui celled padded table">
+    <table class="ui celled padded table">
       <thead>
         <tr>
           <th>id</th>
@@ -55,42 +57,47 @@
       </thead>
       <tbody>
         <tr v-for="item in teams" :key="item.id">
-          <td>{{item.id}}</td>
-          <td class="single line">{{item.name_team}}</td>
+          <td>{{ item.id }}</td>
+          <td class="single line">{{ item.name_team }}</td>
           <td>
-            <div class="ui yellow rating" data-rating="3" data-max-rating="3">{{item.founding_date}}</div>
+            <div
+              class="ui yellow rating"
+              data-rating="3"
+              data-max-rating="3"
+            >{{ item.founding_date }}</div>
           </td>
-          <td class="right aligned">{{item.info}}</td>
+          <td class="aligned">{{ item.info }}</td>
           <td>
-            <div class="compact ui basic icon buttons">     
-              <button @click="deleteTeamInTnm(item.id)" class="compact ui button" data-position="top right" data-variation="mini">
+            <div class="compact ui basic icon buttons">
+              <button
+                @click="deleteTeamInTnm(item.id)"
+                class="compact ui button"
+                data-position="top right"
+                data-variation="mini"
+              >
                 <i class="trash alternate outline icon"></i>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <div class="ui right floated pagination menu"></div>
+      </tfoot>
     </table>
     <div class="ui modal large" id="modal-team-tournnament-add">
-      <div class="ui header red">
-        Danh sách các đội
-      </div>
+      <div class="ui header red">Danh sách các đội</div>
       <div class="content">
         <div class="ui four column grid">
-          <div
-            class="column"
-            v-for="item in listTeam"
-            :key="item.id"
-            @click="selectTeam(item)"
-          >
+          <div class="column" v-for="item in listTeam" :key="item.id" @click="selectTeam(item)">
             <div class="ui segment">
               <div style="min-height:100px">
-                <img
-                  style="max-width:100%;"
-                  :src="'http://localhost:8081' + item.link_logo"
-                />
+                <img style="max-width:100%;" :src="'http://localhost:8081' + item.link_logo" />
               </div>
-              <p class="pur-mt-10"><i v-if="checkExits(item.id)" class="ui green text check icon "></i>{{ item.name_team }}</p>
+              <p class="pur-mt-10">
+                <i v-if="checkExits(item.id)" class="ui green text check icon"></i>
+                {{ item.name_team }}
+              </p>
             </div>
           </div>
         </div>
@@ -110,12 +117,17 @@
         <p>Bạn có muốn xóa đội khỏi giải đấu ?</p>
       </div>
       <div class="actions">
-        <div @click="deleteHandleTeamInTnm()" class="ui compact red button">
-          Yes
-        </div>
-        <div @click="cancelDelete()" class="ui compact cancel button">
-          Cancel
-        </div>
+        <div @click="deleteHandleTeamInTnm()" class="ui compact red button">Yes</div>
+        <div @click="cancelDelete()" class="ui compact cancel button">Cancel</div>
+      </div>
+    </div>
+    <div class="ui modal mini" id="modal-warnning-team-tournament">
+      <div class="ui header yellow">WARNNING!!!</div>
+      <div class="content">
+        <p>Đội này đang có trong lịch thi đấu, không thế xóa!!</p>
+      </div>
+       <div class="actions">
+        <div class="ui compact cancel button">Cancel</div>
       </div>
     </div>
   </div>
@@ -156,78 +168,96 @@ export default {
   },
 
   methods: {
-    async deleteTeamInTnm(id){
+    unencodeInfo_Tnm(info_tnmEncode) {
+      return unescape(info_tnmEncode);
+    },
+
+    async deleteTeamInTnm(id) {
       this.id_team_update = id;
       let response = await callApi("GET", "team/getbyidtournament", null, {
-        id: id,
-        id_tournament: this.id_tnm
-        });
-      if(!response.data.code){
-        return ;
+        id: id
+      });
+      if (!response) {
+        return;
       }
-      if(response.data.code == "0000"){
-         $("#modal-delete-team-tournament").modal("show");      
-      } else{
+      if (response.data.code == "0008") {
+        $("#modal-warnning-team-tournament").modal("show");
+      }
+      if (response.data.code == "0000") {
+        $("#modal-delete-team-tournament").modal("show");
+      }
+      if (response.data.code == "0002") {
         this.getListTeamInTnm();
       }
     },
 
-    async deleteHandleTeamInTnm(){
+    async deleteHandleTeamInTnm() {
       let response = await callApi("POST", "admin/updateTeamInTnm", {
         id: this.id_team_update,
         id_tournament: 0
       });
-      if(!response.data.code){
-        return ;
+      if (!response.data.code) {
+        return;
       }
-      if(response.data.code == "0000"){
+      if (response.data.code == "0000") {
         this.getListTeamInTnm();
-         $("#modal-delete-team-tournament").modal("hide");  
+        $("#modal-delete-team-tournament").modal("hide");
       }
     },
 
     async getListTeamInTnm() {
-      let response = await callApi("GET", "team/gettournament", null, {id_tournament: this.id_tnm});
-      if(!response.data.code){
-        return ;
+      let response = await callApi("GET", "team/gettournament", null, {
+        id_tournament: this.id_tnm
+      });
+      if (!response) {
+        return;
       }
       if (response.data.code == "0000") {
         this.teams = response.data.payload;
       }
-  },
-
-    selectTeam(item){
-      let idIndex = this.requestDataSaveTeam.listTeam.findIndex(x => x.id == item.id);
-      if(idIndex == -1){
-        return this.requestDataSaveTeam.listTeam.push({id: item.id});
-      }
-     this.requestDataSaveTeam.listTeam.splice(idIndex, 1);
     },
 
-    checkExits(id){
-      let idIndex = this.requestDataSaveTeam.listTeam.findIndex(x => x.id == id);
+    selectTeam(item) {
+      let idIndex = this.requestDataSaveTeam.listTeam.findIndex(
+        x => x.id == item.id
+      );
+      if (idIndex == -1) {
+        return this.requestDataSaveTeam.listTeam.push({ id: item.id });
+      }
+      this.requestDataSaveTeam.listTeam.splice(idIndex, 1);
+    },
+
+    checkExits(id) {
+      let idIndex = this.requestDataSaveTeam.listTeam.findIndex(
+        x => x.id == id
+      );
       return idIndex >= 0 ? true : false;
     },
 
-    async saveTeamInTnm(){
-      
-      if(this.requestDataSaveTeam.listTeam.length == 0){
+    async saveTeamInTnm() {
+      if (this.requestDataSaveTeam.listTeam.length == 0) {
         $("#modal-team-tournnament-add").modal("hide");
-        return ;
+        return;
       }
-      let response = await callApi("POST", "admin/tournament/addTeam", this.requestDataSaveTeam);
-      if(!response.data.code){
-        return ;
+      let response = await callApi(
+        "POST",
+        "admin/tournament/addTeam",
+        this.requestDataSaveTeam
+      );
+      if (!response.data.code) {
+        return;
       }
-      if(response.data.code == "0000"){
+      if (response.data.code == "0000") {
         this.getListTeamInTnm();
         $("#modal-team-tournnament-add").modal("hide");
       }
     },
 
     async getListTeam() {
-      let response = await callApi("GET", "team/getbynotidtournament", null, {id_tournament: this.id_tnm});
-      if (!response.data.code) {
+      let response = await callApi("GET", "team/getbynotidtournament", null, {
+        id_tournament: this.id_tnm
+      });
+      if (!response) {
         return;
       }
       if (response.data.code == "0000") {
@@ -251,7 +281,7 @@ export default {
     },
 
     cancelDelete() {
-     // $("#modal-member-delete").modal("hide");
+      // $("#modal-member-delete").modal("hide");
     },
 
     sussefull(mess) {
@@ -266,8 +296,8 @@ export default {
     },
 
     turnTournament() {
-       this.$router.push({ name: "Tournament" });
+      this.$router.push({ name: "Tournament" });
     }
-  },
+  }
 };
 </script>

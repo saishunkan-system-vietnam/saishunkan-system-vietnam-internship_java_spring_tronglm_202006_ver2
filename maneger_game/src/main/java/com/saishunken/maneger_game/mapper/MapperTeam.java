@@ -30,9 +30,9 @@ public interface MapperTeam {
 	public BigInteger getTotalByTournament(Team team);
 	
 	//by id tournament
-	public Team getByIdTournament (Team team);
+	public Team getByIdTournament (int id);
 	
-	public BigInteger getTotalByIdTournament(Team team);
+	public BigInteger getTotalByIdTournament(int id);
 	
 	//by not id tournament
 	public List<Team> getAllByNotIdTournament (Team team);
@@ -40,5 +40,10 @@ public interface MapperTeam {
 	public BigInteger getTotalByNotIdTournament(Team team);
 	
 	
+	//total point in match
+	public Integer getTotalPointWin(int id);
 	
+	public Integer getTotalPointlost(int id);
+	
+	public Integer getTotalPointequal(int id);		
 }

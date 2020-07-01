@@ -4,7 +4,7 @@
       <div class="ui inverted secondary pointing menu container">
         <div class="item">
           <div class="ui simple dropdown item custom-menu" id="select-menu-tournament-dropdown">
-            Dropdown
+            Giải đấu
             <i class="Giải đấu"></i>
             <div class="menu">
               <div
@@ -52,8 +52,13 @@
               </tr>
             </table>
           </td>
-          <td>{{ tournament.info_tnm }}</td>
         </tr>
+        <tr>
+        <div class="ui segment">
+          <td v-if="tournament.info_tnm" v-html="unencodeInfo_Tnm(tournament.info_tnm)"></td>
+          <td v-else> </td>
+        </div>
+      </tr>
       </table>
 
       <table class="ui red table">
@@ -125,6 +130,9 @@ export default {
   },
 
   methods: {
+    unencodeInfo_Tnm(info_tnmEncode) {
+      return unescape(info_tnmEncode);
+    },
     getStatus(sta_flg) {
       if (sta_flg == 0) {
         return '<i style="height: 17px" class="ui green text play icon "></i> Chưa thi đấu';

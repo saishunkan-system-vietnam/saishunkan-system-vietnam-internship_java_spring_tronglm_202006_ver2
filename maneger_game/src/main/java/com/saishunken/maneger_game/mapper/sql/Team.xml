@@ -3,36 +3,39 @@
 
 <mapper namespace="com.saishunken.maneger_game.mapper.MapperTeam">
 	<insert id="insert" parameterType="Team">
-		INSERT INTO team (name_team, id_tournament, del_flg, points, link_logo, founding_date, create_date, edit_date, info) 
-		VALUES (#{name_team}, #{id_tournament}, #{del_flg}, #{points}, #{link_logo}, #{founding_date}, #{create_date}, #{edit_date}, #{info});
+		INSERT INTO team (name_team,
+		id_tournament, del_flg, points, link_logo, founding_date, create_date,
+		edit_date, info)
+		VALUES (#{name_team}, #{id_tournament}, #{del_flg}, #{points}, #{link_logo},
+		#{founding_date}, #{create_date}, #{edit_date}, #{info});
 	</insert>
 
 	<update id="update" parameterType="Team">
-		UPDATE team SET	
+		UPDATE team SET
 		<if test="name_team != null">
 			name_team = #{name_team},
 		</if>
-		
+
 		<if test="id_tournament != null">
 			id_tournament = #{id_tournament},
 		</if>
-		
+
 		<if test="del_flg != null">
 			del_flg = #{del_flg},
 		</if>
-		
+
 		<if test="points != null">
 			points = #{points},
 		</if>
-		
+
 		<if test="link_logo != null">
 			link_logo = #{link_logo},
 		</if>
-		
+
 		<if test="founding_date != null">
 			founding_date = #{founding_date},
 		</if>
-		
+
 		<if test="info != null">
 			info = #{info},
 		</if>
@@ -40,77 +43,145 @@
 		WHERE id = #{id};
 	</update>
 
-	<select id="getById" parameterType="int"
-		resultType="Team">
-		SELECT * FROM team WHERE id = #{id};
+	<select id="getById" parameterType="int" resultType="Team">
+		SELECT *
+		FROM team WHERE id = #{id} and del_flg = 0;
 	</select>
 
-	
+
 	<select id="getTotalByNameTeam" resultType="int">
 		SELECT Count(*) FROM team WHERE name_team = #{name_team}
-		<if test ="id != null">
+		<if test="id != null">
 			and id != #{id};
 		</if>
 	</select>
-	
-	<select id="getAll" parameterType="Team"
-		resultType="Team">
+
+	<select id="getAll" parameterType="Team" resultType="Team">
 		SELECT * FROM team WHERE del_flg = 0
 		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
 		</if>
-		LIMIT  #{maxPageItem} 
-		OFFSET #{offset} 	
+		LIMIT #{maxPageItem}
+		OFFSET #{offset}
 	</select>
 
-	<select id="getTotalTeam" parameterType="Team" resultType="BigInteger">
+	<select id="getTotalTeam" parameterType="Team"
+		resultType="BigInteger">
 		SELECT Count(*) FROM team WHERE del_flg = 0
 		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
 		</if>
 	</select>
-	
+
 	<select id="getAllByTournament" parameterType="Team"
 		resultType="Team">
-		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament =
+		#{id_tournament}
 		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>	
-	</select>
-
-	<select id="getTotalByTournament" parameterType="Team" resultType="BigInteger">
-		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
-		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
 		</if>
 	</select>
-	
-	<select id="getByIdTournament" parameterType="Team"
-		resultType="Team">
-		SELECT * FROM team WHERE del_flg = 0 AND id = #{id} AND id_tournament = #{id_tournament}	
+
+	<select id="getTotalByTournament" parameterType="Team"
+		resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament =
+		#{id_tournament}
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
+		</if>
 	</select>
 
-	<select id="getTotalByIdTournament" parameterType="Team" resultType="BigInteger">
-		SELECT Count(*) FROM team WHERE del_flg = 0 AND id = #{id} AND id_tournament = #{id_tournament}
-		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>	
+	<select id="getByIdTournament" parameterType="int"
+		resultMap="teamResulttMap">
+		SELECT
+		t1.id as "t1_id",
+		t1.name_team as "t1_name_team",
+		t1.id_tournament as "t1_id_tournament",
+
+		d1.id as "d1_id",
+		d1.id_team as "d1_id_team",
+		d1.id_match as "d1_id_match",
+		d1.result as "d1_result",
+		d1.win_flg as "d1_win_flg"
+
+		FROM team t1
+		LEFT JOIN detail_match d1 ON t1.id = d1.id_team AND d1.del_flg = 0
+		WHERE t1.del_flg = 0 AND t1.id = #{id}
+	</select>
+
+	<select id="getTotalPointWin" parameterType="int" resultType="Integer">
+		SELECT Count(*)
+		FROM team t1
+		LEFT JOIN detail_match d1 ON t1.id = d1.id_team AND d1.del_flg = 0 
+		WHERE t1.del_flg = 0 AND t1.id = #{id} AND d1.win_flg = 1
+		
 	</select>
 	
+	<select id="getTotalPointlost" parameterType="int" resultType="Integer">
+		SELECT Count(*)
+		FROM team t1
+		LEFT JOIN detail_match d1 ON t1.id = d1.id_team AND d1.del_flg = 0 
+		WHERE
+		t1.del_flg = 0 AND t1.id = #{id} AND d1.win_flg = 2
+	</select>
+	
+	<select id="getTotalPointequal" parameterType="int" resultType="Integer">
+		SELECT Count(*)
+		FROM team t1
+		LEFT JOIN detail_match d1 ON t1.id = d1.id_team AND d1.del_flg = 0 
+		WHERE
+		t1.del_flg = 0 AND t1.id = #{id} AND d1.win_flg = 3
+	</select>
+
+
+	<select id="getTotalByIdTournament" parameterType="int"
+		resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = #{id_tournament}
+	</select>
+
 	<select id="getAllByNotIdTournament" parameterType="Team"
 		resultType="Team">
-		SELECT * FROM team WHERE del_flg = 0 AND id_tournament != #{id_tournament}
+		SELECT * FROM team WHERE del_flg = 0 AND id_tournament = 0
 		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
-		</if>	
-	</select>
-
-	<select id="getTotalByNotIdTournament" parameterType="Team" resultType="BigInteger">
-		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament != #{id_tournament}
-		<if test="name_team != null">
-			AND (name_team LIKE '%${name_team}%' OR info LIKE '%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date LIKE '%${name_team}%')
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
 		</if>
 	</select>
-	
-	
+
+	<select id="getTotalByNotIdTournament" parameterType="Team"
+		resultType="BigInteger">
+		SELECT Count(*) FROM team WHERE del_flg = 0 AND id_tournament = 0
+		<if test="name_team != null">
+			AND (name_team LIKE '%${name_team}%' OR info LIKE
+			'%${name_team}%' OR points LIKE '%${name_team}%' OR founding_date
+			LIKE '%${name_team}%')
+		</if>
+	</select>
+
+	<resultMap id="detailMatchMap" type="Detail_match">
+		<id property="id" column="d1_id" />
+		<result property="id_team" column="d1_id_team" />
+		<result property="id_match" column="d1_id_match" />
+		<result property="result" column="d1_result" />
+		<result property="win_flg" column="d1_win_flg" />
+	</resultMap>
+
+	<resultMap id="teamResulttMap" type="Team">
+		<id property="id" column="t1_id" />
+		<result property="name_team" column="t1_name_team" />
+		<result property="id_tournament" column="t1_id_tournament" />
+		<collection property="listDetailMatch" javaType="ArrayList"
+			ofType="Detail_match" resultMap="detailMatchMap"></collection>
+	</resultMap>
+
+
 </mapper>

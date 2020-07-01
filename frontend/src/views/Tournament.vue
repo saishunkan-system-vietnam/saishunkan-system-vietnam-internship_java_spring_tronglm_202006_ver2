@@ -1,4 +1,3 @@
-
 <template>
   <div class="ui container" style="margin-top: 25px;">
     <div class="text-title">Quản lý giải đấu</div>
@@ -22,13 +21,22 @@
       </thead>
       <tbody>
         <tr v-for="item in tournaments" :key="item.id">
-          <td>{{item.id}}</td>
-          <td class="single line">{{item.name_tnm}}</td>
+          <td>{{ item.id }}</td>
+          <td class="single line">{{ item.name_tnm }}</td>
           <td>
-            <div class="ui yellow rating">{{item.start_date}}</div>
+            <div class="ui yellow rating">{{ item.start_date }}</div>
           </td>
-          <td class="aligned">{{item.end_date}}</td>
-          <td class="aligned" v-html="unencodeInfo_Tnm(item.info_tnm)"></td>
+          <td class="aligned">{{ item.end_date }}</td>
+          <td
+            v-if="unencodeInfo_Tnm(item.info_tnm).length < 30"
+            class="aligned"
+            v-html="unencodeInfo_Tnm(item.info_tnm)"
+          ></td>
+          <td
+            v-else
+            class="aligned"
+            v-html="unencodeInfo_Tnm(item.info_tnm).substring(0, 30) + '...'"
+          ></td>
           <td>
             <div class="compact ui basic icon buttons">
               <button
@@ -63,10 +71,21 @@
               >
                 <i class="trash alternate outline icon"></i>
               </button>
+              <button
+                @click="viewTournament(item.id)"
+                class="compact ui button"
+                data-position="top right"
+                data-variation="mini"
+              >
+                <i class="eye icon"></i>
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <div class="ui right floated pagination menu"></div>
+      </tfoot>
     </table>
     <div class="ui modal" id="modal-tournament-edit">
       <div v-if="idTeamWatch" class="ui header red">Sửa thông tin</div>
@@ -78,7 +97,8 @@
             <input type="text" v-model.trim="tournament.name_tnm" placeholder="Tên giải đấu" />
             <template v-if="$v.tournament.name_tnm.$error">
               <span class="ui red text" v-if="!$v.tournament.name_tnm.required">Không được bỏ trống!</span>
-              <span class="ui red text"
+              <span
+                class="ui red text"
                 v-if="!$v.tournament.name_tnm.maxLength"
               >Tên giải đấu quá dài!</span>
             </template>
@@ -91,7 +111,8 @@
               <label>Ngày bắt đầu</label>
               <Calender type="date" v-model="tournament.start_date"></Calender>
               <template v-if="$v.tournament.start_date.$error">
-                <span class="ui red text"
+                <span
+                  class="ui red text"
                   v-if="!$v.tournament.start_date.required"
                 >Không được bỏ trống!</span>
               </template>
@@ -103,7 +124,8 @@
               <label>Ngày kết thúc</label>
               <Calender type="date" v-model="tournament.end_date"></Calender>
               <template v-if="$v.tournament.end_date.$error">
-                <span class="ui red text"
+                <span
+                  class="ui red text"
                   v-if="!$v.tournament.end_date.required"
                 >Không được bỏ trống!</span>
               </template>
@@ -125,13 +147,60 @@
           </div>
           <div class="field">
             <label>Thông tin giải</label>
-            <ckeditor type="classic" v-model="tournament.info_tnm" ></ckeditor>
+            <ckeditor type="classic" v-model="tournament.info_tnm"></ckeditor>
           </div>
           <button class="ui button" @click="saveTournament()" type="button">Save</button>
-          <button class="ui button" @click="cancelSave()" type="button">Cancel</button>
+          <button class="ui cancel button" @click="cancelSave()" type="button">Cancel</button>
         </form>
       </div>
     </div>
+
+    <div class="ui modal" id="modal-tournament-view">
+      <div class="ui segment">
+        <div class="ui column centered grid">
+          <div class="column row">
+            <p>
+              <span class="ui big text">{{tournament.name_tnm}}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="ui column grid">
+          <p>
+            <span
+              class="ui large text"
+            >- Thời gian bắt đầu từ: {{formatTime(tournament.start_date)}} ---> {{formatTime(tournament.end_date)}}</span>
+          </p>
+        </div>
+
+        <div class="ui column grid">
+          <p>
+            <span class="ui large text">- Điểm đội thắng: {{tournament.win_point}}</span>
+          </p>
+
+          <p>
+            <span class="ui large text">Điểm đội thua: {{tournament.lose_point}}</span>
+          </p>
+
+          <p>
+            <span class="ui large text">Điểm hòa nhau: {{tournament.equal_point}}</span>
+          </p>
+        </div>
+
+        <div class="ui column grid">
+          <p>
+            <span class="ui large text">- Thông tin giải:</span>
+          </p>
+          <p>
+            <span class="ui text" v-html="tournament.info_tnm"></span>
+          </p>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui compact cancel button">Cancel</div>
+      </div>
+    </div>
+
     <div class="ui modal mini" id="modal-tournament-delete">
       <div class="ui header red">Delete</div>
       <div class="content">
@@ -140,6 +209,15 @@
       <div class="actions">
         <div @click="deleteHadleTeam()" class="ui compact cancel red button">Yes</div>
         <div @click="cancelDelete()" class="ui compact cancel button">Cancel</div>
+      </div>
+    </div>
+    <div class="ui modal mini" id="modal-tournment-warning">
+      <div class="ui header red">WARNNING!!</div>
+      <div class="content">
+        <p>Giải đấu đang có các đội tham dự, không thể xóa!</p>
+      </div>
+      <div class="actions">
+        <div class="ui compact cancel button">Cancel</div>
       </div>
     </div>
   </div>
@@ -196,16 +274,15 @@ export default {
       $("#modal-tournament-edit").modal("show");
     },
 
-    async editTournament(id) {
-      this.idTeamWatch = 1;
+    async viewTournament(id) {
       let response = await callApi(
         "GET",
         "tournament/getbyid",
         null,
         (id = { id })
       );
-      if(!response.data.code){
-          return ;
+      if (!response.data.code) {
+        return;
       }
       if (response.data.code == "0000") {
         this.tournament = {
@@ -217,52 +294,81 @@ export default {
           info_tnm: this.unencodeInfo_Tnm(response.data.payload.info_tnm),
           win_point: response.data.payload.win_point,
           lose_point: response.data.payload.lose_point,
-          equal_point: response.data.payload.equal_point,
+          equal_point: response.data.payload.equal_point
         };
-        $("#modal-tournament-edit").modal("show");
-      } else{
-          this.getListTournament();
+        $("#modal-tournament-view").modal("show");
+      } else {
+        this.getListTournament();
       }
     },
 
-    encodeInfo_Tnm(info_tnm){
+    async editTournament(id) {
+      this.idTeamWatch = 1;
+      let response = await callApi(
+        "GET",
+        "tournament/getbyid",
+        null,
+        (id = { id })
+      );
+      if (!response.data.code) {
+        return;
+      }
+      if (response.data.code == "0000") {
+        this.tournament = {
+          id: response.data.payload.id,
+          name_tnm: response.data.payload.name_tnm,
+          start_date: response.data.payload.start_date,
+          end_date: response.data.payload.end_date,
+          del_flg: response.data.payload.del_flg,
+          info_tnm: this.unencodeInfo_Tnm(response.data.payload.info_tnm),
+          win_point: response.data.payload.win_point,
+          lose_point: response.data.payload.lose_point,
+          equal_point: response.data.payload.equal_point
+        };
+        $("#modal-tournament-edit").modal("show");
+      } else {
+        this.getListTournament();
+      }
+    },
+
+    encodeInfo_Tnm(info_tnm) {
       return escape(info_tnm);
     },
-    unencodeInfo_Tnm(info_tnmEncode){
+    unencodeInfo_Tnm(info_tnmEncode) {
       return unescape(info_tnmEncode);
     },
 
     async saveTournament() {
-      console.log(this.tournament.info_tnm, "html")
+      console.log(this.tournament.info_tnm, "html");
       let response;
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      if(this.idTeamWatch){
+      if (this.idTeamWatch) {
         response = await callApi("POST", "/admin/tournament/update", {
-        id: this.tournament.id,
-        name_tnm: this.tournament.name_tnm,
-        start_date: this.tournament.start_date,
-        end_date: this.tournament.end_date,
-        info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
-        win_point: this.tournament.win_point,
-        lose_point: this.tournament.lose_point,
-        equal_point: this.tournament.equal_point
-       });
-      }else{
+          id: this.tournament.id,
+          name_tnm: this.tournament.name_tnm,
+          start_date: this.tournament.start_date,
+          end_date: this.tournament.end_date,
+          info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
+          win_point: this.tournament.win_point,
+          lose_point: this.tournament.lose_point,
+          equal_point: this.tournament.equal_point
+        });
+      } else {
         response = await callApi("POST", "/admin/tournament/create", {
-        name_tnm: this.tournament.name_tnm,
-        start_date: this.tournament.start_date,
-        end_date: this.tournament.end_date,
-        info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
-        win_point: this.tournament.win_point,
-        lose_point: this.tournament.lose_point,
-        equal_point: this.tournament.equal_point
-       });
+          name_tnm: this.tournament.name_tnm,
+          start_date: this.tournament.start_date,
+          end_date: this.tournament.end_date,
+          info_tnm: this.encodeInfo_Tnm(this.tournament.info_tnm),
+          win_point: this.tournament.win_point,
+          lose_point: this.tournament.lose_point,
+          equal_point: this.tournament.equal_point
+        });
       }
-      if(!response.data.code){
-          return ;
+      if (!response.data.code) {
+        return;
       }
       if (response.data.code == "0000") {
         this.getListTournament();
@@ -271,41 +377,44 @@ export default {
       }
     },
     async deleteTeam(id) {
-        let response = await callApi(
+      let response = await callApi(
         "GET",
-        "tournament/getbyid",
+        "/tournament/get-by-id-del",
         null,
         (id = { id })
       );
-      if(!response.data.code){
-          return ;
+      if (!response) {
+        return;
       }
-      if(response.data.code == "0000"){
-         this.tournament.id = response.data.payload.id;
-         $("#modal-tournament-delete").modal("show");
-      } else{
-          this.getListTournament();
+      if (response.data.code == "0008") {
+        $("#modal-tournment-warning").modal("show");
       }
-
+      if (response.data.code == "0000") {
+        this.tournament.id = response.data.payload.id;
+        $("#modal-tournament-delete").modal("show");
+      }
+      if(response.data.code == "0003"){
+        this.getListTournament();
+      }
     },
 
     async deleteHadleTeam() {
-        let response = await callApi("POST", "/admin/tournament/update", {
-            id: this.tournament.id,
-            del_flg: 1
-        });
-        if(!response.data.code){
-          return ;
+      let response = await callApi("POST", "/admin/tournament/update", {
+        id: this.tournament.id,
+        del_flg: 1
+      });
+      if (!response.data.code) {
+        return;
       }
-      if(response.data.code == "0000"){
-          this.getListTournament();
-          this.sussefull(response.data.message);
-          $("#modal-tournament-delete").modal("hide");
+      if (response.data.code == "0000") {
+        this.getListTournament();
+        this.sussefull(response.data.message);
+        $("#modal-tournament-delete").modal("hide");
       }
     },
 
     cancelDelete() {
-      $("#modal-tournament-delete").modal("toggle");
+      $("#modal-tournament-delete").modal("hide");
     },
 
     async editTeam(id) {},
@@ -315,13 +424,15 @@ export default {
     },
 
     async serchTournament() {
-        let response = await callApi("GET", "tournament/getall", null, {name_tnm: this.name_serch});
-        if(!response.data.code){
-            return;
-        }
-        if (response.data.code == "0000") {
-          this.tournaments = response.data.payload;
-        }
+      let response = await callApi("GET", "tournament/getall", null, {
+        name_tnm: this.name_serch
+      });
+      if (!response.data.code) {
+        return;
+      }
+      if (response.data.code == "0000") {
+        this.tournaments = response.data.payload;
+      }
     },
     sussefull(mess) {
       $("body").toast({
@@ -330,30 +441,32 @@ export default {
       });
     },
 
-    refestData() {
-        this.$v.$reset();
-        this.tournament = {
-          id:  "",
-          name_tnm: "",
-          start_date: "",
-          end_date: "",
-          del_flg: "",
-          info_tnm: "",
-          win_point: 0,
-          lose_point: 0,
-          equal_point: 0
-        };
-
+    formatTime(time) {
+      return moment(time).format("DD/MM/YYYY");
     },
 
-    manegerTeamTnm(id){
+    refestData() {
+      this.$v.$reset();
+      this.tournament = {
+        id: "",
+        name_tnm: "",
+        start_date: "",
+        end_date: "",
+        del_flg: "",
+        info_tnm: "",
+        win_point: 0,
+        lose_point: 0,
+        equal_point: 0
+      };
+    },
+
+    manegerTeamTnm(id) {
       this.$router.push({ name: "TeamDuel", params: { id_tnm: id } });
     },
 
-    manegerMatchTnm(id){
+    manegerMatchTnm(id) {
       this.$router.push({ name: "MatchTnm", params: { tnm_id: id } });
     }
-
   },
 
   validations() {

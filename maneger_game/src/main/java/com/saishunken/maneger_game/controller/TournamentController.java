@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.saishunken.maneger_game.mapper.MapperTournament;
 import com.saishunken.maneger_game.model.Response;
 import com.saishunken.maneger_game.model.Tournament;
+import com.saishunken.maneger_game.service.TeamService;
 import com.saishunken.maneger_game.service.TournamentService;
 
 @RestController
 @RequestMapping("/")
 public class TournamentController {
+	
+	@Autowired
+	private TeamService teamService;
 	
 	@Autowired
 	private TournamentService tournamentService;
@@ -89,6 +93,19 @@ public class TournamentController {
 			response.setMessage("Get data successfully");
 			response.setPayload(tournament);
 			return ResponseEntity.ok().body(response);
+		}	
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
+	}
+	
+	//get by id del
+	@GetMapping("tournament/get-by-id-del")
+	public ResponseEntity<Response> getByIdDel(@RequestParam int id) {
+		if(teamService.getTotalByIdTournament(id) > 0) {
+			return ResponseEntity.ok().body(new Response("0008", "data can not delete", 0, null));
+		}
+		Tournament tournament = mapperTournament.getById(id);
+		if (tournament != null) {	
+			return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 1, tournament));
 		}	
 		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}

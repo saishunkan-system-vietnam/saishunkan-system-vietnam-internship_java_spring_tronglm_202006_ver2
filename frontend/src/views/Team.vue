@@ -57,6 +57,9 @@
           </td>
         </tr>
       </tbody>
+            <tfoot>
+        <div class="ui right floated pagination menu"></div>
+      </tfoot>
     </table>
     <div class="ui modal" id="modal-team-edit">
       <div v-if="idTeamWatch" class="ui header red">Sửa thông tin</div>
@@ -92,11 +95,19 @@
         </form>
       </div>
     </div>
+        <div class="ui modal mini" id="modal-team-warnning">
+      <div class="ui header red">WARNNING</div>
+      <div class="content">
+        <p >Đội này đang có trong giải đấu, không thể xóa!</p>
+      </div>
+      <div class="actions">
+        <div class="ui compact cancel button">Cancel</div>
+      </div>
+    </div>
     <div class="ui modal mini" id="modal-team-delete">
       <div class="ui header red">Delete</div>
       <div class="content">
-        <p v-if="isCheckTeamInMatch">Đội này đang có trong trận đấu, nếu xóa sẽ mất hết thông tin của trận đấu đó!!</p>
-        <p v-else>Are you want delete?</p>
+        <p>Are you want delete?</p>
       </div>
       <div class="actions">
         <div @click="deleteHadleTeam()" class="ui compact cancel red button">Yes</div>
@@ -139,9 +150,8 @@ export default {
   created() {
     this.getListTeam();
   },
+  
   mounted() {},
-
-  computed: {},
 
   methods: {
     async getListTeam() {
@@ -166,11 +176,10 @@ export default {
       if (response.data.code == "0000") {
         this.team.id = response.data.payload.id;
         if (response.data.payload.id_tournament) {
-          this.isCheckTeamInMatch = true;   
+          $("#modal-team-warnning").modal("show");   
         } else{
-          this.isCheckTeamInMatch = false;
+          $("#modal-team-delete").modal("show");
         }
-        $("#modal-team-delete").modal("show");
       } else {
         this.getListTeam();
       }

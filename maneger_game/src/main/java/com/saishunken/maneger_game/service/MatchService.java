@@ -44,9 +44,7 @@ public class MatchService {
 					detailMatch.setWin_flg(0);
 				}
 				int idDetail = mapperDetail_match.insert(detailMatch);
-				if(idDetail > 0) {
-					
-				}
+		
 			});	
 		}
 		return isCheck;

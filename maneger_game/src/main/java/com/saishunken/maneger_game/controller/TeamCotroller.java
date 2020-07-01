@@ -168,48 +168,38 @@ public class TeamCotroller {
 		response.setPayload(teamService.getAllByTournament(team));
 		return ResponseEntity.ok().body(response);
 	}
+	
+	//get point in team
+	@GetMapping("team/getpoint-tnm")
+	public ResponseEntity<Response> getPoint(@RequestParam int id) {
+		
+		
+		return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 1, mapperTeam.getById(id)));
+	}
 
 	// by id tournament
 	@GetMapping("team/getbyidtournament")
-	public ResponseEntity<Response> getByIdTournament(@RequestParam Integer id_tournament, @RequestParam Integer id) {
-		Response response = new Response();
-		Team team = new Team();
-		team.setId(id);
-		team.setId_tournament(id_tournament);
-		if(mapperTeam.getByIdTournament(team) != null) {
-			response.setCode("0000");
-			response.setMessage("Get data successfully");
-			response.setPayload(mapperTeam.getByIdTournament(team));
-			return ResponseEntity.ok().body(response);
+	public ResponseEntity<Response> getByIdTournament(@RequestParam Integer id) {
+		if(mapperTeam.getByIdTournament(id).getListDetailMatch() == null) {
+			if(mapperTeam.getById(id) != null) {
+				return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 1, mapperTeam.getById(id)));
+			}
+			return ResponseEntity.ok().body(new Response("0002", "Data not found", 0, null));
 		}
-		return ResponseEntity.ok().body(new Response("0003", "Data not found", 0, null));
+		if(mapperTeam.getByIdTournament(id).getListDetailMatch().size() == 0) {
+			if(mapperTeam.getById(id) != null) {
+				return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 1, mapperTeam.getById(id)));
+			}
+			return ResponseEntity.ok().body(new Response("0002", "Data not found", 0, null));
+		}
+		return ResponseEntity.ok().body(new Response("0008", "Data can not delete", 0, null));
 	}
-//	@GetMapping("team/getbyidtournament")
-//	public ResponseEntity<Response> getByIdTournament(@RequestParam Integer id_tournament, @RequestParam Optional<Integer> page,
-//			@RequestParam Optional<String> name_team) {
-//		Response response = new Response();
-//		Team team = new Team();
-//		if (page.isPresent()) {
-//			team.setPage(page.get());
-//		} else {
-//			team.setPage(1);
-//		}
-//		team.setId_tournament(id_tournament);
-//		team.setName_team(name_team.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
-//		team.setOffset((team.getPage() - 1) * team.getMaxPageItem());
-//		response.setTotalItem(teamService.getTotalByIdTournament(team));
-//		if(teamService.getAllByIdTournament(team) != null) {
-//			response.setCode("0000");
-//			response.setMessage("Get data successfully");
-//			response.setPayload(teamService.getAllByIdTournament(team));
-//			return ResponseEntity.ok().body(response);
-//		}
-//		return ResponseEntity.ok().body(new Response("0003", "Data not found", 0, null));
-//	}
+	
+	
 
 	// by not id tournament
 	@GetMapping("team/getbynotidtournament")
-	public ResponseEntity<Response> getByNotIdTournament(@RequestParam Integer id_tournament, @RequestParam Optional<Integer> page,
+	public ResponseEntity<Response> getByNotIdTournament( @RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> name_team) {
 		Response response = new Response();
 		Team team = new Team();
@@ -218,7 +208,7 @@ public class TeamCotroller {
 		} else {
 			team.setPage(1);
 		}
-		team.setId_tournament(id_tournament);
+		//team.setId_tournament(id_tournament);
 		team.setName_team(name_team.filter(x -> x.length() >= 1).map(Object::toString).orElse(""));
 		team.setOffset((team.getPage() - 1) * team.getMaxPageItem());
 		response.setTotalItem(teamService.getTotalByNotIdTournament(team));

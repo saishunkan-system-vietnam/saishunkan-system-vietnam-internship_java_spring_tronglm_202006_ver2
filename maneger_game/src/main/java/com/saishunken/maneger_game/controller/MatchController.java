@@ -81,6 +81,12 @@ public class MatchController {
 		}	
 		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}
+	
+	@PostMapping("admin/match_one/update")
+	public ResponseEntity<Response> updateMatchOne(@RequestBody Match match){
+		mapperMatch.update(match);
+		return ResponseEntity.ok().body(new Response("0000", "Update Team successfully",0, null));
+	}
 
 //	@PostMapping("admin/detailmatch/create")
 //	public ResponseEntity<Response> createDetailMatch(@RequestBody Detail_match detail_match){

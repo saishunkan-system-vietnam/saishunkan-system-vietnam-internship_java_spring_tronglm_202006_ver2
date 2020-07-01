@@ -17,7 +17,6 @@ public interface MapperMatch {
 	public Match getById(int id);
 	
 	public List<Match> getAllMatch(int id);
-	
 
 	public Match getMatchDetail(@Param("id") int id, @Param("id_tournament") int id_tournament);
 	

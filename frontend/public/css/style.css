@@ -51,3 +51,10 @@
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
+.ck-editor .ck-editor__main .ck-content {
+    min-height: 400px;
+}
+.menu:not(.left) {
+    right: 0;
+    left: auto !important;
+}
