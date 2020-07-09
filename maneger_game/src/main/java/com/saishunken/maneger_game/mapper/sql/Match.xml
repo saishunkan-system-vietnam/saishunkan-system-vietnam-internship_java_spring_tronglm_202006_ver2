@@ -66,6 +66,7 @@
 	  where t1.id_tournament = #{id} and m1.del_flg = 0 and d1.del_flg = 0 and t1.del_flg = 0
 	</select>
 	
+	
 	<select id="getMatchDetail" resultMap="matchResultMap">
 	  select 
 	      m1.id as "m1_id",
@@ -86,8 +87,48 @@
 	  from match1 m1
 	  left join detail_match d1 on m1.id = d1.id_match
 	  left join team t1 on d1.id_team = t1.id
-	  where m1.id = #{id} and t1.id_tournament = #{id_tournament} and t1.del_flg = 0 and d1.del_flg = 0 and d1.del_flg = 0
+	  where m1.id = #{id} and t1.del_flg = 0 and d1.del_flg = 0 and d1.del_flg = 0
 	</select>
+	
+	<select id="getMatchDetailAll" parameterType="int" resultMap="matchResultMapAndPointMember">
+	  select 
+	      m1.id as "m1_id",
+	      m1.start_time as "m1_start_time",
+	      m1.status_flg as "m1_status_flg",
+	      m1.place_match as "m1_place_match",
+	      
+	      d1.id as "d1_id",
+	      d1.id_team as "d1_id_team",
+	      d1.id_match as "d1_id_match",
+	      d1.result as "d1_result",
+	      d1.win_flg as "d1_win_flg",
+	      
+	      t1.id as "t1_id",
+	      t1.name_team as "t1_name_team",
+	      t1.id_tournament as "t1_id_tournament",
+	      
+	      p1.id as "p1_id",
+	      p1.id_member as "p1_id_member",
+	      p1.scored as "p1_scored",
+	      p1.id_match as "p1_id_match",
+	      p1.at_time as "p1_at_time"
+	      
+	  from match1 m1
+	  left join detail_match d1 on m1.id = d1.id_match
+	  left join point_member_math p1 on m1.id = p1.id_match
+	  left join team t1 on d1.id_team = t1.id
+	  where m1.id = #{id} and t1.del_flg = 0 and d1.del_flg = 0 and d1.del_flg = 0
+	</select>
+	
+	
+	<resultMap id="pointMemberMatchResultMap" type="PointMemberMatch">
+		 <id property="id" column="p1_id" />  
+		 <result property="id_member" column="p1_id_member" />
+		 <result property="scored" column="p1_scored" />
+		 <result property="at_time" column="p1_at_time" />
+		 <result property="id_match" column="p1_id_match" />
+	</resultMap>
+	
 	
 	<resultMap id="teamResultMap" type="Team">
 		 <id property="id" column="t1_id" />  
@@ -110,6 +151,16 @@
 		 <result property="place_match" column="m1_place_match" />
 		 <collection property="teams" javaType="ArrayList" ofType="Team" resultMap="teamResultMap"></collection>
 		 <collection property="listDetailMatch" javaType="ArrayList" ofType="Detail_match" resultMap="detailMatchResultMap"></collection>
+	</resultMap>
+	
+	<resultMap id="matchResultMapAndPointMember" type="Match">
+		 <id property="id" column="m1_id" />  
+		 <result property="start_time" column="m1_start_time" />
+		 <result property="status_flg" column="m1_status_flg" />
+		 <result property="place_match" column="m1_place_match" />
+		 <collection property="teams" javaType="ArrayList" ofType="Team" resultMap="teamResultMap"></collection>
+		 <collection property="listDetailMatch" javaType="ArrayList" ofType="Detail_match" resultMap="detailMatchResultMap"></collection>
+		 <collection property="listPointMemberMatch" javaType="ArrayList" ofType="PointMemberMatch" resultMap="pointMemberMatchResultMap"></collection>
 	</resultMap>
 	
 </mapper>

@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +25,10 @@ import com.saishunken.maneger_game.service.AccountService;
 @RequestMapping("/")
 public class AccountController {
 
+
+	@Autowired
+    public JavaMailSender emailSender;
+		
 	@Autowired
 	private AccountService accountService;
 
@@ -30,6 +36,18 @@ public class AccountController {
 	private MapperAccount mapperAccount;
 
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+	@PostMapping("sent-mail")
+	 public String sendSimpleEmail() {		 
+        // Create a Simple MailMessage.
+        SimpleMailMessage message = new SimpleMailMessage();        
+        message.setTo("lminhtrong102@gmail.com");
+        message.setSubject("Test Simple Email");
+        message.setText("Hello, Im testing Simple Email");
+       // Send Message!
+        this.emailSender.send(message);
+        return "Email Sent!";
+    }
 
 	@GetMapping("admin/getall")
 	public ResponseEntity<Response> getAllUser(@RequestParam Optional<Integer> page,

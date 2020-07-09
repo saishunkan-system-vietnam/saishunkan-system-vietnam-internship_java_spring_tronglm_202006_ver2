@@ -12,11 +12,40 @@ public class Team extends AbstractModel {
 	private Integer id_tournament;
 	private Integer points;
 	private String link_logo;
+	private Integer totalWin;
+	private Integer totalLose;
+	private Integer totalEqual;
+	
+	
 	
 	private List<Detail_match> listDetailMatch;
 	
 	
 	
+
+	public Integer getTotalWin() {
+		return totalWin;
+	}
+
+	public void setTotalWin(Integer totalWin) {
+		this.totalWin = totalWin;
+	}
+
+	public Integer getTotalLose() {
+		return totalLose;
+	}
+
+	public void setTotalLose(Integer totalLose) {
+		this.totalLose = totalLose;
+	}
+
+	public Integer getTotalEqual() {
+		return totalEqual;
+	}
+
+	public void setTotalEqual(Integer totalEqual) {
+		this.totalEqual = totalEqual;
+	}
 
 	public List<Detail_match> getListDetailMatch() {
 		return listDetailMatch;

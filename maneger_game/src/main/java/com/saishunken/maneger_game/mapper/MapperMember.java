@@ -42,5 +42,7 @@ public interface MapperMember {
 	
 	//total nickname
 	public int getTotalByNickName(@Param("nickname") String nickname, @Param("id") Integer id );
+	
+	public List<Member> getMemberAndPointByTeam(int id_team);
 
 }

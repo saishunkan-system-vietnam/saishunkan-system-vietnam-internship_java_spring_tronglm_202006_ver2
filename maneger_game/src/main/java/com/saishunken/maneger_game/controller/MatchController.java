@@ -56,6 +56,12 @@ public class MatchController {
 		return ResponseEntity.ok().body(new Response("0000", "Update Team successfully",0, null));
 	}
 	
+	@PostMapping("admin/match/update-all")
+	public ResponseEntity<Response> updateMatchAll(@RequestBody Match match){
+		matchService.updateMatchAll(match);
+		return ResponseEntity.ok().body(new Response("0000", "Update Team successfully",0, null));
+	}
+	
 	@PostMapping("admin/match/delete")
 	public ResponseEntity<Response> deleteMatch(@RequestBody Match match){
 		mapperMatch.update(match);
@@ -70,9 +76,22 @@ public class MatchController {
 	}
 	
 	@GetMapping("match/get-match")
-	public ResponseEntity<Response> getMatchById(@RequestParam int id, @RequestParam int id_tournament) {
+	public ResponseEntity<Response> getMatchById(@RequestParam int id) {
 		Response response = new Response();
-		Match object = mapperMatch.getMatchDetail(id, id_tournament);
+		Match object = mapperMatch.getMatchDetail(id);
+		if (object != null) {
+			response.setCode("0000");
+			response.setMessage("Get data successfully");
+			response.setPayload(object);
+			return ResponseEntity.ok().body(response);
+		}	
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
+	}
+	
+	@GetMapping("match/get-match-point")
+	public ResponseEntity<Response> getMatchAnPointMember(@RequestParam int id) {
+		Response response = new Response();
+		Match object = mapperMatch.getMatchDetailAll(id);
 		if (object != null) {
 			response.setCode("0000");
 			response.setMessage("Get data successfully");

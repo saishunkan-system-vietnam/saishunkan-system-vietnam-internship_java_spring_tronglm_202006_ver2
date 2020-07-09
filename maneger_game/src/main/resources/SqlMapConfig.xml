@@ -10,6 +10,8 @@
         <typeAlias alias="Tournament" type="com.saishunken.maneger_game.model.Tournament" />
         <typeAlias alias="Match" type="com.saishunken.maneger_game.model.Match" />  
         <typeAlias alias="Detail_match" type="com.saishunken.maneger_game.model.Detail_match" /> 
+        <typeAlias alias="PointMemberMatch" type="com.saishunken.maneger_game.model.PointMemberMatch" /> 
+        
     </typeAliases>
  
     <mappers>
@@ -19,6 +21,7 @@
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Tournament.xml" />
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Match.xml" />
         <mapper resource="com/saishunken/maneger_game/mapper/sql/Detail_match.xml" />
+        <mapper resource="com/saishunken/maneger_game/mapper/sql/PointMemberMatch.xml" />
     </mappers>
  
 </configuration>

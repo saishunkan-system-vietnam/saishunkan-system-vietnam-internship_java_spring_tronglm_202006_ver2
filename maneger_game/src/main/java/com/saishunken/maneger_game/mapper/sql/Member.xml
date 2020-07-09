@@ -73,7 +73,7 @@
 	
 	<select id="getById" parameterType="int"
 		resultType="Member">
-		SELECT * FROM member WHERE id = #{id};
+		SELECT * FROM member WHERE id = #{id} and del_flg = 0;
 	</select>
 	
 	<select id="getTotalByNickName"	resultType="int">
@@ -100,7 +100,7 @@
 		<if test="cap_flg != null">
 			cap_flg = #{cap_flg},
 		</if>
-		<if test="scored">
+		<if test="scored != null">
 			scored = #{scored},
 		</if>
 		edit_date = #{edit_date}
@@ -111,5 +111,34 @@
 		UPDATE member SET cap_flg = 0			
 		WHERE id_team = #{id_team} AND cap_flg = 1
 	</update>
+	
+	<select id="getMemberAndPointByTeam" parameterType="int" resultMap="poinAllMemberMap">
+		SELECT 
+		  m1.id as "m1_id",
+		  m1.name_member as "m1_name_member",
+		  m1.nickname as "m1_nickname",
+		  m1.id_team as "m1_id_team",
+
+		  p1.id as "p1_id",
+	      p1.id_member as "p1_id_member",
+	      p1.scored as "p1_scored"
+		FROM member m1
+		LEFT JOIN point_member_math p1 ON m1.id = p1.id_member
+		WHERE m1.id_team = #{id_team};
+	</select>
+	
+	<resultMap id="pointMemberResultMap" type="PointMemberMatch">
+		 <id property="id" column="p1_id" />  
+		 <result property="id_member" column="p1_id_member" />
+		 <result property="scored" column="p1_scored" />
+	</resultMap>
+	
+	<resultMap type="Member" id="poinAllMemberMap">
+		 <id property="id" column="m1_id" />  
+		 <result property="name_member" column="m1_name_member" />
+		 <result property="nickname" column="m1_nickname" />
+		 <result property="id_team" column="m1_id_team" />	
+		 <collection property="listpoint" javaType="ArrayList" ofType="PointMemberMatch" resultMap="pointMemberResultMap"></collection>
+	</resultMap>
 
 </mapper>

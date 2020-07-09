@@ -1,5 +1,8 @@
 package com.saishunken.maneger_game.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,14 +10,65 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.saishunken.maneger_game.mapper.MapperMember;
+import com.saishunken.maneger_game.mapper.MapperTeam;
 import com.saishunken.maneger_game.model.Member;
+import com.saishunken.maneger_game.model.Team;
 
 @Service
 @Transactional
 public class MemberService {
 	
 	@Autowired
-	private MapperMember mapperMember;	
+	private MapperMember mapperMember;
+	
+	@Autowired
+	private MapperTeam mapperTeam;
+	
+	//get list member in tournament
+	public List<Member> getListMemberTNM(Integer id_tnm){
+		Team team = new Team();
+		Member member = new Member();
+		List<Member> listMemberTNm  = new ArrayList<Member>();
+		team.setId_tournament(id_tnm);
+		List<Team> listTeam = mapperTeam.getAllByTournament(team);
+		listTeam.forEach(teamInTNM -> {
+			member.setId_team(teamInTNM.getId());
+			listMemberTNm.addAll(mapperMember.getByTeam(member));
+		});
+        Comparator<Member> scoredComparator = new Comparator<Member>() {
+            @Override
+            public int compare(Member s1, Member s2) {
+                return s2.getScored().compareTo(s1.getScored());
+            }
+        };
+        Collections.sort(listMemberTNm, scoredComparator);
+		return listMemberTNm;
+	}
+	
+	//get member point in tournamen
+	public List<Member> getListMemberPointTNM(Integer id_tnm){
+		Team team = new Team();
+		List<Member> listMemberTNm  = new ArrayList<Member>();
+		team.setId_tournament(id_tnm);
+		List<Team> listTeam = mapperTeam.getAllByTournament(team);
+		listTeam.forEach(teamInTNM -> {
+			listMemberTNm.addAll(mapperMember.getMemberAndPointByTeam(teamInTNM.getId()));
+		});
+		listMemberTNm.forEach(memberPoint -> {
+			memberPoint.setScored(0);
+			memberPoint.getListpoint().forEach(point -> {
+				memberPoint.setScored(memberPoint.getScored() + point.getScored());
+			});
+		});
+        Comparator<Member> scoredComparator = new Comparator<Member>() {
+            @Override
+            public int compare(Member s1, Member s2) {
+                return s2.getScored().compareTo(s1.getScored());
+            }
+        };
+        Collections.sort(listMemberTNm, scoredComparator);
+		return listMemberTNm;
+	}
 	
 	// create member
 	public void createMember (Member member) {
@@ -49,6 +103,16 @@ public class MemberService {
 			mapperMember.updateCap(member);
 		}
 		mapperMember.update(member);
+	}
+	
+	//update scored
+	public void updateScored(Member member) {
+	  Member memberDB =	mapperMember.getById(member.getId());
+	  if(memberDB.getScored() != null) {
+		  Integer scored = memberDB.getScored() + member.getScored();
+		  member.setScored(scored);
+	  }
+	  mapperMember.update(member);
 	}
 	
 	//all

@@ -47,83 +47,163 @@
     <div class="ui buttons">
       <button @click="addMatchInTnm()" class="ui button">Thêm trận đấu</button>
     </div>
-    <table class="ui red table">
+
+    <div class="ui grid">
+      <div class="row">
+        <div style="max-height:407px;overflow: scroll" class="ten wide column">
+          <table class="ui red table">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th style="max-width:200px;min-width:200px; text-align: center">Đội</th>
+                <th>Trạng thái</th>
+                <th>Điểm</th>
+                <th></th>
+                <!-- <th>id</th>
+                <th>Ngày thi đấu</th>
+                <th>Đội A</th>
+                <th>Đội B</th>
+                <th>Trạng thái</th>
+                <th>Điểm</th>
+                <th>Chung cuộc</th>
+                <th></th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="item in listMatch">
+                <tr v-if="item.listDetailMatch.length == 2" :key="item.id">
+                  <td>{{ item.id }}</td>
+                  <td style="max-width:200px;min-width:200px; text-align: center">
+                    {{ getTeam(item).teamA.name }}
+                    <i class="basketball ball icon"></i>
+                    {{ getTeam(item).teamB.name }}
+                  </td>
+                  <td v-html="getStatus(item.status_flg)"></td>
+                  <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
+                  <!-- <td>{{ getStartTime(item.start_time) }}</td>
+                  <td>{{ getTeam(item).teamA.name }}</td>
+                  <td>{{ getTeam(item).teamB.name }}</td>
+                  <td v-html="getStatus(item.status_flg)"></td>
+                  <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
+                  <td>{{ getTeam(item).result }}</td>-->
+                  <td>
+                    <div class="compact ui basic icon buttons">
+                      <button
+                        class="compact ui button"
+                        data-position="top right"
+                        data-variation="mini"
+                        @click="editMatchInTnm(item.id)"
+                      >
+                        <i class="edit outline icon"></i>
+                      </button>
+
+                      <button
+                        class="compact ui button"
+                        data-position="top right"
+                        data-variation="mini"
+                        @click="updateMatchInTnm(item.id)"
+                      >
+                        <i class="poll icon"></i>
+                      </button>
+                      <button
+                        class="compact ui button"
+                        data-position="top right"
+                        data-variation="mini"
+                        @click="deleteMatch(item.id)"
+                      >
+                        <i class="trash alternate outline icon"></i>
+                      </button>
+                      <div class="ui button floating icon dropdown match-tournamrnt-status">
+                        <i class="exchange alternate icon"></i>
+                        <div class="menu">
+                          <div
+                            :data-value="`${item.id}-0`"
+                            class="item"
+                            :class="item.status_flg==0 ? 'active' : ''"
+                          >Chưa thi đấu</div>
+                          <div
+                            :data-value="`${item.id}-1`"
+                            class="item"
+                            :class="item.status_flg==1 ? 'active' : ''"
+                          >Đã thi đấu</div>
+                          <div
+                            :data-value="`${item.id}-2`"
+                            class="item"
+                            :class="item.status_flg==2 ? 'active' : ''"
+                          >Đang thi đấu</div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <!-- <td></td>
+                <td></td>
+                <td></td>-->
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="max-height:407px;overflow: scroll" class="right floated four wide column">
+          <table class="ui very basic collapsing celled table">
+            <thead>
+              <tr>
+                <th>Xếp hạng</th>
+                <th>Cầu thủ</th>
+                <th>Ghi được</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in listMemberInTNM" :key="item.id">
+                <td>{{index+1}}</td>
+                <td>{{item.nickname}}</td>
+                <td>{{item.scored}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-title">Bảng xếp hạng</div>
+    <table class="ui inverted table">
       <thead>
         <tr>
-          <th>id</th>
-          <th>Ngày thi đấu</th>
-          <th>Đội A</th>
-          <th>Đội B</th>
-          <th>Trạng thái</th>
-          <th>Điểm</th>
-          <th>Chung cuộc</th>
-          <th></th>
+          <th>Xếp Hạng</th>
+          <th>Tên Đội</th>
+          <th>Trận thắng</th>
+          <th>Trận thua</th>
+          <th>Trận hòa</th>
+          <th>Tổng Điểm</th>
         </tr>
       </thead>
       <tbody>
-        <template v-for="item in listMatch">
-          <tr v-if="item.listDetailMatch.length == 2" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ getStartTime(item.start_time) }}</td>
-            <td>{{ getTeam(item).teamA.name }}</td>
-            <td>{{ getTeam(item).teamB.name }}</td>
-            <td v-html="getStatus(item.status_flg)"></td>
-            <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
-            <td>{{ getTeam(item).result }}</td>
-            <td>
-              <div class="compact ui basic icon buttons">
-                <button
-                  class="compact ui button"
-                  data-position="top right"
-                  data-variation="mini"
-                  @click="editMatchInTnm(item.id)"
-                >
-                  <i class="edit outline icon"></i>
-                </button>
-
-                <button
-                  class="compact ui button"
-                  data-position="top right"
-                  data-variation="mini"
-                  @click="updateMatchInTnm(item.id)"
-                >
-                  <i class="poll icon"></i>
-                </button>
-                <button
-                  class="compact ui button"
-                  data-position="top right"
-                  data-variation="mini"
-                  @click="deleteMatch(item.id)"
-                >
-                  <i class="trash alternate outline icon"></i>
-                </button>
-                <div class="ui button floating icon dropdown match-tournamrnt-status">
-                  <i class="exchange alternate icon"></i>
-                  <div class="menu">
-                    <div
-                      :data-value="`${item.id}-0`"
-                      class="item"
-                      :class="item.status_flg==0 ? 'active' : ''"
-                    >Chưa thi đấu</div>
-                    <div
-                      :data-value="`${item.id}-1`"
-                      class="item"
-                      :class="item.status_flg==1 ? 'active' : ''"
-                    >Đã thi đấu</div>
-                    <div
-                      :data-value="`${item.id}-2`"
-                      class="item"
-                      :class="item.status_flg==2 ? 'active' : ''"
-                    >Đang thi đấu</div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </template>
+        <tr v-for="(item, index) in listTeamRank" :key="item.id">
+          <td>{{index + 1}}</td>
+          <td>{{item.name_team}}</td>
+          <td>{{item.totalWin}}</td>
+          <td>{{item.totalLose}}</td>
+          <td>{{item.totalEqual}}</td>
+          <td>{{item.points}}</td>
+        </tr>
       </tbody>
       <tfoot>
-        <div class="ui right floated pagination menu"></div>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
       </tfoot>
     </table>
     <div class="ui modal large" id="modal-match-tournnament-add">
@@ -197,7 +277,7 @@
     </div>
 
     <div class="ui modal" id="modal-resoult-match">
-      <div class="ui header red">Cập nhập kết quả trận thi đấu</div>
+      <div style="text-align: center" class="ui header red">Cập nhập kết quả trận thi đấu</div>
       <div class="content">
         <form class="ui form">
           <div class="field">
@@ -218,6 +298,88 @@
               </div>
             </div>
           </div>
+
+          <div class="field">
+            <div class="two fields">
+              <div class="field">
+                <label>Danh sách thành viên ghi bàn {{labelTeamA}}:</label>
+                <div
+                  style="margin-top:15px"
+                  class="two fields"
+                  v-for="(member, index) in listMemberupdateA"
+                  :key="index"
+                >
+                  <div class="field">
+                    <label>Thành viên:</label>
+                    <div
+                      class="ui fluid selection dropdown"
+                      :id="`select-dropdown-member-a-${index}`"
+                    >
+                      <input type="hidden" />
+                      <i class="dropdown icon"></i>
+                      <div class="default text">Chọn thành viên</div>
+                      <div class="menu">
+                        <div
+                          v-for="item in memberTeamA"
+                          :key="item.id"
+                          class="item"
+                          :data-value="item.id"
+                        >{{ item.nickname }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Số bàn ghi được:</label>
+                    <input v-model="listMemberupdateA[index].scored" type="number" />
+                    <template v-if="$v.listMemberupdateA.$each[index].scored.required">
+                      <span
+                        class="ui red text"
+                        v-if="!$v.listMemberupdateA.$each[index].scored.required"
+                      >Không được bỏ trống!</span>
+                    </template>
+                  </div>
+                </div>
+                <i @click="pushItemListA" class="plus icon"></i>
+                <i @click="minusItemListA" class="minus icon"></i>
+              </div>
+              <div class="field">
+                <label>Danh sách thành viên ghi bàn {{labelTeamB}}:</label>
+                <div
+                  style="margin-top:15px"
+                  class="two fields"
+                  v-for="(member, index) in listMemberupdateB"
+                  :key="index"
+                >
+                  <div class="field">
+                    <label>Thành viên:</label>
+                    <div
+                      class="ui fluid selection dropdown"
+                      :id="`select-dropdown-member-b-${index}`"
+                    >
+                      <input type="hidden" />
+                      <i class="dropdown icon"></i>
+                      <div class="default text">Chọn thành viên</div>
+                      <div class="menu">
+                        <div
+                          v-for="item in memberTeamB"
+                          :key="item.id"
+                          class="item"
+                          :data-value="item.id"
+                        >{{ item.nickname }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Số bàn ghi được:</label>
+                    <input v-model="listMemberupdateB[index].scored" type="number" />
+                  </div>
+                </div>
+                <i @click="pushItemListB" class="plus icon"></i>
+                <i @click="minusItemListB" class="minus icon"></i>
+              </div>
+            </div>
+          </div>
+
           <div style="margin-top:20px;" class="actions">
             <div v-show="showButonSave" class="ui primary button" @click="saveResultMatchInTnm">
               <i class="save outline icon"></i>Lưu
@@ -281,7 +443,23 @@ export default {
       resoultTeamA: "",
       resoultTeamB: "",
       win_flgA: 0,
-      win_flgB: 0
+      win_flgB: 0,
+      listTeamRank: [],
+      idResoultTeamA: "",
+      idResoultTeamB: "",
+      memberTeamA: [],
+      memberTeamB: [],
+      // memberA: {
+      //   id: "",
+      //   scored: ""
+      // },
+      // memberB: {
+      //   id: "",
+      //   scored: ""
+      // },
+      listMemberupdateA: [],
+      listMemberupdateB: [],
+      listMemberInTNM: []
     };
   },
 
@@ -293,10 +471,13 @@ export default {
     this.getListMatch();
     this.getListTeamInTnm();
     this.getInfoTournament();
+    this.getListRankTeam();
+    this.getListMemberInTNM();
   },
 
   mounted() {
     let self = this;
+
     $("#select-dropdown-team-a").dropdown({
       onChange(value, text, $choice) {
         self.idTeamA = value;
@@ -310,7 +491,86 @@ export default {
   },
 
   methods: {
-    async changeStatus(n) {},
+    async getListMemberInTNM() {
+      let response = await callApi("GET", "/getall/member-tnm", null, {
+        id_tnm: this.tnm_id
+      });
+      if (response.data.code == "0000") {
+        this.listMemberInTNM = response.data.payload;
+      }
+    },
+
+    pushItemListA() {
+      let self = this;
+      self.listMemberupdateA.push({});
+      let index = self.listMemberupdateA.length - 1;
+      self.$nextTick(() => {
+        $(`#select-dropdown-member-a-${index}`).dropdown({
+          onChange(value, text, $choice) {
+            self.listMemberupdateA[index].id = value;
+          }
+        });
+      });
+    },
+
+    minusItemListA() {
+      let index = this.listMemberupdateA.length - 1;
+      this.listMemberupdateA.splice(index, 1);
+    },
+
+    pushItemListB() {
+      let self = this;
+      self.listMemberupdateB.push({});
+      let index = self.listMemberupdateB.length - 1;
+      self.$nextTick(() => {
+        $(`#select-dropdown-member-b-${index}`).dropdown({
+          onChange(value, text, $choice) {
+            self.listMemberupdateB[index].id = value;
+          }
+        });
+      });
+    },
+
+    minusItemListB() {
+      let index = this.listMemberupdateB.length - 1;
+      this.listMemberupdateB.splice(index, 1);
+    },
+
+    async getListMemberInTeamA() {
+      let response = await callApi("GET", "/getbyteam/member", null, {
+        id_team: this.idResoultTeamA
+      });
+      if (!response) {
+        return;
+      }
+      if (response.data.code == "0000") {
+        this.memberTeamA = response.data.payload;
+      }
+    },
+
+    async getListMemberInTeamB() {
+      let response = await callApi("GET", "/getbyteam/member", null, {
+        id_team: this.idResoultTeamB
+      });
+      if (!response) {
+        return;
+      }
+      if (response.data.code == "0000") {
+        this.memberTeamB = response.data.payload;
+      }
+    },
+
+    async getListRankTeam() {
+      let response = await callApi("GET", "team/get-rank", null, {
+        id_tournament: this.tnm_id
+      });
+      if (!response) {
+        return;
+      }
+      if (response.data.code == "0000") {
+        this.listTeamRank = response.data.payload;
+      }
+    },
 
     getTeam(item) {
       let teamA = item.listDetailMatch[0];
@@ -386,8 +646,7 @@ export default {
       this.showButonSave = true;
       this.idWatch = 1;
       let response = await callApi("GET", "/match/get-match", null, {
-        id: id,
-        id_tournament: this.tnm_id
+        id: id
       });
       if (response.data.code == "0000") {
         this.detail_match = response.data.payload;
@@ -417,17 +676,17 @@ export default {
       if (response.data.code == "0000") {
         this.listMatch = response.data.payload;
       }
-      this.$nextTick( () => {
+      this.$nextTick(() => {
         $(".match-tournamrnt-status").dropdown({
           async onChange(value, text, $choice) {
             let index = value.indexOf("-");
             let idMatch = value.substring(0, index);
-            let statusMatch = value.substring(index+1, value.length);
+            let statusMatch = value.substring(index + 1, value.length);
             let response = await callApi("POST", "/admin/match_one/update", {
               id: idMatch,
               status_flg: statusMatch
             });
-            if(response.data.code == "0000"){
+            if (response.data.code == "0000") {
               self.getListMatch();
             }
           }
@@ -437,8 +696,7 @@ export default {
 
     async deleteMatch(id) {
       let response = await callApi("GET", "/match/get-match", null, {
-        id: id,
-        id_tournament: this.tnm_id
+        id: id
       });
       if (response.data.code == "0000") {
         this.match.id = response.data.payload.id;
@@ -484,28 +742,35 @@ export default {
     },
 
     async updateMatchInTnm(id) {
-      this.showButonSave = true;
-      let response = await callApi("GET", "/match/get-match", null, {
-        id: id,
-        id_tournament: this.tnm_id
-      });
-      if (response.data.code == "0000") {
-        this.match.id = response.data.payload.id;
-        this.labelTeamA = response.data.payload.teams[0].name_team;
-        this.labelTeamB = response.data.payload.teams[1].name_team;
-        this.idEditA = response.data.payload.listDetailMatch[0].id;
-        this.idEditB = response.data.payload.listDetailMatch[1].id;
-        if (response.data.payload.status_flg == 1) {
-          this.resoultTeamA = response.data.payload.listDetailMatch[0].result;
-          this.resoultTeamB = response.data.payload.listDetailMatch[1].result;
-        } else {
-          this.resoultTeamA = "";
-          this.resoultTeamB = "";
-        }
-        $("#modal-resoult-match").modal("show");
-      } else {
-        this.getListMatch();
-      }
+      console.log(id, "id")
+      this.$router.push({ name: "ResoultMatch", params: { id_match: id } });
+
+      // let self = this;
+      // this.showButonSave = true;
+      // let response = await callApi("GET", "/match/get-match", null, {
+      //   id: id
+      // });
+      // if (response.data.code == "0000") {
+      //   this.match.id = response.data.payload.id;
+      //   this.labelTeamA = response.data.payload.teams[0].name_team;
+      //   this.labelTeamB = response.data.payload.teams[1].name_team;
+      //   this.idEditA = response.data.payload.listDetailMatch[0].id;
+      //   this.idEditB = response.data.payload.listDetailMatch[1].id;
+      //   this.idResoultTeamA = response.data.payload.listDetailMatch[0].id_team;
+      //   this.idResoultTeamB = response.data.payload.listDetailMatch[1].id_team;
+      //   this.getListMemberInTeamA();
+      //   this.getListMemberInTeamB();
+      //   if (response.data.payload.status_flg == 1) {
+      //     this.resoultTeamA = response.data.payload.listDetailMatch[0].result;
+      //     this.resoultTeamB = response.data.payload.listDetailMatch[1].result;
+      //   } else {
+      //     this.resoultTeamA = "";
+      //     this.resoultTeamB = "";
+      //   }
+      //   $("#modal-resoult-match").modal("show");
+      // } else {
+      //   this.getListMatch();
+      // }
     },
     async saveResultMatchInTnm() {
       if (this.resoultTeamA && this.resoultTeamB) {
@@ -522,8 +787,13 @@ export default {
             ? 3
             : 2;
       }
+      let listMember = this.listMemberupdateA.concat(this.listMemberupdateB);
       this.$v.resoultTeamA.$touch();
       if (this.$v.resoultTeamA.$invalid) {
+        return;
+      }
+      this.$v.listMemberupdateA.$touch();
+      if (this.$v.listMemberupdateA.$invalid) {
         return;
       }
       this.$v.resoultTeamB.$touch();
@@ -544,10 +814,12 @@ export default {
             result: this.resoultTeamB,
             win_flg: this.win_flgB
           }
-        ]
+        ],
+        listMember: listMember
       });
       if (response.data.code == "0000") {
         this.getListMatch();
+        this.getListRankTeam();
         this.showButonSave = false;
         $("#modal-resoult-match").modal("hide");
       }
@@ -633,10 +905,20 @@ export default {
     }
   },
   validations() {
-    let self = this;
     return {
       resoultTeamA: {
-        required
+        required,
+        totalScored(value) {
+          let self = this;
+          let total = 0;
+          self.listMemberupdateA.forEach(element => {
+            total = total + parseInt(element.scored);
+          });
+          if (value == total) {
+            return true;
+          }
+          return false;
+        }
       },
       resoultTeamB: {
         required
@@ -660,6 +942,16 @@ export default {
       match: {
         place_match: {
           required
+        }
+      },
+      listMemberupdateA: {
+        $each: {
+          id: {
+            required
+          },
+          scored: {
+            required
+          }
         }
       }
     };

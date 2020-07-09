@@ -160,7 +160,7 @@ export default {
 
   methods: {
     async getListMembers() {
-      let response = await callApi("GET", "admin/getbyteam/member", null, {
+      let response = await callApi("GET", "/getbyteam/member", null, {
         id_team: this.id_team
       });
       if (response.data.code != "0000") {

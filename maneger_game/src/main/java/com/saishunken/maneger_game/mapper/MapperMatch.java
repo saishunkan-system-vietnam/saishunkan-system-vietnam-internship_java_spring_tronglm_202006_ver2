@@ -18,6 +18,8 @@ public interface MapperMatch {
 	
 	public List<Match> getAllMatch(int id);
 
-	public Match getMatchDetail(@Param("id") int id, @Param("id_tournament") int id_tournament);
+	public Match getMatchDetail(@Param("id") int id);
+	
+	public Match getMatchDetailAll(int id);
 	
 }

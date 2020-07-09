@@ -54,13 +54,37 @@
           </td>
         </tr>
         <tr>
-        <div class="ui segment">
-          <td v-if="tournament.info_tnm" v-html="unencodeInfo_Tnm(tournament.info_tnm)"></td>
-          <td v-else> </td>
-        </div>
-      </tr>
+          <div class="ui segment">
+            <td v-if="tournament.info_tnm" v-html="unencodeInfo_Tnm(tournament.info_tnm)"></td>
+            <td v-else></td>
+          </div>
+        </tr>
       </table>
-
+      <div class="text-title">Bảng xếp hạng</div>
+      <table class="ui inverted table">
+        <thead>
+          <tr>
+            <th>Xếp Hạng</th>
+            <th>Tên Đội</th>
+            <th>Tổng Điểm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in listTeamRank" :key="item.id">
+            <td>{{index + 1}}</td>
+            <td>{{item.name_team}}</td>
+            <td>{{item.points}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>3 People</th>
+            <th>2 Approved</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="text-title">Danh sách trận đấu</div>
       <table class="ui red table">
         <thead>
           <tr>
@@ -116,7 +140,8 @@ export default {
       tournament: {},
       listMatch: [],
       idTournamentMatch: "",
-      teams: []
+      teams: [],
+      listTeamRank: []
     };
   },
   mounted() {
@@ -130,12 +155,27 @@ export default {
   },
 
   methods: {
+
+    async getListRankTeam(id_tnm){
+      let response = await callApi("GET", "team/get-rank", null, {id_tournament: id_tnm})
+      if(!response){
+        return ;
+      }
+      if(response.data.code == "0000"){
+        this.listTeamRank = response.data.payload;
+      }
+    },
+
     unencodeInfo_Tnm(info_tnmEncode) {
       return unescape(info_tnmEncode);
     },
+
     getStatus(sta_flg) {
       if (sta_flg == 0) {
         return '<i style="height: 17px" class="ui green text play icon "></i> Chưa thi đấu';
+      }
+      if (sta_flg == 2) {
+        return '<i style="height: 17px" class="ui yellow text video icon "></i> Đang thi đấu';
       }
       return '<i style="height: 17px" class="ui red text pause icon "></i> Đã thi đấu';
     },
@@ -210,12 +250,14 @@ export default {
       if (response.data.code == "0000") {
         this.tournament = response.data.payload;
         this.getListMatch();
+        this.getListRankTeam(id);
       }
     },
 
     signout() {
       $("#modal-signout-user").modal("show");
     },
+
     async getListTournament() {
       let response = await callApi("GET", "/tournament/getall");
       if (response.data.code == "0000") {

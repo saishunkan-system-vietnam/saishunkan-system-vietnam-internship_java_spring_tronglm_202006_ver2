@@ -1,5 +1,7 @@
 package com.saishunken.maneger_game.model;
 
+import java.util.List;
+
 public class Member extends AbstractModel{
 
 	private static final long serialVersionUID = 1L;
@@ -10,6 +12,15 @@ public class Member extends AbstractModel{
 	private Integer cap_flg;
 	private Integer scored;
 	
+	private List<PointMemberMatch> listpoint;
+	
+	
+	public List<PointMemberMatch> getListpoint() {
+		return listpoint;
+	}
+	public void setListpoint(List<PointMemberMatch> listpoint) {
+		this.listpoint = listpoint;
+	}
 	public String getName_member() {
 		return name_member;
 	}

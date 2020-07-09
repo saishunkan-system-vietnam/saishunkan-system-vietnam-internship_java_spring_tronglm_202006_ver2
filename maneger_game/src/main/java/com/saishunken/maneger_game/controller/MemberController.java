@@ -20,7 +20,7 @@ import com.saishunken.maneger_game.model.Team;
 import com.saishunken.maneger_game.service.MemberService;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class MemberController {
 	
 	@Autowired
@@ -32,8 +32,15 @@ public class MemberController {
 	@Autowired
 	private MapperTeam mapperTeam;
 	
+	
+	//get list member in tournament
+	@GetMapping("getall/member-tnm")
+	public ResponseEntity<Response> getAllMemberInTnm(@RequestParam Integer id_tnm) {		
+		return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 0, memberService.getListMemberPointTNM(id_tnm)));
+	}
+	
 	//all
-	@GetMapping("/getall/member")
+	@GetMapping("admin/getall/member")
 	public ResponseEntity<Response> getAllMember(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -53,7 +60,7 @@ public class MemberController {
 	}
 	
 	//get team
-	@GetMapping("/getbyteam/member")
+	@GetMapping("getbyteam/member")
 	public ResponseEntity<Response> getMemberByTeam(@RequestParam Integer id_team, @RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -79,9 +86,7 @@ public class MemberController {
 			response.setPayload(memberService.getByTeam(member));
 			return ResponseEntity.ok().body(response);
 		} 
-		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
-		
-		
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));		
 	}
 	
 	//get by id team
@@ -105,7 +110,7 @@ public class MemberController {
 	}
 	
 	//get by not id team
-	@GetMapping("/getbynotidteam/member")
+	@GetMapping("admin/getbynotidteam/member")
 	public ResponseEntity<Response> getMemberByNotIdTeam(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<String> nameMember) {
 		Response response = new Response();
@@ -125,7 +130,7 @@ public class MemberController {
 	}
 	
 	//check nickname
-	@GetMapping("/isnickname")
+	@GetMapping("admin/isnickname")
 	public ResponseEntity<Response> isNickName(@RequestParam String nickname,  @RequestParam Optional<Integer> id) {	
 		Integer memberId;
 		if(id.isPresent()) {
@@ -139,7 +144,7 @@ public class MemberController {
 	    return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
 	// create member
-	@PostMapping("/createMember")
+	@PostMapping("admin/createMember")
 	public ResponseEntity<Response> createUser(@RequestBody Member member) {
 		Integer id = null;
 		if(mapperMember.getTotalByNickName(member.getNickname(), id) > 0) {
@@ -152,7 +157,7 @@ public class MemberController {
 	}
 	
 	// update member
-	@PostMapping("/updateMember")
+	@PostMapping("admin/updateMember")
 	public ResponseEntity<Response> updateUser(@RequestBody Member member) {
 		Integer id = member.getId();
 		if(mapperMember.getTotalByNickName(member.getNickname(), id) > 0) {
@@ -165,8 +170,15 @@ public class MemberController {
 		}
 	}
 	
+	//update Scored
+	@PostMapping("admin/update-scored")
+	public ResponseEntity<Response> updateScored(@RequestBody Member member) {
+			memberService.updateScored(member);
+			return ResponseEntity.ok().body(new Response("0000", "Update Member successfully", 0, null));	
+	}
+	
 	//get by id
-	@GetMapping("/member/getbyid")
+	@GetMapping("admin/member/getbyid")
 	public ResponseEntity<Response> getUserById(@RequestParam int id) {
 		Response response = new Response();
 		Member member = mapperMember.getById(id);
@@ -178,4 +190,11 @@ public class MemberController {
 		}	
 		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}
+	
+	//get all member point
+//	@GetMapping("getall/member-point")
+//	public ResponseEntity<Response> getAllMemberPoint(@RequestParam int id_tnm) {		
+//		return ResponseEntity.ok().body(new Response("0000", "Get data successfully", 0, memberService.getListMemberPointTNM(id_tnm)));
+//	}
+	
 }

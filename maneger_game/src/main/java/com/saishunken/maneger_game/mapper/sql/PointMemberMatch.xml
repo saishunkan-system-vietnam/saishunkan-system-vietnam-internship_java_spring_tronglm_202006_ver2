@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saishunken.maneger_game.mapper.MapperPointMemberMatch">
+	
+	<insert id="insert" parameterType="PointMemberMatch">
+		INSERT INTO point_member_math (id_member, id_match, scored, at_time, del_flg, create_date, edit_date) 
+		VALUES (#{id_member}, #{id_match}, #{scored}, #{at_time}, #{del_flg}, #{create_date}, #{edit_date});
+	</insert>
+	
+	<update id="update" parameterType="PointMemberMatch">
+		UPDATE point_member_math SET	
+		<if test="id_member != null">
+			id_member = #{id_member},
+		</if>	
+		<if test="id_match != null">
+			id_match = #{id_match},
+		</if>
+		<if  test="scored != null">
+			scored = #{scored},
+		</if>
+		<if test="at_time != null">
+			at_time = #{at_time},
+		</if>
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		edit_date = #{edit_date}
+		WHERE id = #{id} 
+	</update>
+	
+	<select id="getById" parameterType="int" resultType="PointMemberMatch">
+		SELECT * FROM point_member_math WHERE id = #{id} AND del_flg = 0
+	</select>
+	
+	<select id="getByIdMatch" parameterType="PointMemberMatch" resultType="PointMemberMatch">
+		SELECT * FROM point_member_math WHERE id_match = #{id_match} AND del_flg = 0
+	</select>
+	
+	<delete id="deleteByIdMatch" parameterType="int">
+		DELETE FROM point_member_math WHERE id_match = #{id_match}
+	</delete>
+	
+	
+
+</mapper>

@@ -17,13 +17,36 @@ public class Match extends AbstractModel{
 	
 	private String place_match;
 	
+	private List<PointMemberMatch> listPointMemberMatch;
+	
+	private List<Member> listMember;
+		
 	private List<Detail_match> listDetailMatch;
 	
 	private List<Team> teams;
 	
+	
+	
+	public List<PointMemberMatch> getListPointMemberMatch() {
+		return listPointMemberMatch;
+	}
+
+	public void setListPointMemberMatch(List<PointMemberMatch> listPointMemberMatch) {
+		this.listPointMemberMatch = listPointMemberMatch;
+	}
+
 	public List<Team> getTeams() {
 		return teams;
 	}
+			
+	public List<Member> getListMember() {
+		return listMember;
+	}
+
+	public void setListMember(List<Member> listMember) {
+		this.listMember = listMember;
+	}
+
 	public void setTeams(List<Team> teams) {
 		this.teams = teams;
 	}

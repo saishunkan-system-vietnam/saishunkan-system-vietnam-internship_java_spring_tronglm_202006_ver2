@@ -16,7 +16,7 @@ import store from "../store/index"
 import { callApi } from "../Api/callApi"
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import VueCkeditor from 'vue-ckeditor5'
-
+import ResoultMatch from '../views/ResoultMatch.vue'
 
 const options = {
   editors: {
@@ -68,7 +68,13 @@ const routes = [
         component: Member,
         name: "Member",
         props: true
-      }  
+      },
+      {
+        path: 'resoult-match/:id_match',
+        component: ResoultMatch,
+        name: "ResoultMatch",
+        props: true
+      }
     ]
   },
 

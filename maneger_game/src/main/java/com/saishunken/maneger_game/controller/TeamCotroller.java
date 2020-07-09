@@ -50,6 +50,12 @@ public class TeamCotroller {
 		}
 		return ResponseEntity.ok().body(new Response("0000", "oke", 0, null));
 	}
+	
+	
+	@GetMapping("team/get-rank")
+	public ResponseEntity<Response> getRank(@ModelAttribute Team team) {		
+		return ResponseEntity.ok().body(new Response("0000", "get rank successfully", 0, teamService.getListRankTeam(team)));
+	}
 
 	// create team
 	@PostMapping("admin/createTeam")
@@ -168,6 +174,8 @@ public class TeamCotroller {
 		response.setPayload(teamService.getAllByTournament(team));
 		return ResponseEntity.ok().body(response);
 	}
+	
+	
 	
 	//get point in team
 	@GetMapping("team/getpoint-tnm")

@@ -14,6 +14,8 @@ import com.saishunken.maneger_game.model.Account;
 @Transactional
 public class AccountService {
 	
+	
+	
 	@Autowired
 	private MapperAccount mapperAccount;
 	
