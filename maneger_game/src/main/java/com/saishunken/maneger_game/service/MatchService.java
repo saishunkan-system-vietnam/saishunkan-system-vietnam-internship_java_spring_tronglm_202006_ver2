@@ -2,6 +2,8 @@ package com.saishunken.maneger_game.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.saishunken.maneger_game.mapper.MapperDetail_match;
 import com.saishunken.maneger_game.mapper.MapperMatch;
+import com.saishunken.maneger_game.mapper.MapperMember;
 import com.saishunken.maneger_game.mapper.MapperPointMemberMatch;
+import com.saishunken.maneger_game.mapper.MapperTeam;
 import com.saishunken.maneger_game.model.Match;
+import com.saishunken.maneger_game.model.Member;
+import com.saishunken.maneger_game.model.PointMemberMatch;
 
 @Service
 @Transactional
@@ -27,6 +33,41 @@ public class MatchService {
 	
 	@Autowired
 	private MapperPointMemberMatch maperPointMember;
+	
+	@Autowired
+	private MapperTeam mapperTeam;
+	
+	@Autowired
+	private MapperMember mapperMember;
+	
+	
+	public Match getInfoDetailMatch(int id) {
+		Match match = new Match();
+		match = mapperMatch.getMatchDetailAll(id);
+				
+		match.getListDetailMatch().forEach(detailMatch -> {
+			detailMatch.setName_team(mapperTeam.getById(detailMatch.getId_team()).getName_team());
+			Member member = new Member();
+			member.setId_team(detailMatch.getId_team());
+			List<PointMemberMatch> listPoint = new ArrayList<PointMemberMatch>();
+			mapperMember.getByTeam(member).forEach(memberInTeam -> {
+				int id_match = detailMatch.getId_match();
+				int id_member = memberInTeam.getId();
+				if(maperPointMember.getByIdMM(id_member, id_match) != null) {
+					PointMemberMatch pointMemberMatch = maperPointMember.getByIdMM(id_member, id_match);
+					Member member1 = mapperMember.getById(pointMemberMatch.getId_member());
+					pointMemberMatch.setName_member(member1.getName_member());
+					pointMemberMatch.setNickname(member1.getNickname());
+					listPoint.add(pointMemberMatch);
+				}
+			});
+			
+			detailMatch.setListPointMDM(listPoint);
+		});
+		match.setTeams(null);
+		match.setListPointMemberMatch(null);
+		return match;
+	}
 
 	public int addMatch(Match match) {
 		String str = match.getStr_start_time();

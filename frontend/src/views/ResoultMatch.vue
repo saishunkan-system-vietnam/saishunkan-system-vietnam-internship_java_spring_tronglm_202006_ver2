@@ -174,7 +174,9 @@ export default {
   created() {
     this.getMatch();
   },
-  mounted() {},
+  mounted() {
+    
+  },
 
   // watch: {
   //   matchSave: {

@@ -60,30 +60,58 @@
           </div>
         </tr>
       </table>
+
       <div class="text-title">Bảng xếp hạng</div>
-      <table class="ui inverted table">
-        <thead>
-          <tr>
-            <th>Xếp Hạng</th>
-            <th>Tên Đội</th>
-            <th>Tổng Điểm</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in listTeamRank" :key="item.id">
-            <td>{{index + 1}}</td>
-            <td>{{item.name_team}}</td>
-            <td>{{item.points}}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>3 People</th>
-            <th>2 Approved</th>
-            <th></th>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="ui grid">
+        <div class="row">
+          <div style="max-height:407px;overflow: scroll" class="eight wide column">
+            <h2 style="text-align:center">Đội</h2>
+            <table class="ui inverted table">
+              <thead>
+                <tr>
+                  <th>Xếp Hạng</th>
+                  <th>Tên Đội</th>
+                  <th>Tổng Điểm</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in listTeamRank" :key="item.id">
+                  <td>{{index + 1}}</td>
+                  <td>{{item.name_team}}</td>
+                  <td>{{item.points}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div style="max-height:407px;overflow: scroll" class="right floated four wide column">
+            <h2>Cầu thủ</h2>
+            <table class="ui very basic collapsing celled table">
+              <thead>
+                <tr>
+                  <th>Xếp hạng</th>
+                  <th>Cầu thủ</th>
+                  <th>Ghi được</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in listMemberInTNM" :key="item.id">
+                  <td>{{index+1}}</td>
+                  <td>{{item.nickname}}</td>
+                  <td>{{item.scored}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div class="text-title">Danh sách trận đấu</div>
       <table class="ui red table">
         <thead>
@@ -107,10 +135,31 @@
             <td v-html="getStatus(item.status_flg)"></td>
             <td>{{ getTeam(item).teamA.point }} - {{ getTeam(item).teamB.point }}</td>
             <td>{{ getTeam(item).result }}</td>
+            <td>
+              <div class="compact ui basic icon buttons">
+                <button
+                  class="compact ui button"
+                  data-position="top right"
+                  data-variation="mini"
+                  @click="viewMatch(item.id)"
+                >
+                  <i class="eye icon"></i>
+                </button>
+              </div>
+            </td>
           </tr>
         </tbody>
         <tfoot>
-          <div class="ui right floated pagination menu"></div>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
         </tfoot>
       </table>
 
@@ -122,6 +171,69 @@
         <div class="actions">
           <div @click="signOutHandle()" class="ui compact cancel red button">Yes</div>
           <div class="ui compact cancel button">Cancel</div>
+        </div>
+      </div>
+    </div>
+    <div class="ui modal large" id="modal-point-detail-match">
+      <div class="header">Thông tin trận đấu</div>
+      <div v-if="matchPointMember.listDetailMatch" class="content">
+        <div class="ui grid">
+          <div class="two column centered row">
+            <h3>Trận {{matchPointMember.id}}  ({{matchPointMember.start_time}})</h3>
+          </div>
+          <div class="three column centered row">
+            <div class="column nameteam_point">{{matchPointMember.listDetailMatch[0].name_team}}</div>
+            <div
+              class="column nameteam_point"
+            >{{matchPointMember.listDetailMatch[0].result}} -- {{matchPointMember.listDetailMatch[1].result}}</div>
+            <div class="column nameteam_point">{{matchPointMember.listDetailMatch[1].name_team}}</div>
+          </div>
+
+          <div class="three column row" >
+            <div class="seven wide column">
+              <div
+                class="header"
+              >Danh sách thành viên ghi bàn của {{matchPointMember.listDetailMatch[0].name_team}}</div>
+              <table class="ui striped table">
+                <thead>
+                  <tr >
+                    <th>stt</th>
+                    <th>NickName</th>
+                    <th>Ghi được</th>
+                  </tr>
+                </thead>
+                <tbody v-if="matchPointMember.listDetailMatch[0].listPointMDM">
+                  <tr v-for="(item, index) in matchPointMember.listDetailMatch[0].listPointMDM" :key="item.id">
+                    <td>{{index+1}}</td>
+                    <td>{{item.nickname}}</td>
+                    <td>{{item.scored}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="two wide column"></div>
+            <div class="seven wide column">
+              <div
+                class="header"
+              >Danh sách thành viên ghi bàn của {{matchPointMember.listDetailMatch[1].name_team}}</div>
+              <table class="ui striped table">
+                <thead>
+                  <tr>
+                    <th>stt</th>
+                    <th>NickName</th>
+                    <th>Ghi được</th>
+                  </tr>
+                </thead>
+                <tbody v-if="matchPointMember.listDetailMatch[1].listPointMDM">
+                  <tr v-for="(item, index) in matchPointMember.listDetailMatch[1].listPointMDM" :key="item.id">
+                    <td>{{index+1}}</td>
+                    <td>{{item.nickname}}</td>
+                    <td>{{item.scored}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -141,7 +253,9 @@ export default {
       listMatch: [],
       idTournamentMatch: "",
       teams: [],
-      listTeamRank: []
+      listTeamRank: [],
+      listMemberInTNM: [],
+      matchPointMember: {}
     };
   },
   mounted() {
@@ -155,13 +269,33 @@ export default {
   },
 
   methods: {
+    async viewMatch(id) {
+      let response = await callApi("GET", "/match/get-match-detail", null, {
+        id: id
+      });
+      if (response.data.code == "0000") {
+        this.matchPointMember = response.data.payload;
 
-    async getListRankTeam(id_tnm){
-      let response = await callApi("GET", "team/get-rank", null, {id_tournament: id_tnm})
-      if(!response){
-        return ;
+        $("#modal-point-detail-match").modal("show");
       }
-      if(response.data.code == "0000"){
+    },
+
+    async getListMemberInTNM(id) {
+      let response = await callApi("GET", "/getall/member-tnm", null, {
+        id_tnm: id
+      });
+      if (response.data.code == "0000") {
+        this.listMemberInTNM = response.data.payload;
+      }
+    },
+    async getListRankTeam(id_tnm) {
+      let response = await callApi("GET", "team/get-rank", null, {
+        id_tournament: id_tnm
+      });
+      if (!response) {
+        return;
+      }
+      if (response.data.code == "0000") {
         this.listTeamRank = response.data.payload;
       }
     },
@@ -251,6 +385,7 @@ export default {
         this.tournament = response.data.payload;
         this.getListMatch();
         this.getListRankTeam(id);
+        this.getListMemberInTNM(id);
       }
     },
 

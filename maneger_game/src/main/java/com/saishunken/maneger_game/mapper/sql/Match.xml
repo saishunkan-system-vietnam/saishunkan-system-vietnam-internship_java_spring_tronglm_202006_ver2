@@ -67,6 +67,8 @@
 	</select>
 	
 	
+	
+	
 	<select id="getMatchDetail" resultMap="matchResultMap">
 	  select 
 	      m1.id as "m1_id",
@@ -120,16 +122,15 @@
 	  where m1.id = #{id} and t1.del_flg = 0 and d1.del_flg = 0 and d1.del_flg = 0
 	</select>
 	
-	
 	<resultMap id="pointMemberMatchResultMap" type="PointMemberMatch">
-		 <id property="id" column="p1_id" />  
+		 <id property="id" column="p1_id" />
 		 <result property="id_member" column="p1_id_member" />
 		 <result property="scored" column="p1_scored" />
 		 <result property="at_time" column="p1_at_time" />
 		 <result property="id_match" column="p1_id_match" />
 	</resultMap>
 	
-	
+
 	<resultMap id="teamResultMap" type="Team">
 		 <id property="id" column="t1_id" />  
 		 <result property="name_team" column="t1_name_team" />

@@ -573,7 +573,7 @@ export default {
     },
 
     getTeam(item) {
-      let teamA = item.listDetailMatch[0];
+      let teamA = {...item.listDetailMatch[0]};
       let teamB = { ...item.listDetailMatch[1] };
       let infoTeamA = [...this.teams].find(x => x.id == teamA.id_team);
       let infoTeamB = [...this.teams].find(x => x.id == teamB.id_team);

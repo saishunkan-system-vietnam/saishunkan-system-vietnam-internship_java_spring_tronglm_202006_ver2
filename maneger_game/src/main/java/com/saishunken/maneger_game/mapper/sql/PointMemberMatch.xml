@@ -33,6 +33,10 @@
 		SELECT * FROM point_member_math WHERE id = #{id} AND del_flg = 0
 	</select>
 	
+	<select id="getByIdMM" resultType="PointMemberMatch">
+		SELECT * FROM point_member_math WHERE id_member = #{id_member} AND id_match = #{id_match}
+	</select>
+	
 	<select id="getByIdMatch" parameterType="PointMemberMatch" resultType="PointMemberMatch">
 		SELECT * FROM point_member_math WHERE id_match = #{id_match} AND del_flg = 0
 	</select>

@@ -19,9 +19,6 @@ public class Team extends AbstractModel {
 	
 	
 	private List<Detail_match> listDetailMatch;
-	
-	
-	
 
 	public Integer getTotalWin() {
 		return totalWin;

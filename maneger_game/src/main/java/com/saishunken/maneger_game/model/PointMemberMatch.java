@@ -8,6 +8,8 @@ public class PointMemberMatch extends AbstractModel{
 	private Integer id_match;
 	private Integer scored;
 	private String at_time;
+	private String name_member;
+	private String nickname;
 	
 	public PointMemberMatch() {
 		super();
@@ -18,6 +20,19 @@ public class PointMemberMatch extends AbstractModel{
 		this.id_match = id_match;
 		this.scored = scored;
 		this.at_time = at_time;
+	}
+	
+	public String getName_member() {
+		return name_member;
+	}
+	public void setName_member(String name_member) {
+		this.name_member = name_member;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public Integer getId_member() {
 		return id_member;

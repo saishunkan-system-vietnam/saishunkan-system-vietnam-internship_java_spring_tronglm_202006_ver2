@@ -88,6 +88,20 @@ public class MatchController {
 		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
 	}
 	
+	
+	@GetMapping("match/get-match-detail")
+	public ResponseEntity<Response> getMatchByIdDetail(@RequestParam int id) {
+		Response response = new Response();
+		Match object = matchService.getInfoDetailMatch(id);
+		if (object != null) {
+			response.setCode("0000");
+			response.setMessage("Get data successfully");
+			response.setPayload(object);
+			return ResponseEntity.ok().body(response);
+		}	
+		return ResponseEntity.ok().body(new Response("0003", "data not found", 0, null));
+	}
+	
 	@GetMapping("match/get-match-point")
 	public ResponseEntity<Response> getMatchAnPointMember(@RequestParam int id) {
 		Response response = new Response();

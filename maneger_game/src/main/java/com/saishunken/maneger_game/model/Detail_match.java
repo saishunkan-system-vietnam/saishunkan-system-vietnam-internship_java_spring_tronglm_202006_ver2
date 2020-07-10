@@ -1,14 +1,31 @@
 package com.saishunken.maneger_game.model;
 
+import java.util.List;
+
 public class Detail_match  extends AbstractModel{
 	
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id_team;
+	private String name_team;
 	private Integer id_match;
 	private Integer result;
 	private Integer win_flg;
+	private List<PointMemberMatch> listPointMDM;
 	
+		
+	public List<PointMemberMatch> getListPointMDM() {
+		return listPointMDM;
+	}
+	public void setListPointMDM(List<PointMemberMatch> listPointMDM) {
+		this.listPointMDM = listPointMDM;
+	}
+	public String getName_team() {
+		return name_team;
+	}
+	public void setName_team(String name_team) {
+		this.name_team = name_team;
+	}
 	public Integer getId_team() {
 		return id_team;
 	}
