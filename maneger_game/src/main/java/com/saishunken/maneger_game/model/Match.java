@@ -25,7 +25,7 @@ public class Match extends AbstractModel{
 	
 	private List<Team> teams;
 	
-	
+
 	
 	public List<PointMemberMatch> getListPointMemberMatch() {
 		return listPointMemberMatch;

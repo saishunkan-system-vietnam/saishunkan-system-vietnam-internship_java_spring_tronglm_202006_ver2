@@ -3,7 +3,7 @@
 
 <mapper namespace="com.saishunken.maneger_game.mapper.MapperMatch">
 
-	<insert id="insert" parameterType="Match"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	<insert id="insert" parameterType="Match" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 
 		INSERT INTO match1 (start_time, del_flg, status_flg, edit_date, create_date, place_match, end_time)
 		VALUES (#{start_time}, #{del_flg}, #{status_flg}, #{edit_date}, #{create_date}, #{place_match}, #{end_time});
