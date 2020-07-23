@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperAccount">
+	
+	<insert id="insert" parameterType="Account" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO account (mail, password, role, del_flg, create_date, update_date, id_customer, status_flg) 
+		VALUES (#{mail}, #{password}, #{role}, #{del_flg}, #{create_date}, #{update_date}, #{id_customer}, #{status_flg});
+	</insert>
+	
+	<update id="update" parameterType="Account" >
+		UPDATE account SET
+		<if test="password != null">
+			password = #{password},
+		</if>
+		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>
+			
+		<if test="mail != null">
+			mail = #{mail},
+		</if>
+		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getByEmail" parameterType="String"
+		resultType="Account">
+		SELECT * FROM account WHERE mail = #{mail};
+	</select>
+	
+	<select id="getById" parameterType="int"
+		resultType="Account">
+		SELECT * FROM account WHERE id = #{id} AND del_flg = 0; 
+	</select>
+	
+	<select id="getAllAccount" parameterType="Account" resultType="Account">
+		SELECT * FROM account WHERE role LIKE '%${role}%'  
+		<if test="mail != null">
+			AND mail LIKE '%${mail}%'
+		</if>
+	</select>
+	
+</mapper>

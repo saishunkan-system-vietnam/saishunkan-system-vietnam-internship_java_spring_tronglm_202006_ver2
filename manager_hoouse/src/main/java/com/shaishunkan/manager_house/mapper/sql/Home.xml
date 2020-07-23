@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperHome">
+	
+	<insert id="insert" parameterType="Home" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO home (name, address, info, img_home, numerical_order, del_flg, create_date, update_date)
+		VALUES (#{name}, #{address}, #{info}, #{img_home}, #{numerical_order},#{del_flg}, #{create_date}, #{update_date});
+	</insert>
+	
+	<update id="update" parameterType="Home" >
+		UPDATE home SET
+		<if test="name != null">
+			name = #{name},
+		</if>		
+		<if test="address != null">
+			address = #{address},
+		</if>			
+		<if test="info != null">
+			info = #{info},
+		</if>
+		<if test="img_home != null">
+			img_home = #{img_home},
+		</if>
+		<if test="numerical_order != null">
+			numerical_order = #{numerical_order},
+		</if>
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getAllHome" parameterType="String"
+		resultType="Home">
+		SELECT * FROM home WHERE del_flg = 0
+		<if test="name != null">
+			AND	(name LIKE '%${name}%' OR address LIKE '%${name}%' OR info LIKE '%${name}%' OR numerical_order LIKE '%${name}%')
+		</if>
+	</select>
+</mapper>

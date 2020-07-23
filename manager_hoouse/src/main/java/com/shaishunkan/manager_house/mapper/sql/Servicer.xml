@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperServicer">
+	
+	<insert id="insert" parameterType="Servicer" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO service (id_home_2, name, per_flg, del_flg, price, info, create_date, update_date) 
+		VALUES (#{id_home_2}, #{name}, #{per_flg}, #{del_flg}, #{price}, #{info}, #{create_date}, #{update_date});
+	</insert>
+	
+	<update id="update" parameterType="Servicer" >
+		UPDATE service SET
+		<if test="name != null">
+			name = #{name},
+		</if>		
+		<if test="per_flg != null">
+			per_flg = #{per_flg},
+		</if>			
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>		
+		<if test="price != null">
+			price = #{price},
+		</if>
+		<if test="info != null">
+			info = #{info},
+		</if>
+		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getById" parameterType="int"
+		resultType="Servicer">
+		SELECT * FROM service WHERE id = #{id} AND del_flg = 0;
+	</select>
+	
+	<select id="getAllServiceByHome" parameterType="Servicer" resultType="Servicer">
+		SELECT * FROM service WHERE del_flg = 0 AND id_home_2 = #{id_home_2}
+		<if test="name != null">
+			AND	(name LIKE '%${name}%' OR price LIKE '%${name}%' OR info LIKE '%${name}%') 
+		</if>
+	</select>
+	
+	<select id="getTotalByName" resultType="int">
+		SELECT Count(*) FROM service WHERE name = #{name}
+		<if test ="id != null">
+			and id != #{id}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperContract">
+	
+	<insert id="insert" parameterType="Contract" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO contract (id_room_2, time_payment, deposit, start_date, expired, del_flg, create_date, update_date, status_flg, unit_of_time, info, price) 
+		VALUES (#{id_room_2}, #{time_payment}, #{deposit}, #{start_date}, #{expired}, #{del_flg}, #{create_date}, #{update_date}, #{status_flg}, #{unit_of_time}, #{info}, #{price});
+	</insert>
+	
+	<update id="update" parameterType="Contract" >
+		UPDATE contract SET
+		<if test="time_payment != null">
+			time_payment = #{time_payment},
+		</if>		
+		<if test="price != null">
+			price = #{price},
+		</if>
+		<if test="deposit != null">
+			deposit = #{deposit},
+		</if>			
+		<if test="start_date != null">
+			start_date = #{start_date},
+		</if>		
+		<if test="expired != null">
+			expired = #{expired},
+		</if>
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>
+		<if test="unit_of_time != null">
+			unit_of_time = #{unit_of_time},
+		</if>
+		<if test="info != null">
+			info = #{info},
+		</if>		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getById" parameterType="int"
+		resultType="Contract">
+		SELECT * FROM room WHERE id = #{id} AND del_flg = 0;
+	</select>
+	
+	<select id="getComtractByRoom" parameterType="Integer" resultType="Room">
+		SELECT * FROM contract WHERE del_flg = 0 AND status_flg = 1 AND id_room_2 = #{id_room_2}
+	</select>
+	
+</mapper>

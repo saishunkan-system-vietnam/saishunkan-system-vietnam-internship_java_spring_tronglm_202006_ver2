@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Account" type="com.shaishunkan.manager_house.model.Account" />
+		<typeAlias alias="Home" type="com.shaishunkan.manager_house.model.Home" />
+		<typeAlias alias="Room" type="com.shaishunkan.manager_house.model.Room" />
+		<typeAlias alias="Contract" type="com.shaishunkan.manager_house.model.Contract" />
+		<typeAlias alias="ServiceContract" type="com.shaishunkan.manager_house.model.ServiceContract" />
+		<typeAlias alias="Customer" type="com.shaishunkan.manager_house.model.Customer" />
+		<typeAlias alias="Servicer" type="com.shaishunkan.manager_house.model.Servicer" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Account.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Home.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Room.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Contract.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/ServiceContract.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Customer.xml" />
+		<mapper resource="com/shaishunkan/manager_house/mapper/sql/Servicer.xml" />
+	</mappers>
+</configuration>

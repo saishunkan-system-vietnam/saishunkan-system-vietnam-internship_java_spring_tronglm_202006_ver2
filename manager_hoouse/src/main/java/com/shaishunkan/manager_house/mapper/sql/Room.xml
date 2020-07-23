@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperRoom">
+	
+	<insert id="insert" parameterType="Room" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO room (id_home, name, numerical_order, status_flg, del_flg, price, create_date, update_date, length, width, info, unit_of_time) 
+		VALUES (#{id_home}, #{name}, #{numerical_order}, #{status_flg}, #{del_flg}, #{price}, #{create_date}, #{update_date}, #{length}, #{width}, #{info}, #{unit_of_time});
+	</insert>
+	
+	<update id="update" parameterType="Room" >
+		UPDATE room SET
+		<if test="name != null">
+			name = #{name},
+		</if>		
+		<if test="numerical_order != null">
+			numerical_order = #{numerical_order},
+		</if>			
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>		
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		<if test="price != null">
+			price = #{price},
+		</if>
+		<if test="length != null">
+			length = #{length},
+		</if>
+		<if test="width != null">
+			width = #{width},
+		</if>
+		<if test="info != null">
+			info = #{info},
+		</if>
+		<if test="unit_of_time != null">
+			unit_of_time = #{unit_of_time},
+		</if>
+		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getById" parameterType="int"
+		resultType="Room">
+		SELECT * FROM room WHERE id = #{id} AND del_flg = 0;
+	</select>
+	
+	<select id="getAllRoom" parameterType="Room" resultType="Room">
+		SELECT * FROM room WHERE del_flg = 0 AND id_home = #{id_home}
+		<if test="name != null">
+			AND	(name LIKE '%${name}%' OR numerical_order LIKE '%${name}%' OR price LIKE '%${name}%' OR length LIKE '%${name}%' OR width LIKE '%${name}%' OR info LIKE '%${name}%')
+		</if>
+	</select>
+	
+	<select id="getTotalByName" resultType="int">
+		SELECT Count(*) FROM room WHERE name = #{name}
+		<if test ="id != null">
+			and id != #{id}
+		</if>
+	</select>
+	
+	<select id="getTotalByNumber" resultType="int">
+		SELECT Count(*) FROM room WHERE numerical_order = #{numerical_order}
+		<if test ="id != null">
+			and id != #{id}
+		</if>
+	</select>
+	
+</mapper>

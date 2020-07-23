@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shaishunkan.manager_house.mapper.MapperCustomer">
+	
+	<insert id="insert" parameterType="Customer" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO customer (name, phone, address, i_d, del_flg, create_date, update_date, mail, id_contract, status_flg, model_sex ) 
+		VALUES (#{name}, #{phone}, #{address}, #{i_d}, #{del_flg}, #{create_date}, #{update_date}, #{mail} , #{id_contract}, #{status_flg}, #{model_sex})
+	</insert>
+	
+	<update id="update" parameterType="Customer" >
+		UPDATE customer SET
+		<if test="name != null">
+			name = #{name},
+		</if>		
+		<if test="phone != null">
+			phone = #{phone},
+		</if>			
+		<if test="address != null">
+			address = #{address},
+		</if>		
+		<if test="i_d != null">
+			i_d = #{i_d},
+		</if>
+		<if test="del_flg != null">
+			del_flg = #{del_flg},
+		</if>
+		<if test="model_sex != null">
+			model_sex = #{model_sex},
+		</if>
+		<if test="mail != null">
+			mail = #{mail},
+		</if>
+		<if test="status_flg != null">
+			status_flg = #{status_flg},
+		</if>
+		update_date = #{update_date}
+		WHERE id = #{id};
+	</update>
+	
+	<select id="getByStatus" parameterType="int"
+		resultType="Customer">
+		SELECT * FROM customer WHERE status_flg = #{status_flg} AND del_flg = 0;
+	</select>
+	
+</mapper>
